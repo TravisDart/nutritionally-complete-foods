@@ -1,8 +1,18 @@
 # Nutritionally Complete Foods v0.1
 
+* [Overview](#Overview)
+* [Environment Setup](#Environment Setup)
+* [Source Data](#Source Data)
+* [The Solver](#The Solver)
+  * [Example Solutions](#Example Solutions)
+* [Visualization](#Visualization)
+* [Future Improvements](#Future Improvements)
+
 ## Overview
 
 This program finds what combination of foods are nutritionally complete. This problem is related to the [Stigler Diet](https://en.wikipedia.org/wiki/Stigler_diet) problem, but instead of trying to minimize cost, we find the solutions that use the fewest distinct food types. Basically, this solver finds a combination of foods that satisfy a system of inequalities. Each inequality defines the min/max values of a particular nutrient in a person's daily nutritional requirements.
+
+
 
 ## Environment Setup
 
@@ -31,6 +41,8 @@ source deactive
 ```
 
 </details>
+
+
 
 
 ## Source Data
