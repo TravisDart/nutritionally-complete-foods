@@ -1,12 +1,12 @@
 # Nutritionally Complete Foods v0.1
 
 * [Overview](#Overview)
-* [Environment Setup](#Environment Setup)
-* [Source Data](#Source Data)
-* [The Solver](#The Solver)
-  * [Example Solutions](#Example Solutions)
+* [Environment Setup](#Environment-Setup)
+* [Source Data](#Source-Data)
+* [The Solver](#The-Solver)
+  * [Example Solutions](#Example-Solutions)
 * [Visualization](#Visualization)
-* [Future Improvements](#Future Improvements)
+* [Future Improvements](#Future-Improvements)
 
 ## Overview
 
