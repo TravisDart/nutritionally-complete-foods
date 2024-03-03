@@ -47,14 +47,14 @@ source deactive
 
 ## Source Data
 
-Before running the solver, download and parse the food data by running this script:
+This project uses a subset of the [USDA's SR Legacy dataset](https://fdc.nal.usda.gov/) as input. Before running the solver, download and parse this dataset by running:
 
 ```
 cd data
 python create_food_data.py
 ```
 
-This will result in a file called `food_data.csv` which is one of two input files for the solver.
+This will result in a file called `food_data.csv` which is one of the two input files for the solver.
 
 The other input file is the daily recommended values, which comes from the [USDA's Dietary Reference Intake (DRI) Calculator](https://www.nal.usda.gov/human-nutrition-and-food-safety/dri-calculator). You can either use the example values packaged in this repo `data/Daily Recommended Values.csv`, or you can modify the values based on your personalized requirements.
 
