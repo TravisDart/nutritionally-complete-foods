@@ -2,11 +2,11 @@
 
 ## Overview
 
-This program finds what combination of foods are nutritoinally complete. This problem is related to the Stigler Diet problem, but instead of trying to minimize cost, we're trying to find the solutions that use the fewest distinct food types. We sets a system of inequalities to model a person's dietary needs, then find a combination of foods that will satisfy the inequalities.
+This program finds what combination of foods are nutritionally complete. This problem is related to the [Stigler Diet](https://en.wikipedia.org/wiki/Stigler_diet) problem, but instead of trying to minimize cost, we find the solutions that use the fewest distinct food types. Basically, this solver finds a combination of foods that satisfy a system of inequalities. Each inequality defines the min/max values of a particular nutrient in a person's daily nutritional requirements.
 
 ## Environment Setup
 
-Project requirements are stored in `requirements.txt`. Setting up an envronment is a little outside of the scope of this readme, but if you are unfamiliar with how to do so, I've included my preferred method in the expandable section below.
+Project requirements are stored in `requirements.txt`. Setting up an environment is a little outside of the scope of this readme, but if you are unfamiliar with how to do so, I've included my preferred method in the expandable section below.
 
 <details>
   <summary>Environment setup</summary>
