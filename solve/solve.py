@@ -7,32 +7,10 @@ from ortools.sat.python import cp_model
 
 NUMBER_SCALE = 1_000  # CP-SAT only does integers, so scale to use 3 decimal places.
 FOOD_OFFSET = 4  # The first 4 columns of the food data are labels.
-MAX_NUMBER = 5000000
+MAX_NUMBER = 5_000_000
 
 
-class TimedSolutionPrinter(cp_model.CpSolverSolutionCallback):
-    def __init__(self):
-        cp_model.CpSolverSolutionCallback.__init__(self)
-        self._timer_limit = 600  # timer_limit (seconds)
-        self._timer = None
-        # self._reset_timer() # Remove to guarantee a solution
-
-    def _reset_timer(self):
-        if self._timer:
-            self._timer.cancel()
-        self._timer = Timer(self._timer_limit, self.StopSearch)
-        self._timer.start()
-
-    def StopSearch(self):
-        print(f"{self._timer_limit} seconds without improvement")
-        super().StopSearch()
-
-    def on_solution_callback(self):
-        self._reset_timer()
-        super().on_solution_callback()
-
-
-class VarArraySolutionPrinter(TimedSolutionPrinter):
+class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
     def __init__(
         self,
         variables,
@@ -44,22 +22,25 @@ class VarArraySolutionPrinter(TimedSolutionPrinter):
         super().__init__()
         self.__variables = variables
         self.__foods = foods
+        self.__foods_by_id = {int(food[0]): food for food in foods}
         self.__nutritional_requirements = nutritional_requirements
         self.__error_for_quantity = error_for_quantity
 
         self.__solutions_to_keep = 10
-        self.__solutions = []
+        self.__solutions = set([])
         self.__verbose = verbose
 
     def get_solutions(self):
         return self.__solutions
 
     def on_solution_callback(self):
-        self._reset_timer()
-
         food_quantity = {
             v.Name(): self.Value(v) for v in self.__variables if self.Value(v) != 0
         }
+
+        minimal_foods = tuple(
+            sorted([int(v.Name()) for v in self.__variables if self.Value(v) != 0])
+        )
 
         # essential_solution = {
         #     int(re.search(r"\(\d+\)$", v.Name()).group(1)): self.Value(v) for v in self.__variables if self.Value(v) != 0
@@ -83,20 +64,24 @@ class VarArraySolutionPrinter(TimedSolutionPrinter):
 
             nutrient_quantities += [nutrient_quantity]
 
-        solution = {
-            # "essential_solution": essential_solution,
-            "food_quantity": food_quantity,
-            # "number_of_foods": len(food_quantity),
-            # "nutrient_quantities": nutrient_quantities,
-            # "avg_error": mean([self.Value(v) for v in self.__error_for_quantity]),
-            # "total_error": sum([self.Value(v) for v in self.__error_for_quantity]),
-        }
+        # TODO: Just record the essential solution.
+        # solution = {
+        #     # "essential_solution": essential_solution,
+        #     "food_quantity": food_quantity,
+        #     # "number_of_foods": len(food_quantity),
+        #     # "nutrient_quantities": nutrient_quantities,
+        #     # "avg_error": mean([self.Value(v) for v in self.__error_for_quantity]),
+        #     # "total_error": sum([self.Value(v) for v in self.__error_for_quantity]),
+        # }
 
-        # Only keep the best solutions.
-        if len(self.__solutions) >= self.__solutions_to_keep:
-            self.__solutions.pop(0)
+        # # Only keep the best solutions.
+        # if len(self.__solutions) >= self.__solutions_to_keep:
+        #     self.__solutions.pop(0)
 
-        self.__solutions += [solution]
+        # # TODO: Only keep this solution if it's new.
+        if minimal_foods not in self.__solutions:
+            print("Found new solution:", minimal_foods)
+        self.__solutions.add(minimal_foods)
 
 
 def print_info(status, solver, solution_printer):
@@ -125,11 +110,13 @@ def solve_it(
     nutritional_requirements,
     foods,
     num_foods: int = 4,
+    should_optimize: bool = False,
     should_use_upper_value: bool = True,
     required_foods: list[int] = [],
     verbose_logging: bool = True,
 ):
     """
+    :param should_optimize: Use the optimizing solver (initially the default; used in v0.1)
     :param nutritional_requirements: The upper and lower bounds for each nutrient.
     :param foods: A list specifying the nutritional value of each food.
     :param num_foods: Restrict the solution to only use this many foods.
@@ -151,9 +138,7 @@ def solve_it(
     if num_foods:
         should_use_food = [model.NewIntVar(0, 1, food[0]) for food in foods]
         intermediate_values = [
-            model.NewIntVar(
-                0, MAX_NUMBER * NUMBER_SCALE, f"Intermediate {food[2]} ({food[0]})"
-            )
+            model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, name=str(food[0]))
             for food in foods
         ]
 
@@ -185,7 +170,8 @@ def solve_it(
         # Supposedly you don't need abs. I guess because the two expressions are always positive
         # model.Add(error_for_quantity[i] == nutrient_intake - nutrient[1][0])
 
-    model.Minimize(sum(error_for_quantity))
+    if should_optimize:
+        model.Minimize(sum(error_for_quantity))
 
     solver = cp_model.CpSolver()
     solver.parameters.log_search_progress = verbose_logging
@@ -319,6 +305,12 @@ if __name__ == "__main__":
         default=4,
         help="The number of foods in the solution set. The default is 4 foods.",
     )
+    parser.add_argument(
+        "--optimize",
+        action="store_true",
+        default=False,
+        help="Uses the optimizing solver (initially the default; used in v0.1)",
+    )
     args = parser.parse_args()
 
     # nutrients, foods = load_test_data()
@@ -333,4 +325,6 @@ if __name__ == "__main__":
     # ]
     # foods = [food for food in foods if int(food[0]) not in exclude]
 
-    solutions = solve_it(nutrients, foods, num_foods=args.n)
+    solutions = solve_it(
+        nutrients, foods, num_foods=args.n, should_optimize=args.optimize
+    )
