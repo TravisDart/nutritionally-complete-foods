@@ -22,11 +22,20 @@ Project requirements are stored in `requirements.txt`. Setting up an environment
   <summary>Environment setup</summary>
 
 ```
-# Install pyenv
+# Your OS will need the prerequisites, and that's not particularly straightforward.
+# This is what you'll need to install on Ubuntu:
+sudo apt install curl git-core gcc make zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libssl-dev liblzma-dev
+
+# Install pyenv.
 curl https://pyenv.run | bash
 
-# Create a virtual environment with the latest Python 3
-pyenv virtualenv 3 nutritionally-complete-foods
+# Integrate into your shell. (Restart your shell after this.)
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+
+# Create a virtual environment with Python 3.12.2
+pyenv virtualenv 3.12.2 nutritionally-complete-foods
 
 # Activate that virtual environment
 pyenv activate nutritionally-complete-foods
