@@ -1,5 +1,6 @@
 import argparse
 import csv
+import random
 from pprint import pprint
 from threading import Timer
 
@@ -130,11 +131,11 @@ def solve_it(
     quantity_of_food = [
         model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, food[2]) for food in foods
     ]
-    error_for_quantity = [
-        model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, f"Error {food[0]}")
-        for food in foods
-    ]
 
+    error_for_quantity = [
+        model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, f"Error {nutrient[0]}")
+        for nutrient in nutritional_requirements
+    ]
     if num_foods:
         should_use_food = [model.NewIntVar(0, 1, food[0]) for food in foods]
         intermediate_values = [
@@ -295,6 +296,22 @@ def load_real_data():
     return nutrients, foods
 
 
+def load_subset_of_data():
+    nutrients, foods = load_real_data()
+    foods_subset = [
+        f
+        for f in foods
+        if f[0] in ("9024", "14091", "14355", "11672")
+    ]
+
+    # Add 10 other random foods to the list. - But add the same 10 items with each invocation of this function.
+    num_additional_items = 10
+    random.seed(1)
+    foods_subset += random.sample(foods, num_additional_items)
+    random.seed()  # Clean up after ourselves and re-seed the random number generator.
+
+    return nutrients, foods_subset
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Find sets of foods that combine to satisfy one's daily nutritional requirements."
@@ -314,7 +331,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # nutrients, foods = load_test_data()
-    nutrients, foods = load_real_data()
+    # nutrients, foods = load_real_data()
+    nutrients, foods = load_subset_of_data()
 
     # # Exclude foods. These were in previous solutions, but I don't want
     # # to every grow/make them, so exclude them.
