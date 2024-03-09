@@ -57,6 +57,45 @@ def find_closest_solution(A, c):
     return result
 
 
+def real_test():
+    # Test 2: Square A
+    # fmt: off
+    # A = np.array([
+    #     [1840, 13, 31, 0, 150, 10, 2, 0, 10, 3, 60, 400, 1, 90, 670, 4, 0, 1, 720, 0, 0, 0, 0, 0, 10, 63, 0, 965, 1],
+    #     [0, 3, 4, 0, 10, 0, 0, 3730, 50, 0, 30, 2190, 0, 10, 370, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 997, 0],
+    #     [130, 110, 56, 1, 460, 4, 16, 0, 50, 5, 90, 570, 1, 160, 1240, 9, 0, 0, 10, 0, 440, 1, 0, 17, 0, 1, 15, 872, 1],
+    #     [320, 278, 742, 2, 2677, 148, 33, 4, 410, 17, 360, 2600, 17, 1280, 6220, 61, 2, 89, 7640, 2, 320, 4, 3, 276, 3, 2, 27, 478, 7]
+    # ])
+
+    example_foods = [
+        ['14091', 'Beverages', 'Beverages, almond milk, unsweetened, shelf stable', '', (1840, 'mg'), (13, 'g'), (31, 'mg'), (0, 'mg'), (150, 'kcal'), (10, 'g'), (2, 'g'), (0, None), (10, 'µg'), (3, 'mg'), (60, 'mg'), (400, 'µg'), (1, 'mg'), (90, 'mg'), (670, 'mg'), (4, 'g'), (0, 'mg'), (1, 'µg'), (720, 'mg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (10, 'µg'), (63, 'mg'), (0, 'µg'), (965, 'g'), (1, 'mg')],
+        ['14355', 'Beverages', 'Beverages, tea, black, brewed, prepared with tap water', '', (0, 'mg'), (3, 'g'), (4, 'mg'), (0, 'mg'), (10, 'kcal'), (0, 'g'), (0, 'g'), (3730, 'µg'), (50, 'µg'), (0, 'mg'), (30, 'mg'), (2190, 'µg'), (0, 'mg'), (10, 'mg'), (370, 'mg'), (0, 'g'), (0, 'mg'), (0, 'µg'), (30, 'mg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (0, 'µg'), (997, 'g'), (0, 'mg')],
+        ['9024', 'Fruits and Fruit Juices', 'Apricots, canned, juice pack, with skin, solids and liquids', '', (120, 'mg'), (123, 'g'), (18, 'mg'), (1, 'mg'), (480, 'kcal'), (0, 'g'), (16, 'g'), (0, None), (20, 'µg'), (3, 'mg'), (100, 'mg'), (520, 'µg'), (3, 'mg'), (200, 'mg'), (1650, 'mg'), (6, 'g'), (0, 'mg'), (1, 'µg'), (40, 'mg'), (0, 'mg'), (850, 'µg'), (1, 'mg'), (0, 'µg'), (49, 'mg'), (0, 'µg'), (6, 'mg'), (22, 'µg'), (866, 'g'), (1, 'mg')],
+        ['11672', 'Vegetables and Vegetable Products', 'Potato pancakes', '', (320, 'mg'), (278, 'g'), (742, 'mg'), (2, 'mg'), (2677, 'kcal'), (148, 'g'), (33, 'g'), (4, 'µg'), (410, 'µg'), (17, 'mg'), (360, 'mg'), (2600, 'µg'), (17, 'mg'), (1280, 'mg'), (6220, 'mg'), (61, 'g'), (2, 'mg'), (89, 'µg'), (7640, 'mg'), (2, 'mg'), (320, 'µg'), (4, 'mg'), (3, 'µg'), (276, 'mg'), (3, 'µg'), (2, 'mg'), (27, 'µg'), (478, 'g'), (7, 'mg')]
+    ]
+    just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
+    A = np.array(just_matrix_coefficients)
+
+    A = A.T
+    
+    # Minimum daily nutritional requirements
+    c = np.array([1300, 465, 550, 0.890, 4132, 115, 38, 3000, 400, 11, 410, 2200, 16, 1250, 3000, 77, 1.3, 55, 1500, 1.2, 900, 1.3, 2.4, 75, 15, 15, 75, 3700, 11])
+    # fmt: on
+
+    # example_solution = np.array([1227, 804, 3382, 913])
+    example_solution = np.array([2759, 1199, 804, 1006])
+    computed_solution = find_closest_solution(A, c)
+    print(example_solution.shape)
+    print(A.shape)
+    print(computed_solution.shape)
+    example_result = A @ example_solution
+
+    import pdb
+
+    pdb.set_trace()
+    print("Test1 passed", x)
+
+
 def tests():
     # Test 1: A is non-square
     # fmt: off
@@ -119,4 +158,5 @@ def tests():
 
 
 if __name__ == "__main__":
-    tests()
+    real_test()
+    # tests()

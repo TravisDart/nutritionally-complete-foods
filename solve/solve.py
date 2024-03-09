@@ -1,14 +1,13 @@
 import argparse
-import csv
-import random
 from pprint import pprint
-from threading import Timer
-
 from ortools.sat.python import cp_model
-
-NUMBER_SCALE = 1_000  # CP-SAT only does integers, so scale to use 3 decimal places.
-FOOD_OFFSET = 4  # The first 4 columns of the food data are labels.
-MAX_NUMBER = 5_000_000
+from constants import FOOD_OFFSET, MAX_NUMBER, NUMBER_SCALE
+from load_data import (
+    load_subset_of_data,
+    load_test_data,
+    load_real_data,
+    non_optimizing_test_data,
+)
 
 
 class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
@@ -190,127 +189,6 @@ def solve_it(
         pprint(solutions)
         return solutions
 
-
-def validate_data(nutrients, foods, food_header):
-    # Make sure the labels match.
-    for i, nutrient in enumerate(nutrients):
-        if nutrient[0] != food_header[i + FOOD_OFFSET]:
-            print(nutrient[0], "and", food_header[i + FOOD_OFFSET], "don't match")
-
-    # Make sure the units are the same
-    for i, nutrient in enumerate(nutrients):
-        # Make sure the Nutritional Requirement row is consistent with itself.
-        values = set()
-        if nutrient[1][1] is not None:
-            values.add(nutrient[1][1])
-        if nutrient[2][1] is not None:
-            values.add(nutrient[2][1])
-        if nutrient[3] is not None:
-            values.add(nutrient[3])
-        if len(values) != 1:
-            print("Problem!", nutrient)
-
-        # Make sure the Nutritional Requirement unit is the same as all of the food units.
-        for j, food in enumerate(foods):
-            if food[i + FOOD_OFFSET][0] != 0:
-                if nutrient[3] != food[i + FOOD_OFFSET][1]:
-                    print(
-                        "Another Problem!",
-                        nutrient[3],
-                        food[i + FOOD_OFFSET][1],
-                        nutrient,
-                        food[i + FOOD_OFFSET],
-                        food[:FOOD_OFFSET],
-                    )
-
-    print("Data validated!")
-
-
-def load_test_data():
-    nutrients = [
-        ["Vitamin A", (1, "mg"), (2, "mg")],
-        ["Vitamin B", (1, "mg"), (2, "mg")],
-        ["Vitamin C", (1, "mg"), (2, "mg")],
-    ]
-
-    # Each nutritional value for each food
-    foods = [  #                           Vitamins A  B  C
-        ["ID", "Food A", "Food", "Scientific_Name", (1, "mg"), (0, "mg"), (0, "mg")],
-        ["ID", "Food B", "Food", "Scientific_Name", (0, "mg"), (1, "mg"), (0, "mg")],
-        ["ID", "Food C", "Food", "Scientific_Name", (0, "mg"), (0, "mg"), (1, "mg")],
-    ]
-
-    return nutrients, foods
-
-
-def load_real_data():
-    # Nutrient requirements.
-    nutrients = []
-    with open("../data/Daily Recommended Values.csv") as csvfile:
-        csvwreader = csv.reader(csvfile)
-        next(csvwreader)  # Skip the header
-        for row in csvwreader:
-            parsed_row = [
-                row[0],
-                (
-                    int(float(row[1].split(" ")[0]) * NUMBER_SCALE) if row[1] else 0,
-                    row[1].split(" ")[1] if len(row[1].split(" ")) > 1 else None,
-                ),
-                (
-                    int(float(row[2].split(" ")[0]) * NUMBER_SCALE)
-                    if row[2]
-                    else MAX_NUMBER * NUMBER_SCALE,
-                    row[2].split(" ")[1] if len(row[2].split(" ")) > 1 else None,
-                ),
-                row[3],
-            ]
-            if parsed_row[2] is not None:
-                try:
-                    assert parsed_row[1] < parsed_row[2]
-                except AssertionError as e:
-                    print(parsed_row)
-                    raise
-            nutrients += [parsed_row]
-
-    # Food nutrition information
-    foods = []
-    with open("../data/food_data.csv") as csvfile:
-        # creating a csv writer object
-        csvwreader = csv.reader(csvfile)
-        food_header = next(csvwreader)
-        for row in csvwreader:
-            # This is actually not necessary, as the input file is in the correct format already.
-            parsed_row = [
-                *row[:4],
-                *[
-                    (
-                        int(float(x.split(" ")[0]) * NUMBER_SCALE),
-                        x.split(" ")[1] if len(x.split(" ")) > 1 else None,
-                    )
-                    for x in row[4:]
-                ],
-            ]
-            foods += [parsed_row]
-
-    validate_data(nutrients, foods, food_header)
-    return nutrients, foods
-
-
-def load_subset_of_data():
-    nutrients, foods = load_real_data()
-    foods_subset = [
-        f
-        for f in foods
-        if f[0] in ("9024", "14091", "14355", "11672")
-    ]
-
-    # Add 10 other random foods to the list. - But add the same 10 items with each invocation of this function.
-    num_additional_items = 10
-    random.seed(1)
-    foods_subset += random.sample(foods, num_additional_items)
-    random.seed()  # Clean up after ourselves and re-seed the random number generator.
-
-    return nutrients, foods_subset
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
