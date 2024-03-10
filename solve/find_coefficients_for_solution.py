@@ -26,6 +26,8 @@ solve the vector x to find the quantities of food.
 import numpy as np
 from scipy.optimize import minimize
 
+from load_data import load_requirements
+
 
 def objective_function(x, A, c):
     """Calculates the squared distance between c and A*x."""
@@ -57,6 +59,14 @@ def find_closest_solution(A, c):
     return result
 
 
+def evaluate_result(solution, min_bound, max_bound):
+    error = np.linalg.norm(solution - min_bound)
+    under_bounds = [solution[x] < min_bound[x] for x in range(len(max_bound))]
+    over_bounds = [solution[x] > max_bound[x] for x in range(len(max_bound))]
+    is_out_of_bounds = any(under_bounds) or any(over_bounds)
+    return error, under_bounds, over_bounds, is_out_of_bounds
+
+
 def real_test():
     # Test 2: Square A
     # fmt: off
@@ -75,25 +85,38 @@ def real_test():
     ]
     just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
     A = np.array(just_matrix_coefficients)
+    min_requirements, max_requirements, _ = load_requirements()
 
-    A = A.T
-    
-    # Minimum daily nutritional requirements
-    c = np.array([1300, 465, 550, 0.890, 4132, 115, 38, 3000, 400, 11, 410, 2200, 16, 1250, 3000, 77, 1.3, 55, 1500, 1.2, 900, 1.3, 2.4, 75, 15, 15, 75, 3700, 11])
-    # fmt: on
-
-    # example_solution = np.array([1227, 804, 3382, 913])
-    example_solution = np.array([2759, 1199, 804, 1006])
-    computed_solution = find_closest_solution(A, c)
+    example_solution = np.array([[2759, 1199, 804, 1006]])
     print(example_solution.shape)
     print(A.shape)
-    print(computed_solution.shape)
+    example_result = example_solution @ A
+    print(example_result.T)
+
+    error, under_bounds, over_bounds, is_out_of_bounds = evaluate_result(
+        example_result, min_requirements, max_requirements
+    )
+    print(error, under_bounds, over_bounds, is_out_of_bounds)
+
+    return
+
+
+    print("min_requirements", min_requirements)
+    print("max_requirements", max_requirements)
+    computed_solution = find_closest_solution(A, min_requirements)
+    print(example_solution.shape)
+    print(A.shape)
+    assert(computed_solution.shape == example_solution.shape)
     example_result = A @ example_solution
+    print("example_result", example_result)
 
-    import pdb
-
-    pdb.set_trace()
-    print("Test1 passed", x)
+    computed_result = A @ computed_solution
+    print("computed_result", computed_result)
+    error, under_bounds, over_bounds, is_out_of_bounds = evaluate_result(
+        example_result, min_requirements, max_requirements
+    )
+    print(error, under_bounds, over_bounds, is_out_of_bounds)
+    assert not(is_out_of_bounds)
 
 
 def tests():

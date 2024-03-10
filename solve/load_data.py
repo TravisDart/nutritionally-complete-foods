@@ -1,6 +1,5 @@
 import csv
 import random
-from validate_data import validate_data
 from constants import NUMBER_SCALE, MAX_NUMBER
 
 
@@ -38,23 +37,33 @@ def non_optimizing_test_data():
     return nutrients, foods
 
 
-def load_real_data():
+def load_requirements():
     # Nutrient requirements.
     nutrients = []
+    min_requirements = []
+    max_requirements = []
     with open("../data/Daily Recommended Values.csv") as csvfile:
         csvwreader = csv.reader(csvfile)
         next(csvwreader)  # Skip the header
         for row in csvwreader:
+            min_requirement = (
+                int(float(row[1].split(" ")[0]) * NUMBER_SCALE) if row[1] else 0
+            )
+            max_requirement = (
+                int(float(row[2].split(" ")[0]) * NUMBER_SCALE)
+                if row[2]
+                else MAX_NUMBER * NUMBER_SCALE
+            )
+            min_requirements += [min_requirement]
+            max_requirements += [max_requirement]
             parsed_row = [
                 row[0],
                 (
-                    int(float(row[1].split(" ")[0]) * NUMBER_SCALE) if row[1] else 0,
+                    min_requirement,
                     row[1].split(" ")[1] if len(row[1].split(" ")) > 1 else None,
                 ),
                 (
-                    int(float(row[2].split(" ")[0]) * NUMBER_SCALE)
-                    if row[2]
-                    else MAX_NUMBER * NUMBER_SCALE,
+                    max_requirement,
                     row[2].split(" ")[1] if len(row[2].split(" ")) > 1 else None,
                 ),
                 row[3],
@@ -67,12 +76,15 @@ def load_real_data():
                     raise
             nutrients += [parsed_row]
 
-    # Food nutrition information
+    return min_requirements, max_requirements, nutrients
+
+
+def load_real_data():
     foods = []
     with open("../data/food_data.csv") as csvfile:
         # creating a csv writer object
         csvwreader = csv.reader(csvfile)
-        food_header = next(csvwreader)
+        food_labels = next(csvwreader)
         for row in csvwreader:
             # This is actually not necessary, as the input file is in the correct format already.
             parsed_row = [
@@ -87,12 +99,11 @@ def load_real_data():
             ]
             foods += [parsed_row]
 
-    validate_data(nutrients, foods, food_header)
-    return nutrients, foods
+    return foods, food_labels
 
 
 def load_subset_of_data():
-    nutrients, foods = load_real_data()
+    foods, food_labels = load_real_data()
 
     # Load a known solution
     foods_subset = [f for f in foods if f[0] in ("9024", "14091", "14355", "11672")]
@@ -103,4 +114,4 @@ def load_subset_of_data():
     foods_subset += random.sample(foods, num_additional_items)
     random.seed()  # Clean up after ourselves and re-seed the random number generator.
 
-    return nutrients, foods_subset
+    return foods_subset, food_labels

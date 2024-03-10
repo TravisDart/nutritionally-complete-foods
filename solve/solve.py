@@ -7,7 +7,9 @@ from load_data import (
     load_test_data,
     load_real_data,
     non_optimizing_test_data,
+    load_requirements,
 )
+from solve.validate_data import validate_data
 
 
 class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
@@ -107,7 +109,9 @@ def print_info(status, solver, solution_printer):
 
 
 def solve_it(
-    nutritional_requirements,
+    min_requirements,
+    max_requirements,
+    nutrients,
     foods,
     num_foods: int = 4,
     should_optimize: bool = False,
@@ -132,8 +136,8 @@ def solve_it(
     ]
 
     error_for_quantity = [
-        model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, f"Error {nutrient[0]}")
-        for nutrient in nutritional_requirements
+        model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, f"Error {nutrient}")
+        for nutrient in min_requirements
     ]
     if num_foods:
         should_use_food = [model.NewIntVar(0, 1, food[0]) for food in foods]
@@ -155,17 +159,19 @@ def solve_it(
     else:
         solver_vars = quantity_of_food
 
-    for i, nutrient in enumerate(nutritional_requirements):
+    for i in range(len(min_requirements)):
         nutrient_intake = sum(
             food[i + FOOD_OFFSET][0] * solver_vars[j] for j, food in enumerate(foods)
         )
         if should_use_upper_value:
-            model.AddLinearConstraint(nutrient_intake, nutrient[1][0], nutrient[2][0])
+            model.AddLinearConstraint(
+                nutrient_intake, min_requirements[i], max_requirements[i]
+            )
         else:
-            model.Add(nutrient_intake >= nutrient[1][0])
+            model.Add(nutrient_intake >= min_requirements[i])
         # Here we apply the traditional metric for error using absolute value:
         model.AddAbsEquality(
-            target=error_for_quantity[i], expr=nutrient_intake - nutrient[1][0]
+            target=error_for_quantity[i], expr=nutrient_intake - min_requirements[i]
         )
         # Supposedly you don't need abs. I guess because the two expressions are always positive
         # model.Add(error_for_quantity[i] == nutrient_intake - nutrient[1][0])
@@ -178,7 +184,7 @@ def solve_it(
     solver.parameters.enumerate_all_solutions = True
     # The solution printer displays the nutrient that is out of bounds.
     solution_printer = VarArraySolutionPrinter(
-        solver_vars, nutritional_requirements, foods, error_for_quantity
+        solver_vars, nutrients, foods, error_for_quantity
     )
 
     status = solver.Solve(model, solution_printer)
@@ -208,9 +214,11 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    # nutrients, foods = load_test_data()
-    # nutrients, foods = load_real_data()
-    nutrients, foods = load_subset_of_data()
+    # foods = load_test_data()
+    # foods = load_real_data()
+    foods, food_labels = load_subset_of_data()
+    min_requirements, max_requirements, nutrients = load_requirements()
+    validate_data(nutrients, foods, food_labels)
 
     # # Exclude foods. These were in previous solutions, but I don't want
     # # to every grow/make them, so exclude them.
@@ -222,5 +230,10 @@ if __name__ == "__main__":
     # foods = [food for food in foods if int(food[0]) not in exclude]
 
     solutions = solve_it(
-        nutrients, foods, num_foods=args.n, should_optimize=args.optimize
+        min_requirements,
+        max_requirements,
+        nutrients,
+        foods,
+        num_foods=args.n,
+        should_optimize=args.optimize,
     )
