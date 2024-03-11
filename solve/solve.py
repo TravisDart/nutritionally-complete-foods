@@ -1,5 +1,7 @@
 import argparse
 from pprint import pprint
+from statistics import mean
+
 from ortools.sat.python import cp_model
 from constants import FOOD_OFFSET, MAX_NUMBER, NUMBER_SCALE
 from load_data import (
@@ -9,81 +11,84 @@ from load_data import (
     non_optimizing_test_data,
     load_requirements,
 )
-from solve.validate_data import validate_data
+from validate_data import validate_data
 
 
 class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
     def __init__(
         self,
         variables,
-        nutritional_requirements,
+        min_requirements,
+        max_requirements,
         foods,
         error_for_quantity,
         verbose=True,
+        solutions_to_keep=float("inf"),
     ):
         super().__init__()
         self.__variables = variables
         self.__foods = foods
-        self.__foods_by_id = {int(food[0]): food for food in foods}
-        self.__nutritional_requirements = nutritional_requirements
+        self.__min_requirements = min_requirements
+        self.__max_requirements = max_requirements
         self.__error_for_quantity = error_for_quantity
 
-        self.__solutions_to_keep = 10
-        self.__solutions = set([])
+        self.__solutions_to_keep = solutions_to_keep
+        self.__solutions = {}
         self.__verbose = verbose
 
     def get_solutions(self):
         return self.__solutions
 
     def on_solution_callback(self):
-        food_quantity = {
-            v.Name(): self.Value(v) for v in self.__variables if self.Value(v) != 0
-        }
-
-        minimal_foods = tuple(
+        food_ids = tuple(
             sorted([int(v.Name()) for v in self.__variables if self.Value(v) != 0])
         )
+        solution = {
+            "food_quantity": {
+                v.Name(): self.Value(v) for v in self.__variables if self.Value(v) != 0
+            },
+            "avg_error": mean([self.Value(v) for v in self.__error_for_quantity]),
+            "total_error": sum([self.Value(v) for v in self.__error_for_quantity]),
+        }
 
-        # essential_solution = {
-        #     int(re.search(r"\(\d+\)$", v.Name()).group(1)): self.Value(v) for v in self.__variables if self.Value(v) != 0
-        # }
+        # If we already have this combination of foods, pick the one with the lowest error.
+        if food_ids in self.__solutions:
+            if solution["total_error"] < self.__solutions[food_ids]["total_error"]:
+                self.__solutions[food_ids] = solution
+                if self.__verbose:
+                    print("Found more optimal solution for", food_ids)
+        else:
+            self.__solutions[food_ids] = solution
+            if self.__verbose:
+                print("Found a new solution:", food_ids)
 
-        nutrient_quantities = []
-        for i, nutrient in enumerate(self.__nutritional_requirements):
-            the_sum = sum(
-                [
-                    food[i + FOOD_OFFSET][0] * self.Value(self.__variables[j])
-                    for j, food in enumerate(self.__foods)
-                ]
+        # Only keep the best solutions.
+        if len(self.__solutions) >= self.__solutions_to_keep:
+            max_error_key = max(
+                self.__solutions,
+                key=lambda key: self.__solutions[key].get("total_error", 0),
             )
-            nutrient_quantity = [
-                nutrient[0],
-                nutrient[1],
-                the_sum,
-                nutrient[2],
-                nutrient[1][0] <= the_sum <= nutrient[2][0],  # If it's within bounds.
-            ]
+            del self.__solutions[max_error_key]
+            if self.__verbose:
+                print("Deleted old solution:", max_error_key)
 
-            nutrient_quantities += [nutrient_quantity]
-
-        # TODO: Just record the essential solution.
-        # solution = {
-        #     # "essential_solution": essential_solution,
-        #     "food_quantity": food_quantity,
-        #     # "number_of_foods": len(food_quantity),
-        #     # "nutrient_quantities": nutrient_quantities,
-        #     # "avg_error": mean([self.Value(v) for v in self.__error_for_quantity]),
-        #     # "total_error": sum([self.Value(v) for v in self.__error_for_quantity]),
-        # }
-
-        # # Only keep the best solutions.
-        # if len(self.__solutions) >= self.__solutions_to_keep:
-        #     self.__solutions.pop(0)
-
-        # # TODO: Only keep this solution if it's new.
-        if minimal_foods not in self.__solutions:
-            print("Found new solution:", minimal_foods)
-        self.__solutions.add(minimal_foods)
+        # Move this somewhere, I think.
+        # nutrient_quantities = []
+        # for i in range(len(self.__min_requirements)):
+        #     the_sum = sum(
+        #         [
+        #             food[i + FOOD_OFFSET][0] * self.Value(self.__variables[j])
+        #             for j, food in enumerate(self.__foods)
+        #         ]
+        #     )
+        #     nutrient_quantity = [
+        #         self.__min_requirements[i],
+        #         self.__max_requirements[i],
+        #         the_sum,
+        #         self.__min_requirements[i] <= the_sum <= self.__max_requirements[i],
+        #     ]
+        #
+        #     nutrient_quantities += [nutrient_quantity]
 
 
 def print_info(status, solver, solution_printer):
@@ -111,10 +116,9 @@ def print_info(status, solver, solution_printer):
 def solve_it(
     min_requirements,
     max_requirements,
-    nutrients,
     foods,
     num_foods: int = 4,
-    should_optimize: bool = False,
+    should_optimize: bool = True,
     should_use_upper_value: bool = True,
     required_foods: list[int] = [],
     verbose_logging: bool = True,
@@ -134,7 +138,6 @@ def solve_it(
     quantity_of_food = [
         model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, food[2]) for food in foods
     ]
-
     error_for_quantity = [
         model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, f"Error {nutrient}")
         for nutrient in min_requirements
@@ -184,15 +187,22 @@ def solve_it(
     solver.parameters.enumerate_all_solutions = True
     # The solution printer displays the nutrient that is out of bounds.
     solution_printer = VarArraySolutionPrinter(
-        solver_vars, nutrients, foods, error_for_quantity
+        solver_vars,
+        min_requirements,
+        max_requirements,
+        foods,
+        error_for_quantity,
+        verbose=verbose_logging,
     )
 
     status = solver.Solve(model, solution_printer)
-    print_info(status, solver, solution_printer)
+    if verbose_logging:
+        print_info(status, solver, solution_printer)
 
     if status in [cp_model.OPTIMAL, cp_model.FEASIBLE]:
         solutions = solution_printer.get_solutions()
-        pprint(solutions)
+        if verbose_logging:
+            pprint(solutions)
         return solutions
 
 
@@ -232,7 +242,6 @@ if __name__ == "__main__":
     solutions = solve_it(
         min_requirements,
         max_requirements,
-        nutrients,
         foods,
         num_foods=args.n,
         should_optimize=args.optimize,
