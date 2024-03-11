@@ -167,6 +167,11 @@ def solve_it(
             food[i + FOOD_OFFSET][0] * solver_vars[j] for j, food in enumerate(foods)
         )
         if should_use_upper_value:
+            print(
+                "min_requirements[i], max_requirements[i]",
+                min_requirements[i],
+                max_requirements[i],
+            )
             model.AddLinearConstraint(
                 nutrient_intake, min_requirements[i], max_requirements[i]
             )

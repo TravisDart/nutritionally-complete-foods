@@ -110,7 +110,7 @@ def real_test():
     print("max_requirements", max_requirements)
 
     x = solve_it(
-        min_requirements, max_requirements, example_foods, verbose_logging=False
+        min_requirements, max_requirements, example_foods, verbose_logging=True
     )
     assert len(x) == 1
     food_quantity = list(x.values())[0]["food_quantity"]
@@ -129,7 +129,8 @@ def real_test():
     error, under_bounds, over_bounds, is_out_of_bounds = evaluate_result(
         example_result, min_requirements, max_requirements
     )
-    print(error, under_bounds, over_bounds, is_out_of_bounds)
+    # print(error, under_bounds, over_bounds, is_out_of_bounds)
+    print("is_out_of_bounds", is_out_of_bounds)
     import pdb
 
     pdb.set_trace()
