@@ -35,19 +35,6 @@ def objective_function(x, A, c):
     return np.linalg.norm(A @ x - c) ** 2
 
 
-def convert_and_find_closest_solution(subset_ids, foods, nutrients, FOOD_OFFSET):
-    food_subset = [
-        [sublist[0] for sublist in f[FOOD_OFFSET:]] for f in foods if f[0] in subset_ids
-    ]
-    A = np.array(food_subset)
-    A = A.T
-
-    c = np.array([nutrient[1][0] for nutrient in nutrients])
-
-    x = find_closest_solution(A, c)
-    return x
-
-
 def find_closest_solution(A, c):
     """Finds a solution x to the equation c < A*x, minimizing distance to c."""
     minimize_result = minimize(
@@ -93,7 +80,7 @@ def benchmark_solving():
 
 
 def real_test():
-    # Test 2: Square A
+    # Load foods and requirements
     # fmt: off
     example_foods = [
         ['14091', 'Beverages', 'Beverages, almond milk, unsweetened, shelf stable', '', (1840, 'mg'), (13, 'g'), (31, 'mg'), (0, 'mg'), (150, 'kcal'), (10, 'g'), (2, 'g'), (0, None), (10, 'µg'), (3, 'mg'), (60, 'mg'), (400, 'µg'), (1, 'mg'), (90, 'mg'), (670, 'mg'), (4, 'g'), (0, 'mg'), (1, 'µg'), (720, 'mg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (10, 'µg'), (63, 'mg'), (0, 'µg'), (965, 'g'), (1, 'mg')],
@@ -106,26 +93,40 @@ def real_test():
     A = np.array(just_matrix_coefficients)
     A = A.T
     min_requirements, max_requirements, _ = load_requirements()
-    print("min_requirements", min_requirements)
-    print("max_requirements", max_requirements)
 
+    # Find the solution for a known set using error minimization.
+    computed_solution = find_closest_solution(A, min_requirements)
+    print("computed_solution", computed_solution)
+    # assert computed_solution.shape == example_solution.shape
+    example_result = A @ computed_solution
+    print("example_result", example_result)
+
+    # Multiply this back to see if it's really a solution.
+    computed_result = A @ computed_solution
+    print("computed_result", computed_result)
+    error, under_bounds, over_bounds, is_out_of_bounds = evaluate_result(
+        example_result, min_requirements, max_requirements
+    )
+    print(error, under_bounds, over_bounds, is_out_of_bounds)
+    # assert not (is_out_of_bounds)
+
+    # Solve it with the solver
     x = solve_it(
-        min_requirements, max_requirements, example_foods, verbose_logging=True
+        min_requirements, max_requirements, example_foods, verbose_logging=False
     )
     assert len(x) == 1
     food_quantity = list(x.values())[0]["food_quantity"]
     sorted_dict = dict(sorted(food_quantity.items(), key=lambda item: int(item[0])))
-    quantites = tuple(sorted_dict.values())
-    print("quantites", quantites)
-    example_solution = np.array([quantites])
+    quantities = tuple(sorted_dict.values())
+    print("quantities", quantities)
+    example_solution = np.array([quantities])
     example_solution = example_solution.T
-
-    # example_solution = np.array([[2759, 1199, 804, 1006]])
     print(example_solution.shape)
     print(A.shape)
+
+    # Now multipy it back to see if it's really a solution
     example_result = A @ example_solution
     print(example_result.T)
-
     error, under_bounds, over_bounds, is_out_of_bounds = evaluate_result(
         example_result, min_requirements, max_requirements
     )
@@ -134,25 +135,6 @@ def real_test():
     import pdb
 
     pdb.set_trace()
-
-    return
-
-    print("min_requirements", min_requirements)
-    print("max_requirements", max_requirements)
-    computed_solution = find_closest_solution(A, min_requirements)
-    print(example_solution.shape)
-    print(A.shape)
-    assert computed_solution.shape == example_solution.shape
-    example_result = A @ example_solution
-    print("example_result", example_result)
-
-    computed_result = A @ computed_solution
-    print("computed_result", computed_result)
-    error, under_bounds, over_bounds, is_out_of_bounds = evaluate_result(
-        example_result, min_requirements, max_requirements
-    )
-    print(error, under_bounds, over_bounds, is_out_of_bounds)
-    assert not (is_out_of_bounds)
 
 
 def tests():

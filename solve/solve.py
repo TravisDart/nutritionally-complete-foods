@@ -11,7 +11,7 @@ from load_data import (
     non_optimizing_test_data,
     load_requirements,
 )
-from validate_data import validate_data
+from validate_input import validate_data
 
 
 class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
@@ -167,11 +167,6 @@ def solve_it(
             food[i + FOOD_OFFSET][0] * solver_vars[j] for j, food in enumerate(foods)
         )
         if should_use_upper_value:
-            print(
-                "min_requirements[i], max_requirements[i]",
-                min_requirements[i],
-                max_requirements[i],
-            )
             model.AddLinearConstraint(
                 nutrient_intake, min_requirements[i], max_requirements[i]
             )
