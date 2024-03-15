@@ -143,7 +143,7 @@ def solve_it(
         for nutrient in min_requirements
     ]
     if num_foods:
-        should_use_food = [model.NewIntVar(0, 1, food[0]) for food in foods]
+        should_use_food = [model.NewIntVar(0, 1, name=str(food[0])) for food in foods]
         intermediate_values = [
             model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, name=str(food[0]))
             for food in foods

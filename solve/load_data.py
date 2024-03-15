@@ -12,9 +12,9 @@ def load_test_data():
 
     # Each nutritional value for each food
     foods = [  #                           Vitamins A  B  C
-        ["ID", "Food A", "Food", "Scientific_Name", (1, "mg"), (0, "mg"), (0, "mg")],
-        ["ID", "Food B", "Food", "Scientific_Name", (0, "mg"), (1, "mg"), (0, "mg")],
-        ["ID", "Food C", "Food", "Scientific_Name", (0, "mg"), (0, "mg"), (1, "mg")],
+        [1, "Food A", "Food", "Scientific_Name", (1, "mg"), (0, "mg"), (0, "mg")],
+        [2, "Food B", "Food", "Scientific_Name", (0, "mg"), (1, "mg"), (0, "mg")],
+        [3, "Food C", "Food", "Scientific_Name", (0, "mg"), (0, "mg"), (1, "mg")],
     ]
 
     return nutrients, foods
@@ -29,9 +29,9 @@ def non_optimizing_test_data():
 
     # Each nutritional value for each food
     foods = [  #                           Vitamins A           B          C
-        ["ID", "Food A", "Food", "Scientific_Name", (1, "mg"), (0, "mg"), (0, "mg")],
-        ["ID", "Food B", "Food", "Scientific_Name", (0, "mg"), (1, "mg"), (0, "mg")],
-        ["ID", "Food C", "Food", "Scientific_Name", (0, "mg"), (0, "mg"), (1, "mg")],
+        [1, "Food A", "Food", "Scientific_Name", (1, "mg"), (0, "mg"), (0, "mg")],
+        [2, "Food B", "Food", "Scientific_Name", (0, "mg"), (1, "mg"), (0, "mg")],
+        [3, "Food C", "Food", "Scientific_Name", (0, "mg"), (0, "mg"), (1, "mg")],
     ]
 
     return nutrients, foods
@@ -88,7 +88,8 @@ def load_real_data():
         for row in csvwreader:
             # This is actually not necessary, as the input file is in the correct format already.
             parsed_row = [
-                *row[:4],
+                int(row[0]),
+                *row[1:4],
                 *[
                     (
                         int(float(x.split(" ")[0]) * NUMBER_SCALE),
@@ -102,16 +103,19 @@ def load_real_data():
     return foods, food_labels
 
 
-def load_subset_of_data():
+def load_subset_of_data(ids: list[int] = None, random_ids: int = 0):
+    if ids is None:
+        ids = (9024, 14091, 14355, 11672)
+
     foods, food_labels = load_real_data()
 
     # Load a known solution
-    foods_subset = [f for f in foods if f[0] in ("9024", "14091", "14355", "11672")]
+    foods_subset = [f for f in foods if f[0] in ids]
 
-    # Add 10 other random foods to the list. - But add the same 10 items with each invocation of this function.
-    num_additional_items = 10
-    random.seed(1)
-    foods_subset += random.sample(foods, num_additional_items)
-    random.seed()  # Clean up after ourselves and re-seed the random number generator.
+    # Add additional random foods to the list. - But add the same random items with each invocation of this function.
+    if random_ids:
+        random.seed(1)
+        foods_subset += random.sample(foods, random_ids)
+        random.seed()  # Clean up after ourselves and re-seed the random number generator.
 
     return foods_subset, food_labels
