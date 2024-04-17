@@ -28,6 +28,7 @@ from scipy.optimize import minimize
 import time
 from load_data import load_requirements, load_subset_of_data
 from solve import solve_it
+from constants import KNOWN_SOLUTIONS
 
 
 def find_closest_solution3(A, c, d):
@@ -98,13 +99,23 @@ def find_closest_solution(A, c):
     return result
 
 
-def evaluate_result(solution, min_bound, max_bound):
+def evaluate_result(solution, min_bound, max_bound, verbose=True, assert_good=False):
     error = np.linalg.norm(solution - min_bound)
     under_bounds = [solution[x] < min_bound[x] for x in range(len(max_bound))]
     under_bounds_str = "".join(["1" if x else "0" for x in under_bounds])
     over_bounds = [solution[x] > max_bound[x] for x in range(len(max_bound))]
     over_bounds_str = "".join(["1" if x else "0" for x in over_bounds])
     is_out_of_bounds = any(under_bounds) or any(over_bounds)
+
+    if verbose:
+        print("solution", solution)
+        print("error", error)
+        print("Components Under Bounds (Bitstring)", under_bounds_str)
+        print("Components Over Bounds  (Bitstring)", over_bounds_str)
+        print("is_out_of_bounds", is_out_of_bounds)
+
+    if assert_good:
+        assert not is_out_of_bounds
 
     return (
         error,
@@ -148,7 +159,52 @@ def benchmark_solving():
     print("elapsed_time", elapsed_time, "iter/sec:", iterations / elapsed_time)
 
 
+def test_known_solution():
+    for known_solution in KNOWN_SOLUTIONS:
+        ids = [x[0] for x in known_solution]
+        example_foods, _ = load_subset_of_data(ids=ids)
+        just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
+        A = np.array(just_matrix_coefficients)
+        A = A.T
+        min_requirements, max_requirements, _ = load_requirements()
+
+        solution = [x[1] for x in known_solution]
+        result = A @ solution
+        evaluate_result(result, min_requirements, max_requirements, assert_good=True)
+
+
 def real_test():
+    ids = [x[0] for x in KNOWN_SOLUTIONS[0]]
+    example_foods, _ = load_subset_of_data(ids=ids)
+    just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
+    A = np.array(just_matrix_coefficients)
+    A = A.T
+    min_requirements, max_requirements, _ = load_requirements()
+
+    # Part 2: Solve it with the solver
+    x = solve_it(
+        min_requirements, max_requirements, example_foods, verbose_logging=False
+    )
+    # sorted(x["food_quantity"].items(), key=lambda x: x[0])
+    assert len(x) == 1  # Only one solution
+    print(x)
+    print("known solution")
+    print("ids ", ids)
+    print("solution", [x[1] for x in KNOWN_SOLUTIONS[0]])
+    print("computed solution")
+
+    food_quantity = list(x.values())[0]["food_quantity"]
+    sorted_tuples = sorted(food_quantity.items(), key=lambda item: int(item[0]))
+    ids_jik = list([int(x[0]) for x in sorted_tuples])
+    quantities = list([x[1] for x in sorted_tuples])
+    print("ids", ids_jik)
+    print("solution", quantities)
+    # Now multipy it back to see if it's really a solution
+    result = A @ quantities
+    evaluate_result(result, min_requirements, max_requirements)
+
+
+def real_test_discard():
     # Part 0: Load foods and requirements
     # # fmt: off
     # example_foods1 = [
@@ -299,4 +355,5 @@ def tests():
 
 if __name__ == "__main__":
     real_test()
+    # test_known_solution()
     # tests()
