@@ -22,7 +22,7 @@ class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
         max_requirements,
         foods,
         error_for_quantity,
-        verbose=True,
+        log_level: int = 0,
         solutions_to_keep=float("inf"),
     ):
         super().__init__()
@@ -34,7 +34,7 @@ class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
 
         self.__solutions_to_keep = solutions_to_keep
         self.__solutions = {}
-        self.__verbose = verbose
+        self.__log_level = log_level
 
     def get_solutions(self):
         return self.__solutions
@@ -54,12 +54,14 @@ class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
         # If we already have this combination of foods, pick the one with the lowest error.
         if food_ids in self.__solutions:
             if solution["total_error"] < self.__solutions[food_ids]["total_error"]:
-                self.__solutions[food_ids] = solution
-                if self.__verbose:
+                if self.__log_level >= 1:
                     print("Found more optimal solution for", food_ids)
+                    print("Old solution:", self.__solutions[food_ids])
+                    print("New solution:", solution)
+                self.__solutions[food_ids] = solution
         else:
             self.__solutions[food_ids] = solution
-            if self.__verbose:
+            if self.__log_level >= 1:
                 print("Found a new solution:", food_ids)
 
         # Only keep the best solutions.
@@ -69,7 +71,7 @@ class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
                 key=lambda key: self.__solutions[key].get("total_error", 0),
             )
             del self.__solutions[max_error_key]
-            if self.__verbose:
+            if self.__log_level >= 1:
                 print("Deleted old solution:", max_error_key)
 
         # Move this somewhere, I think.
@@ -121,7 +123,7 @@ def solve_it(
     should_optimize: bool = True,
     should_use_upper_value: bool = True,
     required_foods: list[int] = [],
-    verbose_logging: bool = True,
+    log_level: int = 0,
 ):
     """
     :param should_optimize: Use the optimizing solver (initially the default; used in v0.1)
@@ -130,7 +132,7 @@ def solve_it(
     :param num_foods: Restrict the solution to only use this many foods.
     :param should_use_upper_value: Used to remove the upper bound of the nutritional requirements (for debugging)
     :param required_foods: A list of foods that must be in the solution.
-    :param verbose_logging: Sets log_search_progress on the solver.
+    :param log_level: 0 = No logging, 1 = Log solution status, 2 = Log solution status and solver progress.
     :return: A list of solutions.
     """
     model = cp_model.CpModel()
@@ -173,17 +175,17 @@ def solve_it(
         else:
             model.Add(nutrient_intake >= min_requirements[i])
         # Here we apply the traditional metric for error using absolute value:
-        model.AddAbsEquality(
-            target=error_for_quantity[i], expr=nutrient_intake - min_requirements[i]
-        )
+        # model.AddAbsEquality(
+        #     target=error_for_quantity[i], expr=nutrient_intake - min_requirements[i]
+        # )
         # Supposedly you don't need abs. I guess because the two expressions are always positive
-        # model.Add(error_for_quantity[i] == nutrient_intake - nutrient[1][0])
+        model.Add(error_for_quantity[i] == nutrient_intake - min_requirements[i])
 
     if should_optimize:
         model.Minimize(sum(error_for_quantity))
 
     solver = cp_model.CpSolver()
-    solver.parameters.log_search_progress = verbose_logging
+    solver.parameters.log_search_progress = bool(log_level >= 2)
     solver.parameters.enumerate_all_solutions = True
     # The solution printer displays the nutrient that is out of bounds.
     solution_printer = VarArraySolutionPrinter(
@@ -192,16 +194,16 @@ def solve_it(
         max_requirements,
         foods,
         error_for_quantity,
-        verbose=verbose_logging,
+        log_level=log_level,
     )
 
     status = solver.Solve(model, solution_printer)
-    if verbose_logging:
+    if log_level >= 1:
         print_info(status, solver, solution_printer)
 
     if status in [cp_model.OPTIMAL, cp_model.FEASIBLE]:
         solutions = solution_printer.get_solutions()
-        if verbose_logging:
+        if log_level:
             pprint(solutions)
         return solutions
 

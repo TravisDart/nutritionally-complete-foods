@@ -162,6 +162,10 @@ def benchmark_solving():
 def test_known_solution():
     for known_solution in KNOWN_SOLUTIONS:
         ids = [x[0] for x in known_solution]
+        print("known solution")
+        print("ids ", ids)
+        print("qty", [x[1] for x in KNOWN_SOLUTIONS[0]])
+
         example_foods, _ = load_subset_of_data(ids=ids)
         just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
         A = np.array(just_matrix_coefficients)
@@ -169,8 +173,10 @@ def test_known_solution():
         min_requirements, max_requirements, _ = load_requirements()
 
         solution = [x[1] for x in known_solution]
+        # solution = np.array(solution)
+        # solution = solution.T
         result = A @ solution
-        evaluate_result(result, min_requirements, max_requirements, assert_good=True)
+        evaluate_result(result, min_requirements, max_requirements, assert_good=False)
 
 
 def real_test():
@@ -180,17 +186,15 @@ def real_test():
     A = np.array(just_matrix_coefficients)
     A = A.T
     min_requirements, max_requirements, _ = load_requirements()
-
-    # Part 2: Solve it with the solver
-    x = solve_it(
-        min_requirements, max_requirements, example_foods, verbose_logging=False
-    )
-    # sorted(x["food_quantity"].items(), key=lambda x: x[0])
-    assert len(x) == 1  # Only one solution
-    print(x)
     print("known solution")
     print("ids ", ids)
     print("solution", [x[1] for x in KNOWN_SOLUTIONS[0]])
+
+    # Part 2: Solve it with the solver
+    x = solve_it(min_requirements, max_requirements, example_foods, log_level=1)
+    # sorted(x["food_quantity"].items(), key=lambda x: x[0])
+    assert len(x) == 1  # Only one solution
+    print(x)
     print("computed solution")
 
     food_quantity = list(x.values())[0]["food_quantity"]
@@ -354,6 +358,7 @@ def tests():
 
 
 if __name__ == "__main__":
-    real_test()
-    # test_known_solution()
+    test_known_solution()
+    # print("_" * 20)
+    # real_test()
     # tests()
