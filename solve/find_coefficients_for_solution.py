@@ -128,15 +128,6 @@ def evaluate_result(solution, min_bound, max_bound, verbose=True, assert_good=Fa
 
 
 def benchmark_solving():
-    # TODO: un-duplicate this code
-    # # fmt: off
-    # example_foods = [
-    #     ['14091', 'Beverages', 'Beverages, almond milk, unsweetened, shelf stable', '', (1840, 'mg'), (13, 'g'), (31, 'mg'), (0, 'mg'), (150, 'kcal'), (10, 'g'), (2, 'g'), (0, None), (10, 'µg'), (3, 'mg'), (60, 'mg'), (400, 'µg'), (1, 'mg'), (90, 'mg'), (670, 'mg'), (4, 'g'), (0, 'mg'), (1, 'µg'), (720, 'mg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (10, 'µg'), (63, 'mg'), (0, 'µg'), (965, 'g'), (1, 'mg')],
-    #     ['14355', 'Beverages', 'Beverages, tea, black, brewed, prepared with tap water', '', (0, 'mg'), (3, 'g'), (4, 'mg'), (0, 'mg'), (10, 'kcal'), (0, 'g'), (0, 'g'), (3730, 'µg'), (50, 'µg'), (0, 'mg'), (30, 'mg'), (2190, 'µg'), (0, 'mg'), (10, 'mg'), (370, 'mg'), (0, 'g'), (0, 'mg'), (0, 'µg'), (30, 'mg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (0, 'µg'), (997, 'g'), (0, 'mg')],
-    #     ['9024', 'Fruits and Fruit Juices', 'Apricots, canned, juice pack, with skin, solids and liquids', '', (120, 'mg'), (123, 'g'), (18, 'mg'), (1, 'mg'), (480, 'kcal'), (0, 'g'), (16, 'g'), (0, None), (20, 'µg'), (3, 'mg'), (100, 'mg'), (520, 'µg'), (3, 'mg'), (200, 'mg'), (1650, 'mg'), (6, 'g'), (0, 'mg'), (1, 'µg'), (40, 'mg'), (0, 'mg'), (850, 'µg'), (1, 'mg'), (0, 'µg'), (49, 'mg'), (0, 'µg'), (6, 'mg'), (22, 'µg'), (866, 'g'), (1, 'mg')],
-    #     ['11672', 'Vegetables and Vegetable Products', 'Potato pancakes', '', (320, 'mg'), (278, 'g'), (742, 'mg'), (2, 'mg'), (2677, 'kcal'), (148, 'g'), (33, 'g'), (4, 'µg'), (410, 'µg'), (17, 'mg'), (360, 'mg'), (2600, 'µg'), (17, 'mg'), (1280, 'mg'), (6220, 'mg'), (61, 'g'), (2, 'mg'), (89, 'µg'), (7640, 'mg'), (2, 'mg'), (320, 'µg'), (4, 'mg'), (3, 'µg'), (276, 'mg'), (3, 'µg'), (2, 'mg'), (27, 'µg'), (478, 'g'), (7, 'mg')]
-    # ]
-    # # fmt: on
     example_foods = load_subset_of_data(
         ids=[
             14091,
@@ -159,13 +150,11 @@ def benchmark_solving():
     print("elapsed_time", elapsed_time, "iter/sec:", iterations / elapsed_time)
 
 
-def test_known_solution():
-    for known_solution in KNOWN_SOLUTIONS:
-        ids = [x[0] for x in known_solution]
-        print("known solution")
-        print("ids ", ids)
-        print("qty", [x[1] for x in KNOWN_SOLUTIONS[0]])
+def multiply_known_solutions():
+    """Multiply out each known solution to see if it's really a solution."""
 
+    for known_solution in KNOWN_SOLUTIONS[4]:
+        ids = [x[0] for x in known_solution]
         example_foods, _ = load_subset_of_data(ids=ids)
         just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
         A = np.array(just_matrix_coefficients)
@@ -173,127 +162,39 @@ def test_known_solution():
         min_requirements, max_requirements, _ = load_requirements()
 
         solution = [x[1] for x in known_solution]
-        # solution = np.array(solution)
-        # solution = solution.T
         result = A @ solution
         evaluate_result(result, min_requirements, max_requirements, assert_good=False)
 
 
-def real_test():
-    ids = [x[0] for x in KNOWN_SOLUTIONS[0]]
-    example_foods, _ = load_subset_of_data(ids=ids)
-    just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
-    A = np.array(just_matrix_coefficients)
-    A = A.T
-    min_requirements, max_requirements, _ = load_requirements()
-    print("known solution")
-    print("ids ", ids)
-    print("solution", [x[1] for x in KNOWN_SOLUTIONS[0]])
+def solve_against_known_solutions():
+    """Run the solver against just the foods in the known solutions to verify that a solution can be found."""
 
-    # Part 2: Solve it with the solver
-    x = solve_it(min_requirements, max_requirements, example_foods, log_level=1)
-    # sorted(x["food_quantity"].items(), key=lambda x: x[0])
-    assert len(x) == 1  # Only one solution
-    print(x)
-    print("computed solution")
+    for known_solution in KNOWN_SOLUTIONS[4]:
+        ids = [x[0] for x in known_solution]
+        example_foods, _ = load_subset_of_data(ids=ids)
+        just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
+        A = np.array(just_matrix_coefficients)
+        A = A.T
+        min_requirements, max_requirements, _ = load_requirements()
 
-    food_quantity = list(x.values())[0]["food_quantity"]
-    sorted_tuples = sorted(food_quantity.items(), key=lambda item: int(item[0]))
-    ids_jik = list([int(x[0]) for x in sorted_tuples])
-    quantities = list([x[1] for x in sorted_tuples])
-    print("ids", ids_jik)
-    print("solution", quantities)
-    # Now multipy it back to see if it's really a solution
-    result = A @ quantities
-    evaluate_result(result, min_requirements, max_requirements)
+        # Part 2: Solve it with the solver
+        solver_result = solve_it(
+            min_requirements, max_requirements, example_foods, log_level=1
+        )
+        assert len(solver_result) == 1  # Only one solution
 
+        food_quantity = list(solver_result.values())[0]["food_quantity"]
+        solution = []
+        for id in ids:
+            solution += [food_quantity[str(id)]]
 
-def real_test_discard():
-    # Part 0: Load foods and requirements
-    # # fmt: off
-    # example_foods1 = [
-    #     ['14091', 'Beverages', 'Beverages, almond milk, unsweetened, shelf stable', '', (1840, 'mg'), (13, 'g'), (31, 'mg'), (0, 'mg'), (150, 'kcal'), (10, 'g'), (2, 'g'), (0, None), (10, 'µg'), (3, 'mg'), (60, 'mg'), (400, 'µg'), (1, 'mg'), (90, 'mg'), (670, 'mg'), (4, 'g'), (0, 'mg'), (1, 'µg'), (720, 'mg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (10, 'µg'), (63, 'mg'), (0, 'µg'), (965, 'g'), (1, 'mg')],
-    #     ['14355', 'Beverages', 'Beverages, tea, black, brewed, prepared with tap water', '', (0, 'mg'), (3, 'g'), (4, 'mg'), (0, 'mg'), (10, 'kcal'), (0, 'g'), (0, 'g'), (3730, 'µg'), (50, 'µg'), (0, 'mg'), (30, 'mg'), (2190, 'µg'), (0, 'mg'), (10, 'mg'), (370, 'mg'), (0, 'g'), (0, 'mg'), (0, 'µg'), (30, 'mg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (0, 'µg'), (0, 'mg'), (0, 'µg'), (997, 'g'), (0, 'mg')],
-    #     ['9024', 'Fruits and Fruit Juices', 'Apricots, canned, juice pack, with skin, solids and liquids', '', (120, 'mg'), (123, 'g'), (18, 'mg'), (1, 'mg'), (480, 'kcal'), (0, 'g'), (16, 'g'), (0, None), (20, 'µg'), (3, 'mg'), (100, 'mg'), (520, 'µg'), (3, 'mg'), (200, 'mg'), (1650, 'mg'), (6, 'g'), (0, 'mg'), (1, 'µg'), (40, 'mg'), (0, 'mg'), (850, 'µg'), (1, 'mg'), (0, 'µg'), (49, 'mg'), (0, 'µg'), (6, 'mg'), (22, 'µg'), (866, 'g'), (1, 'mg')],
-    #     ['11672', 'Vegetables and Vegetable Products', 'Potato pancakes', '', (320, 'mg'), (278, 'g'), (742, 'mg'), (2, 'mg'), (2677, 'kcal'), (148, 'g'), (33, 'g'), (4, 'µg'), (410, 'µg'), (17, 'mg'), (360, 'mg'), (2600, 'µg'), (17, 'mg'), (1280, 'mg'), (6220, 'mg'), (61, 'g'), (2, 'mg'), (89, 'µg'), (7640, 'mg'), (2, 'mg'), (320, 'µg'), (4, 'mg'), (3, 'µg'), (276, 'mg'), (3, 'µg'), (2, 'mg'), (27, 'µg'), (478, 'g'), (7, 'mg')]
-    # ]
-    # # fmt: on
-    example_foods, _ = load_subset_of_data(
-        ids=[
-            14091,
-            14355,
-            9068,
-            11672,
-        ]
-    )
-    just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
-    A = np.array(just_matrix_coefficients)
-    A = A.T
-    min_requirements, max_requirements, _ = load_requirements()
+        # # Also works
+        # food_quantity = list(solver_result.values())[0]["food_quantity"]
+        # sorted_tuples = sorted(food_quantity.items(), key=lambda item: int(item[0]))
+        # solution = list([x[1] for x in sorted_tuples])
 
-    # Part 1: Find the solution for a known set using error minimization.
-    # solution = find_closest_solution(A, min_requirements)
-    solution = find_closest_solution3(A, min_requirements, max_requirements)
-    print("solution", solution)
-    # Multiply this back to see if it's really a solution.
-    result = A @ solution
-    print("result", result)
-    (
-        error,
-        under_bounds,
-        over_bounds,
-        is_out_of_bounds,
-        under_bounds_str,
-        over_bounds_str,
-    ) = evaluate_result(result, min_requirements, max_requirements)
-    print(error, under_bounds_str, over_bounds_str, is_out_of_bounds)
-    print("is_out_of_bounds", is_out_of_bounds)
-
-    # assert not (is_out_of_bounds)
-
-    print("-" * 80)
-
-    # # Part 2: Solve it with the solver
-    # x = solve_it(
-    #     min_requirements, max_requirements, example_foods, verbose_logging=False
-    # )
-    # assert len(x) == 1
-    # food_quantity = list(x.values())[0]["food_quantity"]
-    # sorted_dict = dict(sorted(food_quantity.items(), key=lambda item: int(item[0])))
-    # quantities = tuple(sorted_dict.values())
-    # print("quantities", quantities)
-    # solution = np.array([quantities])
-    # solution = solution.T
-    # # Now multipy it back to see if it's really a solution
-    # result = A @ solution
-    # print(result.T)
-    # error, under_bounds, over_bounds, is_out_of_bounds = evaluate_result(
-    #     result, min_requirements, max_requirements
-    # )
-    # # print(error, under_bounds, over_bounds, is_out_of_bounds)
-    # print("is_out_of_bounds", is_out_of_bounds)
-    #
-    # print("-" * 80)
-
-    # Part 3: Benchmark the solution finding
-    solution = np.array([1227, 804, 3382, 913])
-    solution = solution.T
-    result = A @ solution
-    print(result.T)
-    (
-        error,
-        under_bounds,
-        over_bounds,
-        is_out_of_bounds,
-        under_bounds_str,
-        over_bounds_str,
-    ) = evaluate_result(result, min_requirements, max_requirements)
-    print(error, under_bounds_str, over_bounds_str, is_out_of_bounds)
-    print("is_out_of_bounds", is_out_of_bounds)
-
-    import pdb
-
-    pdb.set_trace()
+        result = A @ solution
+        evaluate_result(result, min_requirements, max_requirements)
 
 
 def tests():
@@ -358,7 +259,6 @@ def tests():
 
 
 if __name__ == "__main__":
-    test_known_solution()
-    # print("_" * 20)
-    # real_test()
     # tests()
+    multiply_known_solutions()
+    solve_against_known_solutions()

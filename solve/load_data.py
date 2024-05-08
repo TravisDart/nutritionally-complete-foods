@@ -109,8 +109,12 @@ def load_subset_of_data(ids: list[int] = None, random_ids: int = 0):
 
     foods, food_labels = load_real_data()
 
-    # Load a known solution
-    foods_subset = [f for f in foods if f[0] in ids]
+    # Filter the foods to only include the ones with the specified IDs.
+    foods_subset_dict = {f[0]: f for f in foods if f[0] in ids}
+    # Create a list where ordering matters.
+    foods_subset = []
+    for id in ids:
+        foods_subset += [foods_subset_dict[id]]
 
     # Add additional random foods to the list. - But add the same random items with each invocation of this function.
     if random_ids:
