@@ -6,9 +6,6 @@ from ortools.sat.python import cp_model
 from constants import FOOD_OFFSET, MAX_NUMBER, NUMBER_SCALE
 from load_data import (
     load_subset_of_data,
-    load_test_data,
-    load_real_data,
-    non_optimizing_test_data,
     load_requirements,
 )
 from validate_input import validate_data

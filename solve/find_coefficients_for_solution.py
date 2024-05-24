@@ -26,7 +26,7 @@ solve the vector x to find the quantities of food.
 import numpy as np
 from scipy.optimize import minimize
 import time
-from load_data import load_requirements, load_subset_of_data
+from load_data import load_requirements, load_subset_of_data, load_test_data
 from solve import solve_it
 from constants import KNOWN_SOLUTIONS
 
@@ -197,6 +197,38 @@ def solve_against_known_solutions():
         evaluate_result(result, min_requirements, max_requirements)
 
 
+def tests2():
+    ids = [
+        9024,
+        11672,
+        14091,
+        14355,
+    ]
+    example_foods, _ = load_subset_of_data(ids=ids)
+    import pdb
+
+    pdb.set_trace()
+
+    nutrients, example_foods, min_requirements, max_requirements = load_test_data()
+    x = solve_it(min_requirements, max_requirements, example_foods, log_level=1)
+    print(x)
+    return x
+
+    # Test 1: A is non-square
+    # fmt: off
+    A = np.array([
+        [1, 0, 0],
+        [0, 1, 1]
+    ])  # Non-square A
+    # fmt: on
+    A = A.T
+    c = np.array([2, 2, 2])
+
+    x = find_closest_solution(A, c)
+    assert np.array_equal(x, [2, 2])
+    print("Test1 passed")
+
+
 def tests():
     # Test 1: A is non-square
     # fmt: off
@@ -259,6 +291,6 @@ def tests():
 
 
 if __name__ == "__main__":
-    # tests()
-    multiply_known_solutions()
-    solve_against_known_solutions()
+    tests2()
+    # multiply_known_solutions()
+    # solve_against_known_solutions()

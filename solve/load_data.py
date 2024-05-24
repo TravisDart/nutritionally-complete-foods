@@ -4,23 +4,7 @@ from constants import NUMBER_SCALE, MAX_NUMBER
 
 
 def load_test_data():
-    nutrients = [
-        ["Vitamin A", (1, "mg"), (2, "mg")],
-        ["Vitamin B", (1, "mg"), (2, "mg")],
-        ["Vitamin C", (1, "mg"), (2, "mg")],
-    ]
-
-    # Each nutritional value for each food
-    foods = [  #                           Vitamins A  B  C
-        [1, "Food A", "Food", "Scientific_Name", (1, "mg"), (0, "mg"), (0, "mg")],
-        [2, "Food B", "Food", "Scientific_Name", (0, "mg"), (1, "mg"), (0, "mg")],
-        [3, "Food C", "Food", "Scientific_Name", (0, "mg"), (0, "mg"), (1, "mg")],
-    ]
-
-    return nutrients, foods
-
-
-def non_optimizing_test_data():
+    # This is simiilar to the format of the CSV data.
     nutrients = [
         ["Vitamin A", (1, "mg"), (10, "mg")],
         ["Vitamin B", (1, "mg"), (10, "mg")],
@@ -34,7 +18,11 @@ def non_optimizing_test_data():
         [3, "Food C", "Food", "Scientific_Name", (0, "mg"), (0, "mg"), (1, "mg")],
     ]
 
-    return nutrients, foods
+    # This is how the data is parsed and used.
+    min_requirements = [n[1][0] for n in nutrients]
+    max_requirements = [n[2][0] for n in nutrients]
+
+    return nutrients, foods, min_requirements, max_requirements
 
 
 def load_requirements():
