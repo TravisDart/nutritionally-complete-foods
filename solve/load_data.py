@@ -4,7 +4,7 @@ from constants import NUMBER_SCALE, MAX_NUMBER
 
 
 def load_test_data():
-    # This is simiilar to the format of the CSV data.
+    # This is similar to the format of the CSV data.
     nutrients = [
         ["Vitamin A", (1, "mg"), (10, "mg")],
         ["Vitamin B", (1, "mg"), (10, "mg")],

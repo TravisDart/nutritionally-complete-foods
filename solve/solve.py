@@ -162,6 +162,7 @@ def solve_it(
         solver_vars = quantity_of_food
 
     for i in range(len(min_requirements)):
+        # TODO: Reduce the food information to coefficients before passing to this function. This will simplify tests.
         nutrient_intake = sum(
             food[i + FOOD_OFFSET][0] * solver_vars[j] for j, food in enumerate(foods)
         )

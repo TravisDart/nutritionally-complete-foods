@@ -117,6 +117,7 @@ def solve_against_known_solutions():
 
         food_quantity = list(solver_result.values())[0]["food_quantity"]
         solution = []
+        # TODO: There's probably a better order-preserving way to do this.
         for id in ids:
             solution += [food_quantity[str(id)]]
 
@@ -130,35 +131,28 @@ def solve_against_known_solutions():
 
 
 def tests2():
-    ids = [
-        9024,
-        11672,
-        14091,
-        14355,
-    ]
-    example_foods, _ = load_subset_of_data(ids=ids)
-    import pdb
-
-    pdb.set_trace()
-
     nutrients, example_foods, min_requirements, max_requirements = load_test_data()
-    x = solve_it(min_requirements, max_requirements, example_foods, log_level=1)
-    print(x)
-    return x
+    solver_result = solve_it(
+        min_requirements,
+        max_requirements,
+        example_foods,
+        num_foods=len(example_foods),
+        log_level=1,
+    )
 
-    # Test 1: A is non-square
-    # fmt: off
-    A = np.array([
-        [1, 0, 0],
-        [0, 1, 1]
-    ])  # Non-square A
-    # fmt: on
+    just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
+    A = np.array(just_matrix_coefficients)
     A = A.T
-    c = np.array([2, 2, 2])
 
-    x = find_closest_solution(A, c)
-    assert np.array_equal(x, [2, 2])
-    print("Test1 passed")
+    food_quantity = list(solver_result.values())[0]["food_quantity"]
+    solution = []
+    # TODO: There's probably a better order-preserving way to do this.
+    for id in [1, 2, 3]:
+        solution += [food_quantity[str(id)]]
+
+    result = A @ solution
+    _evaluate_result(result, min_requirements, max_requirements)
+    print("Test2 passed")
 
 
 def tests():
