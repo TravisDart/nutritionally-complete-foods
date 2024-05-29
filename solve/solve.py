@@ -2,12 +2,14 @@ import argparse
 from pprint import pprint
 from statistics import mean
 
-from ortools.sat.python import cp_model
 from constants import FOOD_OFFSET, MAX_NUMBER, NUMBER_SCALE
 from load_data import (
-    load_subset_of_data,
+    load_real_data,
     load_requirements,
+    load_subset_of_data,
+    load_test_data,
 )
+from ortools.sat.python import cp_model
 from validate_input import validate_data
 
 
@@ -117,17 +119,13 @@ def solve_it(
     max_requirements,
     foods,
     num_foods: int = 4,
-    should_optimize: bool = True,
-    should_use_upper_value: bool = True,
     required_foods: list[int] = [],
     log_level: int = 0,
 ):
     """
-    :param should_optimize: Use the optimizing solver (initially the default; used in v0.1)
     :param nutritional_requirements: The upper and lower bounds for each nutrient.
     :param foods: A list specifying the nutritional value of each food.
     :param num_foods: Restrict the solution to only use this many foods.
-    :param should_use_upper_value: Used to remove the upper bound of the nutritional requirements (for debugging)
     :param required_foods: A list of foods that must be in the solution.
     :param log_level: 0 = No logging, 1 = Log solution status, 2 = Log solution status and solver progress.
     :return: A list of solutions.
@@ -162,16 +160,12 @@ def solve_it(
         solver_vars = quantity_of_food
 
     for i in range(len(min_requirements)):
-        # TODO: Reduce the food information to coefficients before passing to this function. This will simplify tests.
         nutrient_intake = sum(
             food[i + FOOD_OFFSET][0] * solver_vars[j] for j, food in enumerate(foods)
         )
-        if should_use_upper_value:
-            model.AddLinearConstraint(
-                nutrient_intake, min_requirements[i], max_requirements[i]
-            )
-        else:
-            model.Add(nutrient_intake >= min_requirements[i])
+        model.AddLinearConstraint(
+            nutrient_intake, min_requirements[i], max_requirements[i]
+        )
         # Here we apply the traditional metric for error using absolute value:
         # model.AddAbsEquality(
         #     target=error_for_quantity[i], expr=nutrient_intake - min_requirements[i]
@@ -179,8 +173,7 @@ def solve_it(
         # Supposedly you don't need abs. I guess because the two expressions are always positive
         model.Add(error_for_quantity[i] == nutrient_intake - min_requirements[i])
 
-    if should_optimize:
-        model.Minimize(sum(error_for_quantity))
+    model.Minimize(sum(error_for_quantity))
 
     solver = cp_model.CpSolver()
     solver.parameters.log_search_progress = bool(log_level >= 2)
@@ -216,19 +209,13 @@ if __name__ == "__main__":
         default=4,
         help="The number of foods in the solution set. The default is 4 foods.",
     )
-    parser.add_argument(
-        "--optimize",
-        action="store_true",
-        default=False,
-        help="Uses the optimizing solver (initially the default; used in v0.1)",
-    )
     args = parser.parse_args()
 
-    # foods = load_test_data()
-    # foods = load_real_data()
-    foods, food_labels = load_subset_of_data()
+    foods, food_labels = load_real_data()
+    # # foods, food_labels = load_subset_of_data()
     min_requirements, max_requirements, nutrients = load_requirements()
     validate_data(nutrients, foods, food_labels)
+    # nutrients, foods, min_requirements, max_requirements = load_test_data()
 
     # # Exclude foods. These were in previous solutions, but I don't want
     # # to every grow/make them, so exclude them.
@@ -239,10 +226,23 @@ if __name__ == "__main__":
     # ]
     # foods = [food for food in foods if int(food[0]) not in exclude]
 
-    solutions = solve_it(
-        min_requirements,
-        max_requirements,
-        foods,
-        num_foods=args.n,
-        should_optimize=args.optimize,
-    )
+    keep_going = True
+    all_solutions = {}
+    while keep_going:
+        solutions = solve_it(
+            min_requirements,
+            max_requirements,
+            foods,
+            num_foods=args.n,
+        )
+        print(solutions)
+        if solutions:
+            all_solutions.update(solutions)
+
+            # Remove foods in the solution from the list of foods:
+            for solution in dict(solutions).keys():
+                foods = [food for food in foods if int(food[0]) not in solution]
+        else:
+            keep_going = False
+
+        print(all_solutions)
