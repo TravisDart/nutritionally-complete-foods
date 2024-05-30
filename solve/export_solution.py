@@ -14,4 +14,4 @@ def export_food_data(selected_food_ids: Optional[list[int]]):
 
 
 if __name__ == "__main__":
-    pprint(export_food_data([9024, 14091, 14355, 11672]))
+    pprint(export_food_data([9089, 9412, 11656, 11946, 14091, 14412, 14355]))

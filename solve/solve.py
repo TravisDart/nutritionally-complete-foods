@@ -1,4 +1,6 @@
 import argparse
+import time
+from itertools import combinations
 from pprint import pprint
 from statistics import mean
 
@@ -10,6 +12,7 @@ from load_data import (
     load_test_data,
 )
 from ortools.sat.python import cp_model
+
 from validate_input import validate_data
 
 
@@ -226,23 +229,124 @@ if __name__ == "__main__":
     # ]
     # foods = [food for food in foods if int(food[0]) not in exclude]
 
-    keep_going = True
-    all_solutions = {}
-    while keep_going:
-        solutions = solve_it(
-            min_requirements,
-            max_requirements,
-            foods,
-            num_foods=args.n,
-        )
-        print(solutions)
-        if solutions:
-            all_solutions.update(solutions)
+    # # Find the initial set of solutions, normally.
+    # keep_going = True
+    # all_solutions = {}
+    # while keep_going:
+    #     solutions = solve_it(
+    #         min_requirements,
+    #         max_requirements,
+    #         foods,
+    #         num_foods=args.n,
+    #     )
+    #     print(solutions)
+    #     if solutions:
+    #         all_solutions.update(solutions)
+    #
+    #         # Remove foods in the solution from the list of foods:
+    #         for solution in dict(solutions).keys():
+    #             foods = [food for food in foods if int(food[0]) not in solution]
+    #     else:
+    #         keep_going = False
+    #
+    #     print(all_solutions)
+    #
+    # # Flatten and deduplicate the sets of solutions to get just the elements.
+    # solution_elements = list(set([z for y in all_solutions.keys() for z in y]))
 
-            # Remove foods in the solution from the list of foods:
-            for solution in dict(solutions).keys():
-                foods = [food for food in foods if int(food[0]) not in solution]
-        else:
-            keep_going = False
+    # Tmp workaround to skip the first iteration:
+    # fmt: off
+    all_solutions = {
+      (11656, 11946, 14091, 14412): {'food_quantity': {'14091': 504, '14412': 11628, '11656': 2473, '11946': 7779}, 'avg_error': 1382395.8620689656, 'total_error': 40089480},
+      (9089, 11656, 14091, 14412): {'food_quantity': {'14091': 322, '14412': 11628, '9089': 1346, '11656': 2356}, 'avg_error': 951205.1724137932, 'total_error': 27584950},
+      (9089, 11656, 14091, 14355): {'food_quantity': {'14091': 341, '14355': 805, '9089': 1397, '11656': 2319}, 'avg_error': 617942.0689655172, 'total_error': 17920320},
+      (9412, 11656, 14091, 14355): {'food_quantity': {'14091': 430, '14355': 805, '9412': 1994, '11656': 2140}, 'avg_error': 506314.3448275862, 'total_error': 14683116}
+    }
+    # fmt: on
+    solution_elements = [9089, 9412, 11656, 11946, 14091, 14412, 14355]
 
-        print(all_solutions)
+    # Find solutions with every combination of the elements in the preceding solutions.
+    iterations = 0
+    total_iterations = 2 ** len(solution_elements)
+    average_elapsed_time = None
+    for x in range(len(solution_elements) + 1):
+        for elements_to_remove in combinations(solution_elements, x):
+            iterations += 1
+            foods2 = [food for food in foods if int(food[0]) not in elements_to_remove]
+
+            t = time.process_time()
+            solutions = solve_it(
+                min_requirements,
+                max_requirements,
+                foods2,
+                num_foods=args.n,
+            )
+            elapsed_time = time.process_time() - t
+
+            if average_elapsed_time is None:
+                average_elapsed_time = elapsed_time
+            else:
+                average_elapsed_time = (
+                    average_elapsed_time
+                    + (elapsed_time - average_elapsed_time) / iterations
+                )
+
+            print(
+                f"Iteration {iterations} took {elapsed_time} (avg {average_elapsed_time}). "
+                f"Run should complete in {(total_iterations - iterations) * average_elapsed_time} seconds."
+            )
+
+            if solutions:
+                for solution in solutions:
+                    if solution not in all_solutions:
+                        print(
+                            "Found new solution:",
+                            solution,
+                            "with exclusions:",
+                            elements_to_remove,
+                        )
+
+                all_solutions.update(solutions)
+            else:
+                print("No solutions found for", elements_to_remove)
+
+    print(all_solutions)
+
+# Possible optimization:
+#
+#     def combination_iterator(solution_elements: list[int]):
+#         for x in range(len(solution_elements) + 1):
+#             for elements_to_remove in combinations(solution_elements, x):
+#                 yield elements_to_remove
+#
+#     for x in tqdm(
+#         combination_iterator(solution_elements),
+#         2 ** len(solution_elements),
+#         "Iterations",
+#     ):
+#         foods2 = [food for food in foods if int(food[0]) not in elements_to_remove]
+#         solutions = solve_it(
+#             min_requirements,
+#             max_requirements,
+#             foods2,
+#             num_foods=args.n,
+#         )
+#
+#         if solutions:
+#             for solution in solutions:
+#                 if solution not in all_solutions:
+#                     print(
+#                         "Found new solution:",
+#                         solution,
+#                         "with exclusions:",
+#                         elements_to_remove,
+#                     )
+#
+#             all_solutions.update(solutions)
+#         else:
+#             print("No solutions found for", elements_to_remove)
+#
+#     solution_elements_from_iteration = set(
+#         [z for y in all_solutions.keys() for z in y]
+#     )
+#     print(all_solutions)
