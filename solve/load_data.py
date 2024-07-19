@@ -1,6 +1,7 @@
 import csv
 import random
 from constants import NUMBER_SCALE, MAX_NUMBER
+from validate_input import validate_data
 
 
 def load_test_data(food_set: int = 0):
@@ -132,3 +133,33 @@ def load_subset_of_data(ids: list[int] = None, random_ids: int = 0):
         random.seed()  # Clean up after ourselves and re-seed the random number generator.
 
     return foods_subset, food_labels
+
+
+def load_data(should_use_test_data=False):
+    if should_use_test_data:
+        (
+            nutrients,
+            foods,
+            food_labels,
+            min_requirements,
+            max_requirements,
+        ) = load_test_data()
+    else:
+        foods, food_labels = load_real_data()
+        # foods, food_labels = load_subset_of_data()
+        min_requirements, max_requirements, nutrients = load_requirements()
+        validate_data(nutrients, foods, food_labels)
+
+    # List of food IDs to exclude.
+    # It's probably better to add new exclusions here for the moment.
+    # If you remove foods from selected_foods.txt, all IDs must be recalculated.
+    exclude = [
+        35182,  # Acorn stew (Apache)
+        14091,  # Beverages, almond milk, unsweetened, shelf stable
+        14639,  # Beverages, rice milk, unsweetened
+        11656,  # Corn pudding, home prepared
+        11672,  # Potato pancakes
+    ]
+    foods = [food for food in foods if int(food[0]) not in exclude]
+
+    return nutrients, foods, food_labels, min_requirements, max_requirements

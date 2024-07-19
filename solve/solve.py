@@ -1,5 +1,4 @@
-import argparse
-import time
+import sys
 from itertools import combinations
 from pprint import pprint
 from statistics import mean
@@ -7,15 +6,9 @@ from statistics import mean
 from tqdm import tqdm
 
 from constants import FOOD_OFFSET, MAX_NUMBER, NUMBER_SCALE
-from load_data import (
-    load_real_data,
-    load_requirements,
-    load_subset_of_data,
-    load_test_data,
-)
+from load_data import load_data
 from ortools.sat.python import cp_model
-
-from validate_input import validate_data
+from utils import get_arg_parser
 
 
 class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
@@ -87,8 +80,9 @@ def print_info(status, solver, solution_printer):
         print(f"  branches : {solver.NumBranches()}")
         print(f"  wall time: {solver.WallTime()} s")
         print(f"  sol found: {len(solution_printer.get_solutions())}")
-    elif status == cp_model.MODEL_INVALID:
-        print(cp_model.Validate())
+    # I'm pretty sure this used to work...
+    # elif status == cp_model.MODEL_INVALID:
+    #     print(cp_model.Validate())
     else:
         outcomes = [
             "UNKNOWN",
@@ -187,58 +181,23 @@ def solve_it(
         return solutions
 
 
-def load_data(should_use_test_data=False):
-    if should_use_test_data:
-        (
-            nutrients,
-            foods,
-            food_labels,
-            min_requirements,
-            max_requirements,
-        ) = load_test_data()
-    else:
-        foods, food_labels = load_real_data()
-        # foods, food_labels = load_subset_of_data()
-        min_requirements, max_requirements, nutrients = load_requirements()
-        validate_data(nutrients, foods, food_labels)
-
-    # List of food IDs to exclude.
-    # It's probably better to add new exclusions here for the moment.
-    # If you remove foods from selected_foods.txt, all IDs must be recalculated.
-    exclude = [
-        35182,  # Acorn stew (Apache)
-        14091,  # Beverages, almond milk, unsweetened, shelf stable
-        14639,  # Beverages, rice milk, unsweetened
-        11656,  # Corn pudding, home prepared
-        11672,  # Potato pancakes
-    ]
-    foods = [food for food in foods if int(food[0]) not in exclude]
-
-    return nutrients, foods, food_labels, min_requirements, max_requirements
-
-
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Find sets of foods that combine to satisfy one's daily nutritional requirements."
-    )
-    parser.add_argument(
-        "-n",
-        type=int,
-        default=8,
-        help="The number of foods in the solution set. The default is 8 foods.",
-    )
-    parser.add_argument(
-        "--test-data",
-        action="store_true",
-        help="Use test data instead of real data.",
-    )
-    args = parser.parse_args()
-
+    args = get_arg_parser().parse_args()
     nutrients, foods, food_labels, min_requirements, max_requirements = load_data(
         should_use_test_data=args.test_data
     )
 
-    # Step 2: Find solutions
+    if args.simple:
+        solutions = solve_it(
+            min_requirements,
+            max_requirements,
+            foods,
+            num_foods=args.n,
+            log_level=args.verbose,
+        )
+        print(solutions)
+        sys.exit()
+
     def first_run(min_requirements, max_requirements, foods, num_foods):
         # Find the initial set of solutions, normally.
         keep_going = True
@@ -268,26 +227,6 @@ if __name__ == "__main__":
         foods,
         num_foods=args.n,
     )
-    # # fmt: off
-    # all_solutions = {
-    #     (4510, 9520, 11938, 14412, 16112, 31020, 35206): {'food_quantity': {'35206': 1136, '14412': 17835, '4510': 115, '9520': 1035, '16112': 642, '11938': 378, '31020': 241}, 'avg_error': 2161471.7586206896, 'total_error': 62682681},
-    #     (4513, 9520, 11938, 14412, 16112, 31020, 35206): {'food_quantity': {'35206': 1160, '14412': 17721, '4513': 115, '9520': 1033, '16112': 644, '11938': 378, '31020': 241}, 'avg_error': 2165449.0689655175, 'total_error': 62798023},
-    #     (4588, 9520, 11938, 14412, 16112, 31020, 35206): {'food_quantity': {'35206': 1172, '14412': 17582, '4588': 116, '9520': 1033, '16112': 624, '11938': 289, '31020': 288}, 'avg_error': 2137777.3103448274, 'total_error': 61995542},
-    #     (4588, 9282, 9520, 11938, 14412, 16112, 31020): {'food_quantity': {'14412': 15849, '4588': 116, '9520': 1033, '9282': 1718, '16112': 669, '11938': 289, '31020': 242}, 'avg_error': 2013152.2068965517, 'total_error': 58381414},
-    #     (4516, 9282, 9520, 11938, 14412, 16112, 31020): {'food_quantity': {'14412': 15849, '4516': 116, '9520': 1033, '9282': 1718, '16112': 669, '11938': 289, '31020': 242}, 'avg_error': 2011588.2068965517, 'total_error': 58336058},
-    #     (4581, 9282, 9520, 11938, 14412, 16112, 31020): {'food_quantity': {'14412': 15849, '4581': 116, '9520': 1033, '9282': 1718, '16112': 669, '11938': 289, '31020': 242}, 'avg_error': 2011576.2068965517, 'total_error': 58335710},
-    #     (9282, 9520, 11938, 14412, 16112, 31020, 42231): {'food_quantity': {'14412': 15778, '42231': 116, '9520': 1060, '9282': 1684, '16112': 668, '11938': 289, '31020': 243}, 'avg_error': 2009702.3103448276, 'total_error': 58281367},
-    #     (4707, 9282, 9520, 11938, 14412, 16112, 31020): {'food_quantity': {'14412': 15800, '4707': 118, '9520': 1077, '9282': 1801, '16112': 621, '11938': 334, '31020': 245}, 'avg_error': 1965344.0344827587, 'total_error': 56994977},
-    #     (4707, 9192, 9520, 11938, 14412, 16112, 31020): {'food_quantity': {'14412': 12196, '4707': 108, '9520': 963, '9192': 3805, '16112': 696, '11938': 254, '31020': 250}, 'avg_error': 1927527.1724137932, 'total_error': 55898288},
-    #     (4707, 9520, 11993, 14412, 31020, 35206, 43449): {'food_quantity': {'35206': 528, '14412': 11628, '4707': 151, '9520': 1041, '43449': 1419, '11993': 129, '31020': 453}, 'avg_error': 950805.3793103448, 'total_error': 27573356},
-    #     (4572, 9520, 11993, 14412, 31020, 35206, 43449): {'food_quantity': {'35206': 513, '14412': 11628, '4572': 149, '9520': 1023, '43449': 1454, '11993': 110, '31020': 459}, 'avg_error': 938185.4137931034, 'total_error': 27207377},
-    #     (4516, 9520, 11993, 14412, 31020, 35206, 43449): {'food_quantity': {'35206': 513, '14412': 11628, '4516': 149, '9520': 1023, '43449': 1454, '11993': 110, '31020': 459}, 'avg_error': 938175.1379310344, 'total_error': 27207079},
-    #     (4047, 9520, 11993, 14412, 31020, 35206, 43449): {'food_quantity': {'35206': 486, '14412': 11628, '4047': 151, '9520': 1026, '43449': 1446, '11993': 117, '31020': 458}, 'avg_error': 930482.9310344828, 'total_error': 26984005},
-    #     (4518, 9520, 11993, 14412, 31020, 35206, 43449): {'food_quantity': {'35206': 473, '14412': 11628, '4518': 150, '9520': 1020, '43449': 1458, '11993': 111, '31020': 460}, 'avg_error': 929052.275862069, 'total_error': 26942516},
-    #     (4518, 9520, 11998, 14412, 31020, 35206, 43449): {'food_quantity': {'35206': 447, '14412': 11628, '4518': 149, '9520': 898, '43449': 1569, '11998': 125, '31020': 459}, 'avg_error': 927350.3448275862, 'total_error': 26893160},
-    #     (9520, 11998, 14412, 31020, 35092, 35206, 43449): {'food_quantity': {'35206': 439, '35092': 245, '14412': 11628, '9520': 869, '43449': 1471, '11998': 274, '31020': 419}, 'avg_error': 915769.9655172414, 'total_error': 26557329},
-    # }
-    # # fmt: on
     print(all_solutions)
 
     def second_run(all_solutions):
@@ -330,4 +269,5 @@ if __name__ == "__main__":
     all_solutions = second_run(all_solutions)
 
     solution_elements_from_iteration = set([z for y in all_solutions.keys() for z in y])
+    print(solution_elements_from_iteration)
     print(all_solutions)
