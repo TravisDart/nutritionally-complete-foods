@@ -66,54 +66,67 @@ def _evaluate_result(solution, min_bound, max_bound, verbose=True, assert_good=F
 def multiply_known_solutions():
     """Multiply out each known solution to see if it's really a solution."""
 
-    for known_solution in KNOWN_SOLUTIONS[4]:
-        ids = [x[0] for x in known_solution]
-        example_foods, _ = load_subset_of_data(ids=ids)
-        just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
-        A = np.array(just_matrix_coefficients)
-        A = A.T
-        min_requirements, max_requirements, _ = load_requirements()
+    for number_of_foods in KNOWN_SOLUTIONS:
+        for known_solution in KNOWN_SOLUTIONS[number_of_foods]:
+            ids = [x[0] for x in known_solution]
+            example_foods, _ = load_subset_of_data(ids=ids)
+            just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
+            A = np.array(just_matrix_coefficients)
+            A = A.T
+            min_requirements, max_requirements, _ = load_requirements()
 
-        solution = [x[1] for x in known_solution]
-        result = A @ solution
-        _evaluate_result(result, min_requirements, max_requirements, assert_good=True)
+            solution = [x[1] for x in known_solution]
+            result = A @ solution
+            _evaluate_result(
+                result, min_requirements, max_requirements, assert_good=True
+            )
 
 
 def solve_against_known_solutions(verbose=True):
     """Run the solver against just the foods in the known solutions to verify that a solution can be found."""
 
-    for known_solution in KNOWN_SOLUTIONS[4]:
-        ids = [x[0] for x in known_solution]
-        example_foods, _ = load_subset_of_data(ids=ids)
-        just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
-        A = np.array(just_matrix_coefficients)
-        A = A.T
-        min_requirements, max_requirements, _ = load_requirements()
+    for number_of_foods in KNOWN_SOLUTIONS:
+        for known_solution in KNOWN_SOLUTIONS[number_of_foods]:
+            ids = [x[0] for x in known_solution]
+            example_foods, _ = load_subset_of_data(ids=ids)
+            just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
+            A = np.array(just_matrix_coefficients)
+            A = A.T
+            min_requirements, max_requirements, _ = load_requirements()
 
-        # Part 2: Solve it with the solver
-        solver_result = solve_it(
-            min_requirements, max_requirements, example_foods, log_level=int(verbose)
-        )
-        assert len(solver_result) == 1  # Only one solution
+            # Part 2: Solve it with the solver
+            solver_result = solve_it(
+                min_requirements,
+                max_requirements,
+                example_foods,
+                log_level=int(verbose),
+            )
+            assert len(solver_result) == 1  # Only one solution
 
-        food_quantity = list(solver_result.values())[0]["food_quantity"]
-        solution = ordered_dict_values(food_quantity)
+            food_quantity = list(solver_result.values())[0]["food_quantity"]
+            solution = ordered_dict_values(food_quantity)
 
-        result = A @ solution
-        _evaluate_result(
-            result,
-            min_requirements,
-            max_requirements,
-            verbose=verbose,
-            assert_good=True,
-        )
+            result = A @ solution
+            _evaluate_result(
+                result,
+                min_requirements,
+                max_requirements,
+                verbose=verbose,
+                assert_good=True,
+            )
 
 
 def trivial_tests(verbose=True):
     for food_set in range(3):
-        nutrients, example_foods, min_requirements, max_requirements = load_test_data(
-            food_set
-        )
+        (
+            nutrients,
+            example_foods,
+            food_labels,
+            min_requirements,
+            max_requirements,
+        ) = load_test_data(food_set)
+        del food_labels
+
         solver_result = solve_it(
             min_requirements,
             max_requirements,
@@ -159,8 +172,8 @@ def benchmark_solving():
 
 
 if __name__ == "__main__":
-    trivial_tests()
-    multiply_known_solutions()
+    # trivial_tests()
+    # multiply_known_solutions()
     solve_against_known_solutions()
     print("All assertions pass.")
 

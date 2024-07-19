@@ -11,7 +11,15 @@ def load_test_data(food_set: int = 0):
         ["Vitamin C", (1, "mg"), (10, "mg")],
     ]
 
-    food_labels = ["ID", "Category", "Food", "Scientific_Name", "Vitamin A", "Vitamin B", "Vitamin C"]
+    food_labels = [
+        "ID",
+        "Category",
+        "Food",
+        "Scientific_Name",
+        "Vitamin A",
+        "Vitamin B",
+        "Vitamin C",
+    ]
 
     food_sets = [
         [  # Square                             Vitamins  A          B          C

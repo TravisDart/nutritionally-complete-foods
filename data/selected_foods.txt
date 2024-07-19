@@ -1,3 +1,4 @@
+American Indian/Alaska Native Foods > Acorn stew (Apache)
 American Indian/Alaska Native Foods > Agave, cooked (Southwest)
 American Indian/Alaska Native Foods > Agave, dried (Southwest)
 American Indian/Alaska Native Foods > Agave, raw (Southwest)
@@ -53,6 +54,8 @@ American Indian/Alaska Native Foods > Willow, leaves in oil (Alaska Native)
 American Indian/Alaska Native Foods > Willow, young leaves, chopped (Alaska Native)
 American Indian/Alaska Native Foods > Wocas, dried seeds, Oregon, yellow pond lily (Klamath)
 American Indian/Alaska Native Foods > Wocas, tuber, cooked, Oregon, yellow pond lily (Klamath)
+Beverages > Beverages, almond milk, unsweetened, shelf stable
+Beverages > Beverages, rice milk, unsweetened
 Beverages > Beverages, tea, black, brewed, prepared with distilled water
 Beverages > Beverages, tea, black, brewed, prepared with tap water
 Beverages > Beverages, tea, black, ready to drink
@@ -835,6 +838,7 @@ Vegetables and Vegetable Products > Collards, frozen, chopped, cooked, boiled, d
 Vegetables and Vegetable Products > Collards, frozen, chopped, unprepared
 Vegetables and Vegetable Products > Collards, raw
 Vegetables and Vegetable Products > Coriander (cilantro) leaves, raw
+Vegetables and Vegetable Products > Corn pudding, home prepared
 Vegetables and Vegetable Products > Corn with red and green peppers, canned, solids and liquids
 Vegetables and Vegetable Products > Corn, sweet, white, canned, cream style, no salt added
 Vegetables and Vegetable Products > Corn, sweet, white, canned, cream style, regular pack
@@ -1066,6 +1070,7 @@ Vegetables and Vegetable Products > Poi
 Vegetables and Vegetable Products > Pokeberry shoots, (poke), cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Pokeberry shoots, (poke), raw
 Vegetables and Vegetable Products > Potato flour
+Vegetables and Vegetable Products > Potato pancakes
 Vegetables and Vegetable Products > Potato puffs, frozen, oven-heated
 Vegetables and Vegetable Products > Potato puffs, frozen, unprepared
 Vegetables and Vegetable Products > Potato wedges, frozen (Includes foods for USDA's Food Distribution Program)
