@@ -11,6 +11,8 @@ def load_test_data(food_set: int = 0):
         ["Vitamin C", (1, "mg"), (10, "mg")],
     ]
 
+    food_labels = ["ID", "Category", "Food", "Scientific_Name", "Vitamin A", "Vitamin B", "Vitamin C"]
+
     food_sets = [
         [  # Square                             Vitamins  A          B          C
             [1, "Food A", "Food", "Scientific_Name", (1, "mg"), (0, "mg"), (0, "mg")],
@@ -33,7 +35,7 @@ def load_test_data(food_set: int = 0):
     min_requirements = [n[1][0] for n in nutrients]
     max_requirements = [n[2][0] for n in nutrients]
 
-    return nutrients, foods, min_requirements, max_requirements
+    return nutrients, foods, food_labels, min_requirements, max_requirements
 
 
 def load_requirements():
@@ -104,7 +106,7 @@ def load_real_data():
 
 def load_subset_of_data(ids: list[int] = None, random_ids: int = 0):
     if ids is None:
-        ids = (9024, 14091, 14355, 11672)
+        ids = (2009, 4531, 9520, 11998, 14412, 20129, 31020)
 
     foods, food_labels = load_real_data()
 

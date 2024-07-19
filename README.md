@@ -1,4 +1,4 @@
-# Nutritionally Complete Foods v0.1
+# Nutritionally Complete Foods v0.2
 
 * [Overview](#Overview)
 * [Environment Setup](#Environment-Setup)
@@ -80,10 +80,10 @@ python find_complete_foods.py
 
 This will output a list of foods that combine to satisfy the given dietary constrains. 
 
-As the goal is to find the fewest number of foods required, the solver is currently hardcoded to find 4 foods. (There are no solutions with 3 foods or fewer.) The number of foods in the solution can be set with the `-n` flag:
+As the goal is to find the fewest number of foods required, the solver is currently hardcoded to find 4 foods. (There are no solutions with 7 foods or fewer.) The number of foods in the solution can be set with the `-n` flag:
 
 ```
-python find_complete_foods.py -n 5
+python find_complete_foods.py -n 9
 ```
 
 
@@ -145,3 +145,4 @@ Based on this result, these are the follow up questions and possible improvement
   - Constrain solution to certain groups of foods. For example try to find a solution that incorporates one item from a selected lisit of mushrooms, and one item from a seleted list of potatoes.
   - Integrate the nutritional-requirement calculator instead of having to calculate that separately and import it in a spreadsheet.
   - Add more command-line options for things like verbosity, output, etc.
+

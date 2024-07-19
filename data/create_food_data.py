@@ -44,15 +44,14 @@ def extract_json(zip_path, json_path):
 def create_filtered_json(json_path, filtered_json_path, selected_foods_path):
     all_foods = json.loads(open(json_path).read())
     all_foods = all_foods["SRLegacyFoods"]  # Only one top-level key
-
-    # A file containing the category and food name in the form "Category > Food Name"
-    # This is a little bit over-specified, as we just want the food name.
     selected_foods = open(selected_foods_path).read().splitlines()
-    selected_food_names = [x.split(" > ")[1] for x in selected_foods]
+    selected_food_names = [tuple(x.split(" > ")) for x in selected_foods]
 
     output = []
     for food in all_foods:
-        if food["description"] in selected_food_names:
+        category = food["foodCategory"]["description"]
+        food_name = food["description"]
+        if (category, food_name) in selected_food_names:
             output += [food]
 
     open(filtered_json_path, "w").write(json.dumps(output))
