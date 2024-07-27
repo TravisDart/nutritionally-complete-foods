@@ -135,7 +135,7 @@ def create_csv(filtered_json_path, csv_path):
                         amount *= 1000
                         nutrient_unit = "µg"
 
-                    # amount /= 100  # The standard serving size is 100g. Normalize to 1g.
+                    amount /= 100  # The standard serving size is 100g. Normalize to 1g.
                     amount = round(amount, 3)  # Round everything to 3 decimal places.
 
                     dest_col = required_nutrients.index(nutrient["nutrient"]["name"])
