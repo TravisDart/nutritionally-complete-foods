@@ -5,11 +5,12 @@ def get_arg_parser():
     parser = argparse.ArgumentParser(
         description="Find sets of foods that combine to satisfy one's daily nutritional requirements."
     )
+    default_foods = 8
     parser.add_argument(
         "-n",
         type=int,
-        default=8,
-        help="The number of foods in the solution set. The default is 8 foods.",
+        default=default_foods,
+        help=f"The number of foods in the solution set. The default is {default_foods} foods.",
     )
     parser.add_argument(
         "--test-data",
@@ -22,10 +23,5 @@ def get_arg_parser():
         action="count",
         default=0,
         help="Verbosity logging. Use -vv for very verbose.",
-    )
-    parser.add_argument(
-        "--simple",
-        action="store_true",
-        help="Find the single best solution and print it.",
     )
     return parser

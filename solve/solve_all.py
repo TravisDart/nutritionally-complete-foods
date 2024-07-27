@@ -19,10 +19,6 @@ if __name__ == "__main__":
         should_use_test_data=args.test_data
     )
 
-    if args.simple:
-        print("Not implemented in this version. Use solve.py instead.")
-        sys.exit(1)
-
     def first_run(min_requirements, max_requirements, foods, num_foods):
         # Find the initial set of solutions, normally.
         keep_going = True

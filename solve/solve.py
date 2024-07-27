@@ -183,17 +183,28 @@ def solve_it(
 
 if __name__ == "__main__":
     args = get_arg_parser().parse_args()
+
+    # List of food IDs to exclude. Add new exclusions here.
+    # The current list is composed of the processed foods that I have come across during testing.
+    # Don't remove foods from selected_foods.txt, as the food IDs will change, breaking the tests and previous solutions
+    exclude = [
+        35182,  # Acorn stew (Apache)
+        14091,  # Beverages, almond milk, unsweetened, shelf stable
+        14639,  # Beverages, rice milk, unsweetened
+        11656,  # Corn pudding, home prepared
+        11672,  # Potato pancakes
+    ]
+
     nutrients, foods, food_labels, min_requirements, max_requirements = load_data(
-        should_use_test_data=args.test_data
+        should_use_test_data=args.test_data,
+        exclude=exclude,
     )
 
-    if args.simple:
-        solutions = solve_it(
-            min_requirements,
-            max_requirements,
-            foods,
-            num_foods=args.n,
-            log_level=args.verbose,
-        )
-        print(solutions)
-        sys.exit()
+    solutions = solve_it(
+        min_requirements,
+        max_requirements,
+        foods,
+        num_foods=args.n,
+        log_level=args.verbose,
+    )
+    print(solutions)
