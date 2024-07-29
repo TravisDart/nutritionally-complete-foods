@@ -185,8 +185,8 @@ if __name__ == "__main__":
     args = get_arg_parser().parse_args()
 
     # List of food IDs to exclude. Add new exclusions here.
-    # The current list is composed of the processed foods that I have come across during testing.
-    # Don't remove foods from selected_foods.txt, as the food IDs will change, breaking the tests and previous solutions
+    # The current list is composed of the processed foods that I have come across during testing. Don't remove foods
+    # from selected_foods.txt, as this will change the food IDs and break the tests and previous solutions.
     exclude = [
         35182,  # Acorn stew (Apache)
         14091,  # Beverages, almond milk, unsweetened, shelf stable
@@ -200,11 +200,24 @@ if __name__ == "__main__":
         exclude=exclude,
     )
 
-    solutions = solve_it(
-        min_requirements,
-        max_requirements,
-        foods,
-        num_foods=args.n,
-        log_level=args.verbose,
-    )
-    print(solutions)
+    num_foods = 1
+    solutions = []
+    while not solutions:
+        solutions = solve_it(
+            min_requirements,
+            max_requirements,
+            foods,
+            num_foods=num_foods,
+            log_level=args.verbose,
+        )
+
+        if solutions:
+            break
+        else:
+            print(f"No solutions with {num_foods} foods found.")
+            # If we specify the number of solutions as a command-line argument,
+            # then don't loop; stop after trying that number.
+            if args.n is not None:
+                break
+            else:
+                num_foods += 1
