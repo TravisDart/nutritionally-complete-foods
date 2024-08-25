@@ -1,7 +1,8 @@
-black~=23.11.0
-ortools~=9.8.3296
-requests~=2.31.0
-numpy~=1.26.2
-scipy~=1.11.4
+black
+isort
 jupyter~=1.0.0
 matplotlib~=3.8.3
+numpy~=1.26.2
+ortools~=9.8.3296
+requests~=2.31.0
+scipy~=1.11.4

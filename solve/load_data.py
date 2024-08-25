@@ -1,5 +1,7 @@
 import csv
 import random
+from typing import List
+
 from constants import NUMBER_SCALE, MAX_NUMBER
 from validate_input import validate_data
 
@@ -135,7 +137,7 @@ def load_subset_of_data(ids: list[int] = None, random_ids: int = 0):
     return foods_subset, food_labels
 
 
-def load_data(should_use_test_data=False, exclude=[]):
+def load_data(should_use_test_data: bool = False, exclude: List[int] = None):
     if should_use_test_data:
         (
             nutrients,
@@ -150,6 +152,19 @@ def load_data(should_use_test_data=False, exclude=[]):
         min_requirements, max_requirements, nutrients = load_requirements()
         validate_data(nutrients, foods, food_labels)
 
-    foods = [food for food in foods if int(food[0]) not in exclude]
+    # This is a list of food IDs to exclude. This is useful to temporarily exclude a food,
+    # for instance to tweak the solver so it won't return foods you don't like.
+    # For a more permanent exclusion, remove the food from data/selected_foods.txt.
+    # The foods below are examples that have already been excluded.
+    if exclude is None:
+        exclude = [
+            # 35182,  # Acorn stew (Apache)
+            # 14091,  # Beverages, almond milk, unsweetened, shelf stable
+            # 14639,  # Beverages, rice milk, unsweetened
+            # 11656,  # Corn pudding, home prepared
+            # 11672,  # Potato pancakes
+        ]
+    if exclude:
+        foods = [food for food in foods if int(food[0]) not in exclude]
 
     return nutrients, foods, food_labels, min_requirements, max_requirements
