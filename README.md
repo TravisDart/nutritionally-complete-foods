@@ -1,16 +1,30 @@
 # Nutritionally Complete Foods v0.2
 
 * [Overview](#Overview)
+* [Current State of Development](#Current-State-of-Development)
 * [Environment Setup](#Environment-Setup)
 * [Source Data](#Source-Data)
 * [The Solver](#The-Solver)
-  * [Example Solutions](#Example-Solutions)
+* [Example Solutions](#Example-Solutions)
 * [Visualization](#Visualization)
-* [Future Improvements](#Future-Improvements)
+
+
 
 ## Overview
 
-This program finds what combination of foods are nutritionally complete. This problem is related to the [Stigler Diet](https://en.wikipedia.org/wiki/Stigler_diet) problem, but instead of trying to minimize cost, we find the solutions that use the fewest distinct food types. Basically, this solver finds a combination of foods that satisfy a system of inequalities. Each inequality defines the min/max values of a particular nutrient in a person's daily nutritional requirements.
+This program finds combination of foods that are nutritionally complete while minimizing the number of different foods and only considering foods that you might grow yourself. - If you wanted to grow a garden to completely sustain yourself, what are your options?
+
+
+
+## Current State of Development
+
+Currently, this program uses an optimizing solver, which means it finds the combinations of foods that most closely meet the minimum dietary requirements. But, the goal is to find all solutions that satisfy the allowable range of nutritional requirements, not just the solutions closest to the minimum requirements. So, I'm realizing that an optimizing solver is not the best tool for this problem.
+
+I originally chose this solver because the [Stigler Diet](https://en.wikipedia.org/wiki/Stigler_diet) problem is similar to our problem and can be solved efficiently with an optimizing solver. But, instead of trying to minimize cost, our goal is to find the fewest distinct food types, and that is a pretty fundamental difference.
+
+Given a mathematical function shaped like a mountain, an optimizing solver will try to find its peak. When presented with a plateau shape, the solver just skates around looking for a peak. Ideally, I would like to tell the solver to stop optimizing once it has found any solution and to not consider that combination again.
+
+In the `solve_all.py` file (see below), I have tried to use the optimizing solver to find all solutions: Once one solution of is found, the algorithm removes the foods that compose the solution from the list and solves again. When no more solutions are found, then the process is repeated using every combination of the foods found in the solutions. - Unfortunately, this basically reduces to a slow brute-force search.
 
 
 
@@ -63,9 +77,9 @@ cd data
 python create_food_data.py
 ```
 
-This will result in a file called `food_data.csv` which is one of the two input files for the solver.
+This will result in a file called `food_data.csv` which is one of the two input files for the solver. There are currently 1,241 foods in this list.
 
-The other input file is the daily recommended values, which comes from the [USDA's Dietary Reference Intake (DRI) Calculator](https://www.nal.usda.gov/human-nutrition-and-food-safety/dri-calculator). You can either use the example values packaged in this repo `data/Daily Recommended Values.csv`, or you can modify the values based on your personalized requirements.
+The other input file is the CSV of daily recommended values, which comes from the [USDA's Dietary Reference Intake (DRI) Calculator](https://www.nal.usda.gov/human-nutrition-and-food-safety/dri-calculator). You can either use the example file in this repo ( `data/Daily Recommended Values.csv`), or you can modify the values based on your personalized requirements. Ideally, I would like this program to directly integrate the calculation of dietary requirements, but the spreadsheet gives us a good enough initial goal.
 
 
 
@@ -75,74 +89,42 @@ After you have generated the source data file, run the solver like so:
 
 ```
 cd solve
-python find_complete_foods.py
+python solve.py
 ```
 
 This will output a list of foods that combine to satisfy the given dietary constrains. 
 
-As the goal is to find the fewest number of foods required, the solver is currently hardcoded to find 4 foods. (There are no solutions with 7 foods or fewer.) The number of foods in the solution can be set with the `-n` flag:
+As the goal is to find the fewest number of foods required, the solver is currently hardcoded to find 7 foods. (There are no solutions with 6 foods or fewer.) The number of foods in the solution can be set with the `-n` flag:
 
 ```
-python find_complete_foods.py -n 9
+python solve.py -n 9
 ```
 
 
 
-### Example Solutions
+## Example Solutions
 
-As mentioned in the to-do section below, the solver currently finds the optimal solution that most closely approximates the recommended values. However, we only require a solution that meets the max/min constraints, not the ones that most optimally meet the minimum contstraint. Moving to a non-optimizing solver is needed before a v1.0 release.
+The program takes about 3hrs to run and all solutions can be found in `solve/constants.py`.
 
-I tried to remove the all of the processed foods from the list and leave only foods that someone might grow in a garden or easily make from something they grow. Still, the solver seems to prefer the more-processed items on the list.
+Currently, all solutions contain Kiwifruit (ID #520) and either dry or rehydrated seaweed (ID 31019 and 31020, respectively). This leads me to suspect we're missing a lot of solutions.
 
-Below are the solutions currently output from the solver. Through the various iterations of development, I've gotten a small variety of different solutions which I suspect are just indicative of the unfinished state of the solver as I worked on it. For instance, you'll notice that the solution in the screenshot below is different than the one given here.
+Example solution:
 
-(As noted previously, there are no solutions for 3 or fewer foods.)
-
-* 4-food solution:
-  * Apricots, canned, juice pack, with skin, solids and liquids (ID 9024): 2,759g
-  * Beverages, almond milk, unsweetened, shelf stable (ID 14091): 1,199g
-  * Beverages, tea, black, brewed, prepared with tap water (ID 14355): 804g
-  * Potato pancakes (ID 11672): 1,006g
-* 5-food solution:
-  * Beverages, water, tap, well (ID 14412): 11,616g
-  * Cornmeal, degermed, unenriched, white (ID 20522): 496g
-  * Mushrooms, portabella, exposed to ultraviolet light, raw (ID 11998): 45g
-  * Mustard greens, raw (ID 11270): 648g
-  * Potato pancakes (ID 11672): 789g
-* 6-food solution:
-  * Acorn stew (Apache) (ID 35182): 444g
-  * Beverages, water, tap, well (Id 14412): 11,628g
-  * Cornmeal, degermed, unenriched, yellow (ID 20422): 563g
-  * Mushrooms, maitake, raw (ID 11993): 103g                             
-  * Peppers, sweet, red, sauteed (ID 11921): 595g
-  * Tofu yogurt (ID 43476): 854g
+1. Olives, pickled, canned or bottled, green (877g) - ID #9195
+2. Kiwifruit, ZESPRI SunGold, raw (1,019g) - ID #9520
+3. Mushrooms, portabella, exposed to ultraviolet light, raw (303g) - ID #11998
+4. Beverages, tea, black, brewed, prepared with tap water (805g) - ID #14355
+5. Seaweed, Canadian Cultivated EMI-TSUNOMATA, dry (49g) - ID #31019
+6. Plums, wild (Northern Plains Indians) (1,108g) - ID #35206
+7. Beans, baked, canned, no salt added (956g) - ID #43449
 
 
 
 ## Visualization
 
-The resulting solution can be visualized with a Jupyter Notebook.  This is run in the standard way by running `jupyter notebook`, then opening `visualize/Visualize Nutrients.ipynb` in the Jupyter web application. 
+The `visualize/` folder contains a Jupyter notebook that displays a chart of the actual nutrient value vs the acceptable range. This was first created to verify that the solver was returning correct solutions, so currently the example solution contains processed foods that I eventually removed from consideration (e.g. potato pancakes). Once the solver is perfected, we need to create a tighter integration between the solver and the visualizer.
 
-Example:
+This is run in the standard way by running `jupyter notebook`, then opening `visualize/Visualize Nutrients.ipynb` in the Jupyter web application. Below is a screenshot:
 
 ![Screenshot of the Jupyter Notebook](screenshot.png)
-
-
-
-## Future Improvements
-
-Based on this result, these are the follow up questions and possible improvements:
-
-- Questions:
-  - The USDA data has min, avg, and max values for the nutrient. Currently, I'm using the avg value, which is the value that would appear on the food's Nutrition Facts. Do we need to consider the min and max values?
-  - Can we solve for nutritional requirements and caloric requirements separately (or nearly so)?
-  - Is there a way to precompute solutions?
-    - Will this require the separate nutrient/calorie solution mentioned above?
-- To-do items for the v1.0 release:
-  - As mentioned above, the solver currently finds the optimal solution that most closely approximates the recommended values. We want to find all solutions more than the minimum values and less than the maximum values. The v.1.0 release should implement a non-optimizing constraint solver.
-  - The solver is not well integrated into the visualizer, so currently, the solver's output must be pasted into the visualizer. The solver and the Jupyter notebook (visualizer) need better integration.
-- Possible features and improvements for later versions:
-  - Constrain solution to certain groups of foods. For example try to find a solution that incorporates one item from a selected lisit of mushrooms, and one item from a seleted list of potatoes.
-  - Integrate the nutritional-requirement calculator instead of having to calculate that separately and import it in a spreadsheet.
-  - Add more command-line options for things like verbosity, output, etc.
 
