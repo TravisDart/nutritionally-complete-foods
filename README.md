@@ -18,13 +18,25 @@ This program finds combination of foods that are nutritionally complete while mi
 
 ## Current State of Development
 
+The solver is working and has found many solutions. Below is one example:
+
+1. Olives, pickled, canned or bottled, green (877g) - ID #9195
+2. Kiwifruit, ZESPRI SunGold, raw (1,019g) - ID #9520
+3. Mushrooms, portabella, exposed to ultraviolet light, raw (303g) - ID #11998
+4. Beverages, tea, black, brewed, prepared with tap water (805g) - ID #14355
+5. Seaweed, Canadian Cultivated EMI-TSUNOMATA, dry (49g) - ID #31019
+6. Plums, wild (Northern Plains Indians) (1,108g) - ID #35206
+7. Beans, baked, canned, no salt added (956g) - ID #43449
+
+The goal is not to find "many" solutions but all of them. Currently, every solution contains Kiwifruit and either dry or rehydrated seaweed. This leads me to suspect we're missing a lot of solutions. Plus, using a semi-brute force approach, several more solutions can be found (see the section on the Combinatorial Solver below).
+
 Currently, this program uses an optimizing solver, which means it finds the combinations of foods that most closely meet the minimum dietary requirements. But, the goal is to find all solutions that satisfy the allowable range of nutritional requirements, not just the solutions closest to the minimum requirements. So, I'm realizing that an optimizing solver is not the best tool for this problem.
 
 I originally chose this solver because the [Stigler Diet](https://en.wikipedia.org/wiki/Stigler_diet) problem is similar to our problem and can be solved efficiently with an optimizing solver. But, instead of trying to minimize cost, our goal is to find the fewest distinct food types, and that is a pretty fundamental difference.
 
 Given a mathematical function shaped like a mountain, an optimizing solver will try to find its peak. When presented with a plateau shape, the solver just skates around looking for a peak. Ideally, I would like to tell the solver to stop optimizing once it has found any solution and to not consider that combination again.
 
-In the `solve_all.py` file (see below), I have tried to use the optimizing solver to find all solutions: Once one solution of is found, the algorithm removes the foods that compose the solution from the list and solves again. When no more solutions are found, then the process is repeated using every combination of the foods found in the solutions. - Unfortunately, this basically reduces to a slow brute-force search.
+
 
 
 
@@ -49,7 +61,8 @@ echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
 echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 
 # Create a virtual environment with Python 3.12.2
-pyenv virtualenv 3.12.2 nutritionally-complete-foods
+pyenv install 3.12
+pyenv virtualenv 3.12 nutritionally-complete-foods
 
 # Activate that virtual environment
 pyenv activate nutritionally-complete-foods
@@ -68,7 +81,7 @@ source deactive
 
 
 
-## Source Data
+## Loading Source Data
 
 This project uses a subset of the [USDA's SR Legacy dataset](https://fdc.nal.usda.gov/) as input. Before running the solver, download and parse this dataset by running:
 
@@ -83,7 +96,7 @@ The other input file is the CSV of daily recommended values, which comes from th
 
 
 
-## The Solver
+## Running The Solver
 
 After you have generated the source data file, run the solver like so:
 
@@ -100,31 +113,21 @@ As the goal is to find the fewest number of foods required, the solver is curren
 python solve.py -n 9
 ```
 
-
-
-## Example Solutions
-
 The program takes about 3hrs to run and all solutions can be found in `solve/constants.py`.
 
-Currently, all solutions contain Kiwifruit (ID #520) and either dry or rehydrated seaweed (ID 31019 and 31020, respectively). This leads me to suspect we're missing a lot of solutions.
 
-Example solution:
 
-1. Olives, pickled, canned or bottled, green (877g) - ID #9195
-2. Kiwifruit, ZESPRI SunGold, raw (1,019g) - ID #9520
-3. Mushrooms, portabella, exposed to ultraviolet light, raw (303g) - ID #11998
-4. Beverages, tea, black, brewed, prepared with tap water (805g) - ID #14355
-5. Seaweed, Canadian Cultivated EMI-TSUNOMATA, dry (49g) - ID #31019
-6. Plums, wild (Northern Plains Indians) (1,108g) - ID #35206
-7. Beans, baked, canned, no salt added (956g) - ID #43449
+## The Combinatorial Solver
+
+In the `solve_all.py` file (see below), I have tried to use the optimizing solver to find all solutions: Once one solution of is found, the algorithm removes the foods that compose the solution from the list and solves again. When no more solutions are found, then the process is repeated using every combination of the foods found in the solutions. - Unfortunately, this basically reduces to a slow brute-force search. Yet, this method does find more solutions, which at least proves the standard solving method does not return a complete list.
 
 
 
 ## Visualization
 
-The `visualize/` folder contains a Jupyter notebook that displays a chart of the actual nutrient value vs the acceptable range. This was first created to verify that the solver was returning correct solutions, so currently the example solution contains processed foods that I eventually removed from consideration (e.g. potato pancakes). Once the solver is perfected, we need to create a tighter integration between the solver and the visualizer.
+To help me verify that the solutions were correct, I created a Jupyter notebook in the `visualize/` folder that displays a chart of the actual nutrient value vs the acceptable range. This was only used at the beginning of the project, and since then I removed several processed foods I found in the list. So, currently the example solution contains processed foods that I eventually removed from consideration (e.g. potato pancakes). Once the solver is perfected, we need to go back and create a tighter integration between the solver and the visualizer.
 
-This is run in the standard way by running `jupyter notebook`, then opening `visualize/Visualize Nutrients.ipynb` in the Jupyter web application. Below is a screenshot:
+The notebook is run in the standard way by running `jupyter notebook`, then opening `visualize/Visualize Nutrients.ipynb` in the Jupyter web application. Even though the solutions are a little out of date with the solver, I have included  a screenshot of the notebook below:
 
 ![Screenshot of the Jupyter Notebook](screenshot.png)
 
