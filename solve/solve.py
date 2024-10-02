@@ -20,7 +20,6 @@ class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
         foods,
         error_for_quantity,
         log_level: int = 0,
-        solutions_to_keep=float("inf"),
     ):
         super().__init__()
         self.__variables = variables
@@ -29,7 +28,6 @@ class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
         self.__max_requirements = max_requirements
         self.__error_for_quantity = error_for_quantity
 
-        self.__solutions_to_keep = solutions_to_keep
         self.__solutions = {}
         self.__log_level = log_level
 
@@ -37,10 +35,13 @@ class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
         return self.__solutions
 
     def on_solution_callback(self):
-        food_ids = tuple(
+        # Just the ordered IDs of the foods in the solution.
+        solution_id = tuple(
             sorted([int(v.Name()) for v in self.__variables if self.Value(v) != 0])
         )
-        solution = {
+
+        # Info on the solution.
+        solution_value = {
             "food_quantity": {
                 v.Name(): self.Value(v) for v in self.__variables if self.Value(v) != 0
             },
@@ -49,27 +50,20 @@ class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
         }
 
         # If we already have this combination of foods, pick the one with the lowest error.
-        if food_ids in self.__solutions:
-            if solution["total_error"] < self.__solutions[food_ids]["total_error"]:
+        if solution_id in self.__solutions:
+            if (
+                solution_value["total_error"]
+                < self.__solutions[solution_id]["total_error"]
+            ):
                 if self.__log_level >= 1:
-                    print("Found more optimal solution for", food_ids)
-                    print("Old solution:", self.__solutions[food_ids])
-                    print("New solution:", solution)
-                self.__solutions[food_ids] = solution
+                    print("Found more optimal solution for", solution_id)
+                    print("Old solution:", self.__solutions[solution_id])
+                    print("New solution:", solution_value)
+                self.__solutions[solution_id] = solution_value
         else:
-            self.__solutions[food_ids] = solution
+            self.__solutions[solution_id] = solution_value
             if self.__log_level >= 1:
-                print("Found a new solution:", food_ids)
-
-        # By default, solutions_to_keep is infinite. But if it's set, then only keep the best solutions.
-        if len(self.__solutions) >= self.__solutions_to_keep:
-            max_error_key = max(
-                self.__solutions,
-                key=lambda key: self.__solutions[key].get("total_error", 0),
-            )
-            del self.__solutions[max_error_key]
-            if self.__log_level >= 1:
-                print("Deleted old solution:", max_error_key)
+                print("Found a new solution:", solution_id)
 
 
 def print_info(status, solver, solution_printer):
