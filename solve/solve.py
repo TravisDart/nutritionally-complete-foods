@@ -1,13 +1,10 @@
-import sys
-from itertools import combinations
 from pprint import pprint
 from statistics import mean
 
-from tqdm import tqdm
+from ortools.sat.python import cp_model
 
 from constants import FOOD_OFFSET, MAX_NUMBER
 from load_data import load_data
-from ortools.sat.python import cp_model
 from utils import get_arg_parser
 
 
