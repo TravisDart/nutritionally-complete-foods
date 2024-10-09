@@ -5,7 +5,7 @@ from statistics import mean
 
 from tqdm import tqdm
 
-from constants import FOOD_OFFSET, MAX_NUMBER, NUMBER_SCALE
+from constants import FOOD_OFFSET, MAX_NUMBER
 from load_data import load_data
 from ortools.sat.python import cp_model
 from utils import get_arg_parser
@@ -94,7 +94,6 @@ def solve_it(
     max_requirements,
     foods,
     num_foods: int = 4,
-    required_foods: list[int] = [],
     log_level: int = 0,
 ):
     """
@@ -102,38 +101,28 @@ def solve_it(
     :param max_requirements a list containing the upper bound of nutritional requirements.
     :param foods: A list specifying the nutritional value of each food.
     :param num_foods: Restrict the solution to only use this many foods.
-    :param required_foods: A list of foods that must be in the solution.
     :param log_level: 0 = No logging, 1 = Log solution status, 2 = Log solution status and solver progress.
     :return: A list of solutions.
     """
     model = cp_model.CpModel()
 
-    quantity_of_food = [
-        model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, food[2]) for food in foods
-    ]
+    quantity_of_food = [model.NewIntVar(0, MAX_NUMBER, food[2]) for food in foods]
     error_for_quantity = [
-        model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, f"Error {nutrient}")
+        model.NewIntVar(0, MAX_NUMBER, f"Error {nutrient}")
         for nutrient in min_requirements
     ]
-    if num_foods:
-        should_use_food = [model.NewIntVar(0, 1, name=str(food[0])) for food in foods]
-        intermediate_values = [
-            model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, name=str(food[0]))
-            for food in foods
-        ]
+    should_use_food = [model.NewIntVar(0, 1, name=str(food[0])) for food in foods]
+    intermediate_values = [
+        model.NewIntVar(0, MAX_NUMBER, name=str(food[0])) for food in foods
+    ]
 
-        for j in range(len(foods)):
-            model.AddMultiplicationEquality(
-                intermediate_values[j], quantity_of_food[j], should_use_food[j]
-            )
+    for j in range(len(foods)):
+        model.AddMultiplicationEquality(
+            intermediate_values[j], quantity_of_food[j], should_use_food[j]
+        )
 
-        for k in required_foods:
-            model.Add(should_use_food[k] == 1)
-
-        model.Add(sum(should_use_food) == num_foods)
-        solver_vars = intermediate_values
-    else:
-        solver_vars = quantity_of_food
+    model.Add(sum(should_use_food) == num_foods)
+    solver_vars = intermediate_values
 
     for i in range(len(min_requirements)):
         nutrient_intake = sum(

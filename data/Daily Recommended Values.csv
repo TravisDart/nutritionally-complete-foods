@@ -3,28 +3,28 @@ Nutrient,lower,upper,unit,AKA
 "Carbohydrate, by difference",465 g,671 g,g,Carbohydrate
 "Choline, total",550 mg,3000 mg,mg,Choline
 "Copper, Cu",0.890 mg,8 mg,mg,Copper
-Energy,4132 kcal,,kcal,Energy
+Energy,2500 kcal,5000 kcal,kcal,Energy
 Total lipid (fat),115 g,161 g,g,Fat
-"Fiber, total dietary",38 g,,g,Total Fiber
+"Fiber, total dietary",38 g,70 g,g,Total Fiber
 "Fluoride, F",3000 µg,10000 µg,µg,Fluoride
 "Folate, total",400 µg,800 µg,µg,Folate
 "Iron, Fe",11 mg,45 mg,mg,Iron
-"Magnesium, Mg",410 mg,,mg,Magnesium
+"Magnesium, Mg",410 mg,760 mg,mg,Magnesium
 "Manganese, Mn",2200 µg,9000 µg,µg,Manganese
 Niacin,16 mg,30 mg,mg,Niacin
 "Phosphorus, P",1250 mg,4000 mg,mg,Phosphorus
-"Potassium, K",3000 mg,,mg,Potassium
-Protein,77 g,,g,Protein
-Riboflavin,1.3 mg,,mg,Riboflavin
+"Potassium, K",3000 mg,30000 mg,mg,Potassium
+Protein,77 g,385 g,g,Protein
+Riboflavin,1.3 mg,6.5 mg,mg,Riboflavin
 "Selenium, Se",55 µg,400 µg,µg,Selenium
-"Sodium, Na",1500 mg,,mg,Sodium
-Thiamin,1.2 mg,,mg,Thiamin
+"Sodium, Na",1500 mg,4500 mg,mg,Sodium
+Thiamin,1.2 mg,50 mg,mg,Thiamin
 "Vitamin A, RAE",900 µg,2800 µg,µg,Vitamin A
+Vitamin B-12,2.4 µg,24 µg,µg,Vitamin B12
 Vitamin B-6,1.3 mg,80 mg,mg,Vitamin B6
-Vitamin B-12,2.4 µg,,µg,Vitamin B12
 "Vitamin C, total ascorbic acid",75 mg,1800 mg,mg,Vitamin C
 Vitamin D (D2 + D3),15 µg,100 µg,µg,Vitamin D
 Vitamin E (alpha-tocopherol),15 mg,800 mg,mg,Vitamin E
-Vitamin K (phylloquinone),75 µg,,µg,Vitamin K
-Water,3700 g,,g,Water
+Vitamin K (phylloquinone),75 µg,750 µg,µg,Vitamin K
+Water,3700 g,10000 g,g,Water
 "Zinc, Zn",11 mg,34 mg,mg,Zinc

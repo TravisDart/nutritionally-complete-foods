@@ -64,7 +64,7 @@ def load_requirements():
             max_requirement = (
                 int(float(row[2].split(" ")[0]) * NUMBER_SCALE)
                 if row[2]
-                else MAX_NUMBER * NUMBER_SCALE
+                else MAX_NUMBER  # All foods now have an upper bound, so we don't really need this.
             )
             min_requirements += [min_requirement]
             max_requirements += [max_requirement]
