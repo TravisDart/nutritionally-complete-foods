@@ -1,3 +1,4 @@
+import math
 from typing import List
 
 
@@ -8,14 +9,16 @@ def find_max_x(y: List[int], z: List[int]):
     This algorithm goes component by component and finds the "ceiling".
     There are many ways to visualize this and many algorithms to compute it.
     """
-    normalized = [z[i] / y[i] for i in range(len(y))]
+    normalized = [z[i] / y[i] for i in range(len(y)) if y[i] != 0]
     normalized.sort()
     max_x = normalized[0]
     return max_x
 
 
 def find_food_max_value(foods, max_requirements, NUMBER_SCALE):
-    return [find_max_x(food, max_requirements) * NUMBER_SCALE for food in foods]
+    return [
+        math.ceil(find_max_x(food, max_requirements) * NUMBER_SCALE) for food in foods
+    ]
 
 
 if __name__ == "__main__":

@@ -112,7 +112,8 @@ def solve_it(
     max_error = find_max_error(food_values, num_foods, min_requirements, NUMBER_SCALE)
 
     quantity_of_food = [
-        model.NewIntVar(0, food_max_value[i]) for i in range(len(foods))
+        model.NewIntVar(0, food_max_value[i], name=str(food[0]))
+        for i, food in enumerate(foods)
     ]
     intermediate_values = [
         model.NewIntVar(0, food_max_value[i], name=str(food[0]))
@@ -170,12 +171,6 @@ def solve_it(
         return solutions
 
 
-def find_top_n_values(foods, num_foods=4):
-    number_of_nutrients = len(foods[0]) - FOOD_OFFSET
-    food_values = [[float("-inf") * num_foods] * number_of_nutrients]
-    pprint(food_values)
-
-
 if __name__ == "__main__":
     args = get_arg_parser().parse_args()
 
@@ -183,35 +178,33 @@ if __name__ == "__main__":
         should_use_test_data=args.test_data
     )
 
-    # This is a trash alogrithm. Redo this.
-    top_n_values = find_top_n_values(foods, num_foods=args.n)
-    for food in foods:
-        for i, nutrient in enumerate(food[FOOD_OFFSET:]):
-            if food[i + FOOD_OFFSET] > sorted(top_n_values[i])[-1]:
-                top_n_values[i] = food[i + FOOD_OFFSET]
-            print(nutrient)
+    solutions = solve_it(
+        min_requirements,
+        max_requirements,
+        foods,
+        num_foods=7,
+        log_level=args.verbose,
+    )
+    print(solutions)
 
-if False:
-    num_foods = 1
-    solutions = []
-    while not solutions:
-        continue
-
-        solutions = solve_it(
-            min_requirements,
-            max_requirements,
-            foods,
-            num_foods=num_foods,
-            log_level=args.verbose,
-        )
-
-        if solutions:
-            break
-        else:
-            print(f"No solutions with {num_foods} foods found.")
-            # If we specify the number of solutions as a command-line argument,
-            # then don't loop; stop after trying that number.
-            if args.n is not None:
-                break
-            else:
-                num_foods += 1
+    # num_foods = 1
+    # solutions = []
+    # while not solutions:
+    #     solutions = solve_it(
+    #         min_requirements,
+    #         max_requirements,
+    #         foods,
+    #         num_foods=num_foods,
+    #         log_level=args.verbose,
+    #     )
+    #
+    #     if solutions:
+    #         break
+    #     else:
+    #         print(f"No solutions with {num_foods} foods found.")
+    #         # If we specify the number of solutions as a command-line argument,
+    #         # then don't loop; stop after trying that number.
+    #         if args.n is not None:
+    #             break
+    #         else:
+    #             num_foods += 1
