@@ -59,9 +59,6 @@ def create_filtered_json(json_path, filtered_json_path, selected_foods_path):
 
 
 def create_csv(filtered_json_path, csv_path):
-    """
-    This is probably not the output format we want, but it'll help us understand the data.
-    """
     required_nutrients = [
         "Calcium, Ca",
         "Carbohydrate, by difference",
@@ -112,6 +109,7 @@ def create_csv(filtered_json_path, csv_path):
             + required_nutrients
         )
 
+        column_unit = [None] * len(required_nutrients)
         for food in foods:
             labels = [
                 food["ndbNumber"],
@@ -139,9 +137,20 @@ def create_csv(filtered_json_path, csv_path):
                     amount = round(amount, 3)  # Round everything to 3 decimal places.
 
                     dest_col = required_nutrients.index(nutrient["nutrient"]["name"])
-                    nutrient_values[dest_col] = f"{amount} {nutrient_unit}"
+
+                    # Make sure all values are in the same unit.
+                    if column_unit[dest_col] is None:
+                        column_unit[dest_col] = nutrient_unit
+                    else:
+                        assert column_unit[dest_col] == nutrient_unit
+
+                    if amount == 0:
+                        nutrient_values[dest_col] = amount
+                    else:
+                        nutrient_values[dest_col] = f"{amount} {nutrient_unit}"
 
             csvwriter.writerow(labels + nutrient_values)
+
     print(f"Created final CSV: {csv_path}")
 
 

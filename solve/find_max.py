@@ -14,6 +14,10 @@ def find_max_x(y: List[int], z: List[int]):
     return max_x
 
 
+def find_food_max_value(foods, max_requirements, NUMBER_SCALE):
+    return [find_max_x(food, max_requirements) * NUMBER_SCALE for food in foods]
+
+
 if __name__ == "__main__":
     assert find_max_x([1, 2, 3], [12, 12, 12]) == 4.0
     assert find_max_x([1, 3, 2], [12, 12, 12]) == 4.0

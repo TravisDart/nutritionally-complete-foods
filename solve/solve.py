@@ -3,8 +3,10 @@ from statistics import mean
 
 from ortools.sat.python import cp_model
 
-from constants import FOOD_OFFSET, MAX_NUMBER
+from constants import FOOD_OFFSET, NUMBER_SCALE
 from load_data import load_data
+from find_n_greatest import find_max_error
+from find_max import find_food_max_value
 from utils import get_arg_parser
 
 
@@ -103,15 +105,24 @@ def solve_it(
     """
     model = cp_model.CpModel()
 
-    quantity_of_food = [model.NewIntVar(0, MAX_NUMBER, food[2]) for food in foods]
+    # If the data file and nutritional requirements are static,
+    # then food_max_value and max_error could be cached somewhere.
+    food_values = [[f2[0] for f2 in f1[FOOD_OFFSET:]] for f1 in foods]
+    food_max_value = find_food_max_value(food_values, max_requirements, NUMBER_SCALE)
+    max_error = find_max_error(food_values, num_foods, min_requirements, NUMBER_SCALE)
+
+    quantity_of_food = [
+        model.NewIntVar(0, food_max_value[i]) for i in range(len(foods))
+    ]
+    intermediate_values = [
+        model.NewIntVar(0, food_max_value[i], name=str(food[0]))
+        for i, food in enumerate(foods)
+    ]
     error_for_quantity = [
-        model.NewIntVar(0, MAX_NUMBER, f"Error {nutrient}")
-        for nutrient in min_requirements
+        model.NewIntVar(0, max_error[i], f"Error {nutrient}")
+        for i, nutrient in enumerate(min_requirements)
     ]
     should_use_food = [model.NewIntVar(0, 1, name=str(food[0])) for food in foods]
-    intermediate_values = [
-        model.NewIntVar(0, MAX_NUMBER, name=str(food[0])) for food in foods
-    ]
 
     for j in range(len(foods)):
         model.AddMultiplicationEquality(
@@ -119,21 +130,19 @@ def solve_it(
         )
 
     model.Add(sum(should_use_food) == num_foods)
-    solver_vars = intermediate_values
 
     for i in range(len(min_requirements)):
         nutrient_intake = sum(
-            food[i + FOOD_OFFSET][0] * solver_vars[j] for j, food in enumerate(foods)
+            food[i + FOOD_OFFSET][0] * intermediate_values[j]
+            for j, food in enumerate(foods)
         )
-        model.AddLinearConstraint(
+        model.AddLinearConstraint(  # min_requirements[i] <= nutrient_intake <= max_requirements[i]
             nutrient_intake, min_requirements[i], max_requirements[i]
         )
         # Here we apply the traditional metric for error using absolute value:
         model.AddAbsEquality(
             target=error_for_quantity[i], expr=nutrient_intake - min_requirements[i]
         )
-        # Supposedly you don't need abs. I guess because the two expressions are always positive
-        # model.Add(error_for_quantity[i] == nutrient_intake - min_requirements[i])
 
     model.Minimize(sum(error_for_quantity))
 
@@ -142,7 +151,7 @@ def solve_it(
     solver.parameters.enumerate_all_solutions = True
     # The solution printer displays the nutrient that is out of bounds.
     solution_printer = VarArraySolutionPrinter(
-        solver_vars,
+        intermediate_values,
         min_requirements,
         max_requirements,
         foods,
@@ -161,6 +170,12 @@ def solve_it(
         return solutions
 
 
+def find_top_n_values(foods, num_foods=4):
+    number_of_nutrients = len(foods[0]) - FOOD_OFFSET
+    food_values = [[float("-inf") * num_foods] * number_of_nutrients]
+    pprint(food_values)
+
+
 if __name__ == "__main__":
     args = get_arg_parser().parse_args()
 
@@ -168,9 +183,20 @@ if __name__ == "__main__":
         should_use_test_data=args.test_data
     )
 
+    # This is a trash alogrithm. Redo this.
+    top_n_values = find_top_n_values(foods, num_foods=args.n)
+    for food in foods:
+        for i, nutrient in enumerate(food[FOOD_OFFSET:]):
+            if food[i + FOOD_OFFSET] > sorted(top_n_values[i])[-1]:
+                top_n_values[i] = food[i + FOOD_OFFSET]
+            print(nutrient)
+
+if False:
     num_foods = 1
     solutions = []
     while not solutions:
+        continue
+
         solutions = solve_it(
             min_requirements,
             max_requirements,

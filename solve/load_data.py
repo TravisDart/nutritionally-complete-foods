@@ -2,7 +2,7 @@ import csv
 import random
 from typing import List
 
-from constants import NUMBER_SCALE, MAX_NUMBER
+from constants import NUMBER_SCALE
 from validate_input import validate_data
 
 
@@ -58,14 +58,8 @@ def load_requirements():
         csvwreader = csv.reader(csvfile)
         next(csvwreader)  # Skip the header
         for row in csvwreader:
-            min_requirement = (
-                int(float(row[1].split(" ")[0]) * NUMBER_SCALE) if row[1] else 0
-            )
-            max_requirement = (
-                int(float(row[2].split(" ")[0]) * NUMBER_SCALE)
-                if row[2]
-                else MAX_NUMBER  # All foods now have an upper bound, so we don't really need this.
-            )
+            min_requirement = int(float(row[1].split(" ")[0]) * NUMBER_SCALE)
+            max_requirement = int(float(row[2].split(" ")[0]) * NUMBER_SCALE)
             min_requirements += [min_requirement]
             max_requirements += [max_requirement]
             parsed_row = [
