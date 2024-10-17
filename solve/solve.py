@@ -119,8 +119,9 @@ def solve_it(
         model.NewIntVar(0, food_max_value[i], name=str(food[0]))
         for i, food in enumerate(foods)
     ]
+    # TODO: Fix the calcuation for max_error[i] and use that.
     error_for_quantity = [
-        model.NewIntVar(0, max_error[i], f"Error {nutrient}")
+        model.NewIntVar(0, 5_000_000, f"Error {nutrient}")
         for i, nutrient in enumerate(min_requirements)
     ]
     should_use_food = [model.NewIntVar(0, 1, name=str(food[0])) for food in foods]
