@@ -1,10 +1,14 @@
 import csv
 import json
+import math
 import os
 import zipfile
 import argparse
 
 import requests
+
+from constants import USDA_NUTRIENT_NAMES, NUMBER_SCALE, NUTRIENT_UNITS
+from sqlite import populate_sql
 
 
 def download_zipfile(zip_url, zip_path):
@@ -59,38 +63,6 @@ def create_filtered_json(json_path, filtered_json_path, selected_foods_path):
 
 
 def create_csv(filtered_json_path, csv_path):
-    required_nutrients = [
-        "Calcium, Ca",
-        "Carbohydrate, by difference",
-        "Choline, total",
-        "Copper, Cu",
-        "Energy",
-        "Total lipid (fat)",
-        "Fiber, total dietary",
-        "Fluoride, F",
-        "Folate, total",
-        "Iron, Fe",
-        "Magnesium, Mg",
-        "Manganese, Mn",
-        "Niacin",
-        "Phosphorus, P",
-        "Potassium, K",
-        "Protein",
-        "Riboflavin",
-        "Selenium, Se",
-        "Sodium, Na",
-        "Thiamin",
-        "Vitamin A, RAE",
-        "Vitamin B-6",
-        "Vitamin B-12",
-        "Vitamin C, total ascorbic acid",
-        "Vitamin D (D2 + D3)",
-        "Vitamin E (alpha-tocopherol)",
-        "Vitamin K (phylloquinone)",
-        "Water",
-        "Zinc, Zn",
-    ]
-
     foods = json.loads(open(filtered_json_path).read())
     foods = sorted(
         foods, key=lambda x: (x["foodCategory"]["description"], x["description"])
@@ -101,25 +73,26 @@ def create_csv(filtered_json_path, csv_path):
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(
             [
-                "ID",
-                "Category",
+                "Food ID",
                 "Food",
-                "Scientific_Name",
             ]
-            + required_nutrients
+            + USDA_NUTRIENT_NAMES
         )
+        csvwriter.writerow(["", "NUTRIENT_UNITS"] + NUTRIENT_UNITS)
 
-        column_unit = [None] * len(required_nutrients)
+        column_unit = [None] * len(USDA_NUTRIENT_NAMES)
+        min_nonzero_value = [float("inf")] * len(USDA_NUTRIENT_NAMES)
         for food in foods:
             labels = [
                 food["ndbNumber"],
-                food["foodCategory"]["description"],
-                food["description"],
-                food.get("scientificName", ""),
+                f'{food["foodCategory"]["description"]} > {food["description"]}',
             ]
-            nutrient_values = [0] * len(required_nutrients)
+            assert ">" not in food["foodCategory"]["description"]
+            assert ">" not in food["description"]
+
+            nutrient_values = [0] * len(USDA_NUTRIENT_NAMES)
             for nutrient in food["foodNutrients"]:
-                if nutrient["nutrient"]["name"] in required_nutrients:
+                if nutrient["nutrient"]["name"] in USDA_NUTRIENT_NAMES:
                     amount = nutrient["amount"]
                     nutrient_unit = nutrient["nutrient"]["unitName"]
 
@@ -136,7 +109,7 @@ def create_csv(filtered_json_path, csv_path):
                     amount /= 100  # The standard serving size is 100g. Normalize to 1g.
                     amount = round(amount, 3)  # Round everything to 3 decimal places.
 
-                    dest_col = required_nutrients.index(nutrient["nutrient"]["name"])
+                    dest_col = USDA_NUTRIENT_NAMES.index(nutrient["nutrient"]["name"])
 
                     # Make sure all values are in the same unit.
                     if column_unit[dest_col] is None:
@@ -144,12 +117,20 @@ def create_csv(filtered_json_path, csv_path):
                     else:
                         assert column_unit[dest_col] == nutrient_unit
 
-                    if amount == 0:
-                        nutrient_values[dest_col] = amount
-                    else:
-                        nutrient_values[dest_col] = f"{amount} {nutrient_unit}"
+                    if amount != 0:
+                        min_nonzero_value[dest_col] = min(
+                            amount, min_nonzero_value[dest_col]
+                        )
+
+                    nutrient_values[dest_col] = amount
 
             csvwriter.writerow(labels + nutrient_values)
+
+    scale = 10 ** max([math.ceil(-math.log10(m)) for m in min_nonzero_value])
+
+    # Ensure that the hardcoded values don't need to be updated.
+    assert scale == NUMBER_SCALE
+    assert column_unit == NUTRIENT_UNITS
 
     print(f"Created final CSV: {csv_path}")
 
@@ -189,18 +170,21 @@ def create_filtered_csv(should_delete_intermediate_files: bool = False):
     csv_path = os.path.join(download_dir, "food_data.csv")
     selected_foods_path = "selected_foods.txt"
 
-    if not os.path.exists(filtered_json_path):
-        if not os.path.exists(json_path):
-            if not os.path.exists(zip_path):
-                download_zipfile(zip_url, zip_path)
-            extract_json(zip_path, json_path)
-        create_filtered_json(json_path, filtered_json_path, selected_foods_path)
-    create_csv(filtered_json_path, csv_path)
+    if not os.path.exists(csv_path):
+        if not os.path.exists(filtered_json_path):
+            if not os.path.exists(json_path):
+                if not os.path.exists(zip_path):
+                    download_zipfile(zip_url, zip_path)
+                extract_json(zip_path, json_path)
+            create_filtered_json(json_path, filtered_json_path, selected_foods_path)
+        create_csv(filtered_json_path, csv_path)
+    populate_sql(csv_path)
 
     print()
     print("Data file successfully created.")
     delete_intermediate_files(
-        [zip_path, json_path, filtered_json_path], should_delete_intermediate_files
+        [zip_path, json_path, filtered_json_path, csv_path],
+        should_delete_intermediate_files,
     )
 
 

@@ -1,3 +1,4 @@
+# TODO: Figure out Python path issue and get rid of this file.
 # CP-SAT only does integers, and no nutrient or requirement is less than .001, so scale to make .001 * NUMBER_SCALE = 1.
 NUMBER_SCALE = 1_000
 FOOD_OFFSET = 2  # The first few columns of the food data are labels.

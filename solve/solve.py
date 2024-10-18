@@ -92,7 +92,7 @@ def solve_it(
     min_requirements,
     max_requirements,
     foods,
-    num_foods: int = 4,
+    num_foods,
     log_level: int = 0,
 ):
     """
@@ -175,8 +175,22 @@ def solve_it(
 if __name__ == "__main__":
     args = get_arg_parser().parse_args()
 
-    nutrients, foods, food_labels, min_requirements, max_requirements = load_data(
-        should_use_test_data=args.test_data
+    # This is a list of food IDs to exclude. This is useful to temporarily exclude a food,
+    # for instance to tweak the solver so it won't return foods you don't like.
+    # For a more permanent exclusion, remove the food from data/selected_foods.txt.
+    # The foods below are examples that have already been excluded.
+    exclude_ids = [
+        # 35182,  # Acorn stew (Apache)
+        # 14091,  # Beverages, almond milk, unsweetened, shelf stable
+        # 14639,  # Beverages, rice milk, unsweetened
+        # 11656,  # Corn pudding, home prepared
+        # 11672,  # Potato pancakes
+    ]
+
+    foods, min_requirements, max_requirements = load_data(
+        should_use_test_data=args.test_data,
+        exclude_ids=exclude_ids,
+        # only_these_ids=[...],  # Unused at the moment
     )
 
     solutions = solve_it(

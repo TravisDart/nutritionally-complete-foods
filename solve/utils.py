@@ -1,6 +1,6 @@
 import argparse
 import numpy as np
-from load_data import load_requirements, load_subset_of_data
+from load_data import load_requirements
 
 
 def ordered_dict_values(food_quantity: dict[str, int]):
