@@ -8,7 +8,6 @@ import argparse
 import requests
 
 from constants import USDA_NUTRIENT_NAMES, NUMBER_SCALE, NUTRIENT_UNITS
-from sqlite import populate_sql
 
 
 def download_zipfile(zip_url, zip_path):
@@ -170,15 +169,13 @@ def create_filtered_csv(should_delete_intermediate_files: bool = False):
     csv_path = os.path.join(download_dir, "food_data.csv")
     selected_foods_path = "selected_foods.txt"
 
-    if not os.path.exists(csv_path):
-        if not os.path.exists(filtered_json_path):
-            if not os.path.exists(json_path):
-                if not os.path.exists(zip_path):
-                    download_zipfile(zip_url, zip_path)
-                extract_json(zip_path, json_path)
-            create_filtered_json(json_path, filtered_json_path, selected_foods_path)
-        create_csv(filtered_json_path, csv_path)
-    populate_sql(csv_path)
+    if not os.path.exists(filtered_json_path):
+        if not os.path.exists(json_path):
+            if not os.path.exists(zip_path):
+                download_zipfile(zip_url, zip_path)
+            extract_json(zip_path, json_path)
+        create_filtered_json(json_path, filtered_json_path, selected_foods_path)
+    create_csv(filtered_json_path, csv_path)
 
     print()
     print("Data file successfully created.")

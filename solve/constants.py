@@ -66,9 +66,7 @@ NUTRIENT_UNITS = [
     "mg",
 ]
 
-SQL_COLUMNS = [  # Columns of the CSV that are in SQL.
-    "food_id",
-    "label",
+NUTRIENT_NAMES = [  # Columns of the CSV that are in SQL.
     "calcium",
     "carbohydrate",
     "choline",

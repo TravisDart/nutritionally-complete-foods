@@ -4,7 +4,7 @@ from load_data import load_data
 from constants import FOOD_OFFSET, NUMBER_SCALE
 
 
-def find_top_values_in_each_column(x, num_values: int):
+def find_top_values_in_each_column(foods, max_qty, num_values: int):
     """Finds the num_values greatest numbers in each column of a 2D list.
 
     Args:
@@ -29,65 +29,30 @@ def find_top_values_in_each_column(x, num_values: int):
           [coln_val1, coln_val2, ... coln_val7],
         ]
     """
+    max_foods = [
+        [col * max_qty[i] for col in foods[i][FOOD_OFFSET:]] for i in range(len(foods))
+    ]
+
     # Transpose the matrix.
-    transposed_x = list(zip(*x))
+    transposed_x = list(zip(*max_foods))
 
     # Sort each row in descending order
     sorted_x = [sorted(row, reverse=True) for row in transposed_x]
 
-    # Extract the first 7 elements from each row
+    # Extract the first 7 elements (or whatever) from each row
     y = [row[:num_values] for row in sorted_x]
 
     return y
 
 
-def find_max_error(food_values, num_foods, min_requirements, NUMBER_SCALE):
-    top_n_values = find_top_values_in_each_column(food_values, num_foods)
+def find_max_error(foods, max_qty, num_foods, min_requirements):
+    top_n_values = find_top_values_in_each_column(foods, max_qty, num_foods)
     return [
-        (sum(top_n_values[i]) - min_requirements[i]) * NUMBER_SCALE
-        for i in range(len(min_requirements))
+        sum(top_n_values[i]) - min_requirements[i] for i in range(len(min_requirements))
     ]
 
 
-def find_least_nonzero_values_in_each_column(x):
-    """
-    Similar to find_top_values_in_each_column(), but finds the least non-zero values in each column.
-    """
-    transposed_x = list(zip(*x))
-    sorted_x = [sorted([r for r in row if r != 0]) for row in transposed_x]
-    y = [row[0] for row in sorted_x]
-    return y
-
-
-def calculate_scale():
-    """
-    Really, NUMBER_SCALE probably won't change, but we need to put this code somewhere.
-    It doesn't help that all of our values are already multiplied by NUMBER_SCALE.
-    """
-
-    _, foods, _, min_requirements, max_requirements = load_data()
-    food_values = [[f2[0] / NUMBER_SCALE for f2 in f1[FOOD_OFFSET:]] for f1 in foods]
-
-    # Scale for foods
-    minimum = find_least_nonzero_values_in_each_column(food_values)
-
-    column_scale = [math.ceil(-math.log10(m)) for m in minimum]
-    foods_scale = max(column_scale)
-
-    min_requirements_scale = max(
-        [math.ceil(-math.log10(m / NUMBER_SCALE)) for m in min_requirements]
-    )
-    max_requirements_scale = max(
-        [math.ceil(-math.log10(m / NUMBER_SCALE)) for m in max_requirements]
-    )
-    scale = max(foods_scale, min_requirements_scale, max_requirements_scale)
-    return 10**scale
-
-
 if __name__ == "__main__":
-    scale = calculate_scale()
-    assert scale == NUMBER_SCALE
-
     num_foods = 3
 
     x = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]

@@ -1,12 +1,12 @@
 from pprint import pprint
 from statistics import mean
+from typing import List
 
 from ortools.sat.python import cp_model
 
-from constants import FOOD_OFFSET, NUMBER_SCALE
+from constants import FOOD_OFFSET
 from load_data import load_data
 from find_n_greatest import find_max_error
-from find_max import find_food_max_value
 from utils import get_arg_parser
 
 
@@ -89,10 +89,11 @@ def print_info(status, solver, solution_printer):
 
 
 def solve_it(
-    min_requirements,
-    max_requirements,
     foods,
-    num_foods,
+    max_qty: List[int],
+    min_requirements: List[int],
+    max_requirements: List[int],
+    num_foods: int,
     log_level: int = 0,
 ):
     """
@@ -107,21 +108,17 @@ def solve_it(
 
     # If the data file and nutritional requirements are static,
     # then food_max_value and max_error could be cached somewhere.
-    food_values = [[f2[0] for f2 in f1[FOOD_OFFSET:]] for f1 in foods]
-    food_max_value = find_food_max_value(food_values, max_requirements, NUMBER_SCALE)
-    max_error = find_max_error(food_values, num_foods, min_requirements, NUMBER_SCALE)
-
+    max_error = find_max_error(foods, max_qty, num_foods, min_requirements)
     quantity_of_food = [
-        model.NewIntVar(0, food_max_value[i], name=str(food[0]))
+        model.NewIntVar(0, max_qty[i], name=str(food[0]))
         for i, food in enumerate(foods)
     ]
     intermediate_values = [
-        model.NewIntVar(0, food_max_value[i], name=str(food[0]))
+        model.NewIntVar(0, max_qty[i], name=str(food[0]))
         for i, food in enumerate(foods)
     ]
-    # TODO: Fix the calcuation for max_error[i] and use that.
     error_for_quantity = [
-        model.NewIntVar(0, 5_000_000, f"Error {nutrient}")
+        model.NewIntVar(0, max_error[i], f"Error {nutrient}")
         for i, nutrient in enumerate(min_requirements)
     ]
     should_use_food = [model.NewIntVar(0, 1, name=str(food[0])) for food in foods]
@@ -135,7 +132,7 @@ def solve_it(
 
     for i in range(len(min_requirements)):
         nutrient_intake = sum(
-            food[i + FOOD_OFFSET][0] * intermediate_values[j]
+            food[i + FOOD_OFFSET] * intermediate_values[j]
             for j, food in enumerate(foods)
         )
         model.AddLinearConstraint(  # min_requirements[i] <= nutrient_intake <= max_requirements[i]
@@ -146,7 +143,7 @@ def solve_it(
             target=error_for_quantity[i], expr=nutrient_intake - min_requirements[i]
         )
 
-    model.Minimize(sum(error_for_quantity))
+    # model.Minimize(sum(error_for_quantity))
 
     solver = cp_model.CpSolver()
     solver.parameters.log_search_progress = bool(log_level >= 2)
@@ -187,16 +184,17 @@ if __name__ == "__main__":
         # 11672,  # Potato pancakes
     ]
 
-    foods, min_requirements, max_requirements = load_data(
+    foods, max_foods, min_requirements, max_requirements = load_data(
         should_use_test_data=args.test_data,
-        exclude_ids=exclude_ids,
+        # exclude_ids=exclude_ids,
         # only_these_ids=[...],  # Unused at the moment
     )
 
     solutions = solve_it(
+        foods,
+        max_foods,
         min_requirements,
         max_requirements,
-        foods,
         num_foods=7,
         log_level=args.verbose,
     )

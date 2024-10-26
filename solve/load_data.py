@@ -1,8 +1,12 @@
 import csv
-import sqlite3
-from typing import List
 
-from constants import NUMBER_SCALE, SQL_COLUMNS, FOOD_OFFSET, NUTRIENT_UNITS
+from constants import (
+    NUMBER_SCALE,
+    FOOD_OFFSET,
+    NUTRIENT_UNITS,
+    NUTRIENT_NAMES,
+)
+from find_max import find_food_max_value
 
 
 def load_test_data(food_set: int = 0):
@@ -49,8 +53,7 @@ def load_requirements():
         max_requirements = [int(float(row[2]) * NUMBER_SCALE) for row in rows]
         nutrient_units = [row[3] for row in rows]
 
-        assert nutrient_names == SQL_COLUMNS[FOOD_OFFSET:]
-        print("nutrient_units", nutrient_units, NUTRIENT_UNITS)
+        assert nutrient_names == NUTRIENT_NAMES
         assert nutrient_units == NUTRIENT_UNITS
         assert tuple(min_requirements) < tuple(max_requirements)
 
@@ -58,24 +61,28 @@ def load_requirements():
 
 
 def load_real_data(only_these_ids: list[int] = None, exclude_ids: list[int] = None):
-    con = sqlite3.connect("../data/food.sqlite")
-    cur = con.cursor()
-    query = "SELECT * FROM food"
-    if only_these_ids:
-        query += " WHERE id IN ({})".format(",".join(only_these_ids))
+    foods = []
+    with open("../data/food_data.csv") as csvfile:
+        csvreader = csv.reader(csvfile)
+        next(csvreader)  # Skip header
+        next(csvreader)  # Skip nutrient units
+        for row in csvreader:
+            parsed_row = [
+                int(row[0]),  # Food ID
+                row[1],  # Label
+                *[int(float(x) * NUMBER_SCALE) for x in row[FOOD_OFFSET:]],
+            ]
+            foods += [parsed_row]
 
-    if only_these_ids and exclude_ids:
-        query += " AND "
-    elif exclude_ids:
-        query += " WHERE "
+    if only_these_ids or exclude_ids:
+        foods = [
+            f
+            for f in foods
+            if (only_these_ids and f[0] in only_these_ids)
+            or (exclude_ids and f[0] not in exclude_ids)
+        ]
 
-    if exclude_ids:
-        query += "id NOT IN ({})".format(",".join(exclude_ids))
-
-    print("Query:", query)
-    cur.execute(query)
-    rows = cur.fetchall()
-    return rows
+    return foods
 
 
 def load_data(
@@ -89,4 +96,6 @@ def load_data(
         foods = load_real_data(only_these_ids, exclude_ids)
         min_requirements, max_requirements = load_requirements()
 
-    return foods, min_requirements, max_requirements
+    max_foods = find_food_max_value(foods, max_requirements)
+
+    return foods, max_foods, min_requirements, max_requirements

@@ -1,6 +1,8 @@
 import math
 from typing import List
 
+from constants import FOOD_OFFSET
+
 
 def find_max_x(y: List[int], z: List[int]):
     """
@@ -15,9 +17,9 @@ def find_max_x(y: List[int], z: List[int]):
     return max_x
 
 
-def find_food_max_value(foods, max_requirements, NUMBER_SCALE):
+def find_food_max_value(foods, max_requirements):
     return [
-        math.ceil(find_max_x(food, max_requirements) * NUMBER_SCALE) for food in foods
+        math.ceil(find_max_x(food[FOOD_OFFSET:], max_requirements)) for food in foods
     ]
 
 
