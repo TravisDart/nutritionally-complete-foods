@@ -67,6 +67,7 @@ def verify_solution(
     food_quantities = [x[1] for x in solution]
     result = nutrition_matrix @ food_quantities
 
+    print("solution", solution)
     print("food names")
     print("\n".join(sorted([food[1] for food in foods])))
     print()

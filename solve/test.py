@@ -63,7 +63,6 @@ def multiply_known_solutions(verbose=False, should_assert=True):
             verify_solution(
                 known_solution, verbose=verbose, should_assert=should_assert
             )
-            return
 
 
 def solve_against_known_solutions(verbose=False):
@@ -97,6 +96,6 @@ def solve_against_known_solutions(verbose=False):
 
 if __name__ == "__main__":
     # trivial_tests(verbose=False)
-    multiply_known_solutions(verbose=True, should_assert=False)
+    multiply_known_solutions(verbose=True, should_assert=True)
     # solve_against_known_solutions(verbose=True)
     print("All assertions pass.")
