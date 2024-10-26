@@ -57,6 +57,9 @@ def verify_solution(
     Multiply the foods' nutritional values by the quantities found by the solver
     to verify that it satisfies the constraints.
     """
+    # Make sure the solution is sorted by ID.
+    solution = sorted(solution, key=lambda x: x[0])
+
     ids = [x[0] for x in solution]
     foods, max_foods, min_requirements, max_requirements = load_data(only_these_ids=ids)
 
@@ -66,17 +69,6 @@ def verify_solution(
 
     food_quantities = [x[1] for x in solution]
     result = nutrition_matrix @ food_quantities
-
-    print("solution", solution)
-    print("food names")
-    print("\n".join(sorted([food[1] for food in foods])))
-    print()
-    print("min_requirements", min_requirements)
-    print("max_requirements", max_requirements)
-    print("just_matrix_coefficients", just_matrix_coefficients)
-    print("nutrition_matrix", nutrition_matrix)
-    print("food_quantities", food_quantities)
-    print("result", result)
 
     evaluate_result(
         result,

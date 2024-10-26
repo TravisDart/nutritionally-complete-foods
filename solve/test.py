@@ -69,6 +69,10 @@ def solve_against_known_solutions(verbose=False):
     """Run the solver against just the foods in the known solutions to verify that a solution can be found."""
     for number_of_foods in KNOWN_SOLUTIONS:
         for known_solution in KNOWN_SOLUTIONS[number_of_foods]:
+            print(known_solution)
+            # Make sure the solution is sorted by ID.
+            known_solution = sorted(known_solution, key=lambda x: x[0])
+
             ids = [x[0] for x in known_solution]
             (
                 foods_in_solution,
@@ -96,6 +100,6 @@ def solve_against_known_solutions(verbose=False):
 
 if __name__ == "__main__":
     # trivial_tests(verbose=False)
-    multiply_known_solutions(verbose=True, should_assert=True)
-    # solve_against_known_solutions(verbose=True)
+    # multiply_known_solutions(verbose=True, should_assert=True)
+    solve_against_known_solutions(verbose=False)
     print("All assertions pass.")

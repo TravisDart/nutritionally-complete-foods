@@ -46,10 +46,7 @@ def find_top_values_in_each_column(foods, max_qty, num_values: int):
 
 
 def find_max_error(foods, max_qty, num_foods, min_requirements):
-    print("max_qty, num_foods", max_qty, num_foods)
     top_n_values = find_top_values_in_each_column(foods, max_qty, num_foods)
-    print("top_n_values", top_n_values)
-    print()
     return [
         sum(top_n_values[i]) - min_requirements[i] for i in range(len(min_requirements))
     ]
