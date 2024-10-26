@@ -67,6 +67,16 @@ def verify_solution(
     food_quantities = [x[1] for x in solution]
     result = nutrition_matrix @ food_quantities
 
+    print("food names")
+    print("\n".join(sorted([food[1] for food in foods])))
+    print()
+    print("min_requirements", min_requirements)
+    print("max_requirements", max_requirements)
+    print("just_matrix_coefficients", just_matrix_coefficients)
+    print("nutrition_matrix", nutrition_matrix)
+    print("food_quantities", food_quantities)
+    print("result", result)
+
     evaluate_result(
         result,
         min_requirements,

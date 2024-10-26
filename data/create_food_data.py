@@ -180,7 +180,7 @@ def create_filtered_csv(should_delete_intermediate_files: bool = False):
     print()
     print("Data file successfully created.")
     delete_intermediate_files(
-        [zip_path, json_path, filtered_json_path, csv_path],
+        [zip_path, json_path, filtered_json_path],
         should_delete_intermediate_files,
     )
 

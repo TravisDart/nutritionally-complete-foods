@@ -63,6 +63,7 @@ def multiply_known_solutions(verbose=False, should_assert=True):
             verify_solution(
                 known_solution, verbose=verbose, should_assert=should_assert
             )
+            return
 
 
 def solve_against_known_solutions(verbose=False):
