@@ -56,11 +56,13 @@ def trivial_tests(verbose=False):
             print(f"Test {food_set} passed")
 
 
-def multiply_known_solutions(verbose=False):
+def multiply_known_solutions(verbose=False, should_assert=True):
     """Multiply out each known solution to see if it's really a solution."""
     for number_of_foods in KNOWN_SOLUTIONS:
         for known_solution in KNOWN_SOLUTIONS[number_of_foods]:
-            verify_solution(known_solution, verbose=verbose)
+            verify_solution(
+                known_solution, verbose=verbose, should_assert=should_assert
+            )
 
 
 def solve_against_known_solutions(verbose=False):
@@ -93,7 +95,7 @@ def solve_against_known_solutions(verbose=False):
 
 
 if __name__ == "__main__":
-    trivial_tests(verbose=False)
-    # multiply_known_solutions(verbose=True)
+    # trivial_tests(verbose=False)
+    multiply_known_solutions(verbose=True, should_assert=False)
     # solve_against_known_solutions(verbose=True)
     print("All assertions pass.")

@@ -20,7 +20,7 @@ def dict_to_ordered_tuples(food_quantity: dict[str, int]):
     ]
 
 
-def evaluate_result(solution, min_bound, max_bound, verbose=True, assert_good=False):
+def evaluate_result(solution, min_bound, max_bound, verbose=True, should_assert=False):
     error = np.linalg.norm(solution - min_bound)
     under_bounds = [solution[x] < min_bound[x] for x in range(len(max_bound))]
     under_bounds_str = "".join(["1" if x else "0" for x in under_bounds])
@@ -35,7 +35,7 @@ def evaluate_result(solution, min_bound, max_bound, verbose=True, assert_good=Fa
         print("Components Over Bounds  (Bitstring)", over_bounds_str)
         print("is_out_of_bounds", is_out_of_bounds)
 
-    if assert_good:
+    if should_assert:
         assert not is_out_of_bounds
 
     return (
@@ -51,9 +51,10 @@ def evaluate_result(solution, min_bound, max_bound, verbose=True, assert_good=Fa
 def verify_solution(
     solution,
     verbose=False,
+    should_assert=True,
 ):
     """
-    Multiply the foods' nutritional values by the quantites found by the solver
+    Multiply the foods' nutritional values by the quantities found by the solver
     to verify that it satisfies the constraints.
     """
     ids = [x[0] for x in solution]
@@ -67,7 +68,11 @@ def verify_solution(
     result = nutrition_matrix @ food_quantities
 
     evaluate_result(
-        result, min_requirements, max_requirements, assert_good=False, verbose=verbose
+        result,
+        min_requirements,
+        max_requirements,
+        should_assert=should_assert,
+        verbose=verbose,
     )
 
 
