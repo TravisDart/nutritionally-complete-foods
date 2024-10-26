@@ -184,11 +184,7 @@ if __name__ == "__main__":
         # 11672,  # Potato pancakes
     ]
 
-    foods, max_foods, min_requirements, max_requirements = load_data(
-        should_use_test_data=args.test_data,
-        # exclude_ids=exclude_ids,
-        # only_these_ids=[...],  # Unused at the moment
-    )
+    foods, max_foods, min_requirements, max_requirements = load_data()
 
     solutions = solve_it(
         foods,

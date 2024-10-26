@@ -23,23 +23,39 @@ def load_test_data(food_set: int = 0):
             [2, "Category > Food B", 0, 1, 0],
             [3, "Category > Food C", 0, 0, 1],
         ],
-        [  # Non-square             Vitamins A  B  C
-            [1, "Category > Food A", "Food", 1, 0, 0],
-            [2, "Category > Food B", "Food", 0, 1, 1],
+        [  # Non-square              A  B  C
+            [1, "Category > Food A", 1, 0, 0],
+            [2, "Category > Food B", 0, 1, 1],
         ],
-        [  # Simulate floats        Vitamins  A  B   C
-            [1, "Category > Food A", "Food", 10, 5, 0],
-            [2, "Category > Food B", "Food", 0, 5, 10],
+        [  # Simulate floats          A  B  C
+            [1, "Category > Food A", 10, 5, 0],
+            [2, "Category > Food B", 0, 5, 10],
         ],
     ]
 
-    foods = food_sets[food_set]
+    expected_max_foods = [
+        [10, 10, 10],
+        [10, 10],
+        [1, 1],
+    ]
 
-    # This is how the data is parsed and used.
+    expected_max_error = [
+        [9, 9, 9],
+        [9, 9, 9],
+        [9, 9, 9],
+    ]
+
+    foods = food_sets[food_set]
     min_requirements = [n[1] for n in nutrients]
     max_requirements = [n[2] for n in nutrients]
 
-    return nutrients, min_requirements, max_requirements
+    return (
+        foods,
+        min_requirements,
+        max_requirements,
+        expected_max_foods[food_set],
+        expected_max_error[food_set],
+    )
 
 
 def load_requirements():
@@ -86,16 +102,10 @@ def load_real_data(only_these_ids: list[int] = None, exclude_ids: list[int] = No
 
 
 def load_data(
-    should_use_test_data: bool = False,
     only_these_ids: list[int] = None,
     exclude_ids: list[int] = None,
 ):
-    if should_use_test_data:
-        foods, min_requirements, max_requirements = load_test_data()
-    else:
-        foods = load_real_data(only_these_ids, exclude_ids)
-        min_requirements, max_requirements = load_requirements()
-
+    foods = load_real_data(only_these_ids, exclude_ids)
+    min_requirements, max_requirements = load_requirements()
     max_foods = find_food_max_value(foods, max_requirements)
-
     return foods, max_foods, min_requirements, max_requirements

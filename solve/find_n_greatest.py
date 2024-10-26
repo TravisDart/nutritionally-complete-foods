@@ -40,13 +40,16 @@ def find_top_values_in_each_column(foods, max_qty, num_values: int):
     sorted_x = [sorted(row, reverse=True) for row in transposed_x]
 
     # Extract the first 7 elements (or whatever) from each row
-    y = [row[:num_values] for row in sorted_x]
+    top_values = [row[:num_values] for row in sorted_x]
 
-    return y
+    return top_values
 
 
 def find_max_error(foods, max_qty, num_foods, min_requirements):
+    print("max_qty, num_foods", max_qty, num_foods)
     top_n_values = find_top_values_in_each_column(foods, max_qty, num_foods)
+    print("top_n_values", top_n_values)
+    print()
     return [
         sum(top_n_values[i]) - min_requirements[i] for i in range(len(min_requirements))
     ]

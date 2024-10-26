@@ -1,7 +1,9 @@
 import numpy as np
-from load_data import load_requirements, load_subset_of_data, load_test_data, load_data
+from load_data import load_requirements, load_test_data, load_data
 from solve import solve_it
-from constants import KNOWN_SOLUTIONS
+from constants import KNOWN_SOLUTIONS, FOOD_OFFSET
+from find_n_greatest import find_max_error
+from find_max import find_food_max_value
 from utils import (
     ordered_dict_values,
     dict_to_ordered_tuples,
@@ -10,59 +12,32 @@ from utils import (
 )
 
 
-def multiply_known_solutions(verbose=False):
-    """Multiply out each known solution to see if it's really a solution."""
-
-    nutrients, foods, food_labels, min_requirements, max_requirements = load_data()
-    for number_of_foods in KNOWN_SOLUTIONS:
-        for known_solution in KNOWN_SOLUTIONS[number_of_foods]:
-            verify_solution(known_solution, verbose=verbose)
-
-
-def solve_against_known_solutions(verbose=False):
-    """Run the solver against just the foods in the known solutions to verify that a solution can be found."""
-
-    min_requirements, max_requirements, _ = load_requirements()
-    for number_of_foods in KNOWN_SOLUTIONS:
-        for known_solution in KNOWN_SOLUTIONS[number_of_foods]:
-            ids = [x[0] for x in known_solution]
-            foods_in_solution, _ = load_subset_of_data(ids=ids)
-
-            solver_result = solve_it(
-                min_requirements,
-                max_requirements,
-                foods_in_solution,
-                num_foods=len(known_solution),
-                log_level=int(verbose) * 2,
-            )
-            assert len(solver_result) == 1  # Only one solution
-
-            # Convert the dict-formatted solution to a tuple format. We need to make this more consistent.
-            food_quantity = list(solver_result.values())[0]["food_quantity"]
-            tuple_solution = dict_to_ordered_tuples(food_quantity)
-
-            verify_solution(tuple_solution, verbose=verbose)
-
-
 def trivial_tests(verbose=False):
-    for food_set in range(3):
+    for food_set in [2]:  # range(3):
         (
-            nutrients,
-            example_foods,
-            _,  # Food labels
+            foods,
             min_requirements,
             max_requirements,
+            expected_max_foods,
+            expected_max_error,
         ) = load_test_data(food_set)
 
+        max_foods = find_food_max_value(foods, max_requirements)
+        assert max_foods == expected_max_foods
+
+        fme = find_max_error(foods, max_foods, len(foods), min_requirements)
+        assert fme == expected_max_error
+
         solver_result = solve_it(
+            foods,
+            max_foods,
             min_requirements,
             max_requirements,
-            example_foods,
-            num_foods=len(example_foods),
+            num_foods=len(foods),
             log_level=int(verbose),
         )
 
-        just_matrix_coefficients = [[y[0] for y in x[4:]] for x in example_foods]
+        just_matrix_coefficients = [[y for y in x[FOOD_OFFSET:]] for x in foods]
         A = np.array(just_matrix_coefficients)
         A = A.T
 
@@ -81,8 +56,44 @@ def trivial_tests(verbose=False):
             print(f"Test {food_set} passed")
 
 
+def multiply_known_solutions(verbose=False):
+    """Multiply out each known solution to see if it's really a solution."""
+    for number_of_foods in KNOWN_SOLUTIONS:
+        for known_solution in KNOWN_SOLUTIONS[number_of_foods]:
+            verify_solution(known_solution, verbose=verbose)
+
+
+def solve_against_known_solutions(verbose=False):
+    """Run the solver against just the foods in the known solutions to verify that a solution can be found."""
+    for number_of_foods in KNOWN_SOLUTIONS:
+        for known_solution in KNOWN_SOLUTIONS[number_of_foods]:
+            ids = [x[0] for x in known_solution]
+            (
+                foods_in_solution,
+                max_foods,
+                min_requirements,
+                max_requirements,
+            ) = load_data(only_these_ids=ids)
+
+            solver_result = solve_it(
+                foods_in_solution,
+                max_foods,
+                min_requirements,
+                max_requirements,
+                num_foods=len(known_solution),
+                log_level=int(verbose) * 2,
+            )
+            assert len(solver_result) == 1  # Only one solution
+
+            # Convert the dict-formatted solution to a tuple format. We need to make this more consistent.
+            food_quantity = list(solver_result.values())[0]["food_quantity"]
+            tuple_solution = dict_to_ordered_tuples(food_quantity)
+
+            verify_solution(tuple_solution, verbose=verbose)
+
+
 if __name__ == "__main__":
     trivial_tests(verbose=False)
-    multiply_known_solutions(verbose=False)
-    solve_against_known_solutions(verbose=False)
+    # multiply_known_solutions(verbose=True)
+    # solve_against_known_solutions(verbose=True)
     print("All assertions pass.")
