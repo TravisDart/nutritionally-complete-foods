@@ -98,6 +98,9 @@ def load_real_data(only_these_ids: list[int] = None, exclude_ids: list[int] = No
             or (exclude_ids and f[0] not in exclude_ids)
         ]
 
+    # Make sure the foods are sorted by ID.
+    foods = sorted(foods, key=lambda x: x[0])
+
     return foods
 
 
