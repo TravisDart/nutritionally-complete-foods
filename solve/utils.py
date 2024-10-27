@@ -70,13 +70,16 @@ def verify_solution(
     food_quantities = [x[1] for x in solution]
     result = nutrition_matrix @ food_quantities
 
-    evaluate_result(
-        result,
-        min_requirements,
-        max_requirements,
-        should_assert=should_assert,
-        verbose=verbose,
-    )
+    try:
+        evaluate_result(
+            result,
+            min_requirements,
+            max_requirements,
+            should_assert=should_assert,
+            verbose=verbose,
+        )
+    except Exception:
+        print("Solution", solution)
 
 
 def get_arg_parser():

@@ -1,9 +1,12 @@
+import time
+
 import numpy as np
-from load_data import load_requirements, load_test_data, load_data
-from solve import solve_it
+
 from constants import KNOWN_SOLUTIONS, FOOD_OFFSET
-from find_n_greatest import find_max_error
 from find_max import find_food_max_value
+from find_n_greatest import find_max_error
+from load_data import load_test_data, load_data
+from solve import solve_it
 from utils import (
     ordered_dict_values,
     dict_to_ordered_tuples,
@@ -50,7 +53,7 @@ def trivial_tests(verbose=False):
             min_requirements,
             max_requirements,
             verbose=verbose,
-            assert_good=True,
+            should_assert=True,
         )
         if verbose:
             print(f"Test {food_set} passed")
@@ -69,7 +72,6 @@ def solve_against_known_solutions(verbose=False):
     """Run the solver against just the foods in the known solutions to verify that a solution can be found."""
     for number_of_foods in KNOWN_SOLUTIONS:
         for known_solution in KNOWN_SOLUTIONS[number_of_foods]:
-            print(known_solution)
             # Make sure the solution is sorted by ID.
             known_solution = sorted(known_solution, key=lambda x: x[0])
 
@@ -98,8 +100,16 @@ def solve_against_known_solutions(verbose=False):
             verify_solution(tuple_solution, verbose=verbose)
 
 
+def time_it(func, *args, **kwargs):
+    start_time = time.time()
+    func(*args, **kwargs)
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print("Known solutions took", execution_time, "seconds to solve.")
+
+
 if __name__ == "__main__":
     # trivial_tests(verbose=False)
-    # multiply_known_solutions(verbose=True, should_assert=True)
-    solve_against_known_solutions(verbose=False)
+    multiply_known_solutions(verbose=False, should_assert=True)
+    # time_it(solve_against_known_solutions, verbose=False)
     print("All assertions pass.")

@@ -143,7 +143,7 @@ def solve_it(
             target=error_for_quantity[i], expr=nutrient_intake - min_requirements[i]
         )
 
-    # model.Minimize(sum(error_for_quantity))
+    model.Minimize(sum(error_for_quantity))
 
     solver = cp_model.CpSolver()
     solver.parameters.log_search_progress = bool(log_level >= 2)
