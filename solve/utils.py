@@ -1,6 +1,7 @@
 import argparse
 import numpy as np
-from load_data import load_requirements, load_subset_of_data
+from load_data import load_data
+from constants import FOOD_OFFSET
 
 
 def ordered_dict_values(food_quantity: dict[str, int]):
@@ -19,7 +20,7 @@ def dict_to_ordered_tuples(food_quantity: dict[str, int]):
     ]
 
 
-def evaluate_result(solution, min_bound, max_bound, verbose=True, assert_good=False):
+def evaluate_result(solution, min_bound, max_bound, verbose=True, should_assert=False):
     error = np.linalg.norm(solution - min_bound)
     under_bounds = [solution[x] < min_bound[x] for x in range(len(max_bound))]
     under_bounds_str = "".join(["1" if x else "0" for x in under_bounds])
@@ -34,7 +35,7 @@ def evaluate_result(solution, min_bound, max_bound, verbose=True, assert_good=Fa
         print("Components Over Bounds  (Bitstring)", over_bounds_str)
         print("is_out_of_bounds", is_out_of_bounds)
 
-    if assert_good:
+    if should_assert:
         assert not is_out_of_bounds
 
     return (
@@ -50,17 +51,19 @@ def evaluate_result(solution, min_bound, max_bound, verbose=True, assert_good=Fa
 def verify_solution(
     solution,
     verbose=False,
+    should_assert=True,
 ):
     """
-    Multiply the foods' nutritional values by the quantites found by the solver
+    Multiply the foods' nutritional values by the quantities found by the solver
     to verify that it satisfies the constraints.
     """
+    # Make sure the solution is sorted by ID.
+    solution = sorted(solution, key=lambda x: x[0])
+
     ids = [x[0] for x in solution]
-    food_data, _ = load_subset_of_data(ids=ids)
+    foods, max_foods, min_requirements, max_requirements = load_data(only_these_ids=ids)
 
-    min_requirements, max_requirements, _ = load_requirements()
-
-    just_matrix_coefficients = [[y[0] for y in x[4:]] for x in food_data]
+    just_matrix_coefficients = [[y for y in x[FOOD_OFFSET:]] for x in foods]
     nutrition_matrix = np.array(just_matrix_coefficients)
     nutrition_matrix = nutrition_matrix.T
 
@@ -68,7 +71,11 @@ def verify_solution(
     result = nutrition_matrix @ food_quantities
 
     evaluate_result(
-        result, min_requirements, max_requirements, assert_good=True, verbose=verbose
+        result,
+        min_requirements,
+        max_requirements,
+        should_assert=should_assert,
+        verbose=verbose,
     )
 
 

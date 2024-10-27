@@ -1,13 +1,12 @@
-import sys
-from itertools import combinations
 from pprint import pprint
 from statistics import mean
+from typing import List
 
-from tqdm import tqdm
-
-from constants import FOOD_OFFSET, MAX_NUMBER, NUMBER_SCALE
-from load_data import load_data
 from ortools.sat.python import cp_model
+
+from constants import FOOD_OFFSET
+from load_data import load_data
+from find_n_greatest import find_max_error
 from utils import get_arg_parser
 
 
@@ -20,7 +19,6 @@ class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
         foods,
         error_for_quantity,
         log_level: int = 0,
-        solutions_to_keep=float("inf"),
     ):
         super().__init__()
         self.__variables = variables
@@ -29,7 +27,6 @@ class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
         self.__max_requirements = max_requirements
         self.__error_for_quantity = error_for_quantity
 
-        self.__solutions_to_keep = solutions_to_keep
         self.__solutions = {}
         self.__log_level = log_level
 
@@ -37,10 +34,13 @@ class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
         return self.__solutions
 
     def on_solution_callback(self):
-        food_ids = tuple(
+        # Just the ordered IDs of the foods in the solution.
+        solution_id = tuple(
             sorted([int(v.Name()) for v in self.__variables if self.Value(v) != 0])
         )
-        solution = {
+
+        # Info on the solution.
+        solution_value = {
             "food_quantity": {
                 v.Name(): self.Value(v) for v in self.__variables if self.Value(v) != 0
             },
@@ -49,27 +49,20 @@ class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
         }
 
         # If we already have this combination of foods, pick the one with the lowest error.
-        if food_ids in self.__solutions:
-            if solution["total_error"] < self.__solutions[food_ids]["total_error"]:
+        if solution_id in self.__solutions:
+            if (
+                solution_value["total_error"]
+                < self.__solutions[solution_id]["total_error"]
+            ):
                 if self.__log_level >= 1:
-                    print("Found more optimal solution for", food_ids)
-                    print("Old solution:", self.__solutions[food_ids])
-                    print("New solution:", solution)
-                self.__solutions[food_ids] = solution
+                    print("Found more optimal solution for", solution_id)
+                    print("Old solution:", self.__solutions[solution_id])
+                    print("New solution:", solution_value)
+                self.__solutions[solution_id] = solution_value
         else:
-            self.__solutions[food_ids] = solution
+            self.__solutions[solution_id] = solution_value
             if self.__log_level >= 1:
-                print("Found a new solution:", food_ids)
-
-        # By default, solutions_to_keep is infinite. But if it's set, then only keep the best solutions.
-        if len(self.__solutions) >= self.__solutions_to_keep:
-            max_error_key = max(
-                self.__solutions,
-                key=lambda key: self.__solutions[key].get("total_error", 0),
-            )
-            del self.__solutions[max_error_key]
-            if self.__log_level >= 1:
-                print("Deleted old solution:", max_error_key)
+                print("Found a new solution:", solution_id)
 
 
 def print_info(status, solver, solution_printer):
@@ -96,11 +89,11 @@ def print_info(status, solver, solution_printer):
 
 
 def solve_it(
-    min_requirements,
-    max_requirements,
     foods,
-    num_foods: int = 4,
-    required_foods: list[int] = [],
+    max_qty: List[int],
+    min_requirements: List[int],
+    max_requirements: List[int],
+    num_foods: int,
     log_level: int = 0,
 ):
     """
@@ -108,52 +101,47 @@ def solve_it(
     :param max_requirements a list containing the upper bound of nutritional requirements.
     :param foods: A list specifying the nutritional value of each food.
     :param num_foods: Restrict the solution to only use this many foods.
-    :param required_foods: A list of foods that must be in the solution.
     :param log_level: 0 = No logging, 1 = Log solution status, 2 = Log solution status and solver progress.
     :return: A list of solutions.
     """
     model = cp_model.CpModel()
 
+    # If the data file and nutritional requirements are static,
+    # then food_max_value and max_error could be cached somewhere.
+    max_error = find_max_error(foods, max_qty, num_foods, min_requirements)
     quantity_of_food = [
-        model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, food[2]) for food in foods
+        model.NewIntVar(0, max_qty[i], name=str(food[0]))
+        for i, food in enumerate(foods)
+    ]
+    intermediate_values = [
+        model.NewIntVar(0, max_qty[i], name=str(food[0]))
+        for i, food in enumerate(foods)
     ]
     error_for_quantity = [
-        model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, f"Error {nutrient}")
-        for nutrient in min_requirements
+        model.NewIntVar(0, max_error[i], f"Error {nutrient}")
+        for i, nutrient in enumerate(min_requirements)
     ]
-    if num_foods:
-        should_use_food = [model.NewIntVar(0, 1, name=str(food[0])) for food in foods]
-        intermediate_values = [
-            model.NewIntVar(0, MAX_NUMBER * NUMBER_SCALE, name=str(food[0]))
-            for food in foods
-        ]
+    should_use_food = [model.NewIntVar(0, 1, name=str(food[0])) for food in foods]
 
-        for j in range(len(foods)):
-            model.AddMultiplicationEquality(
-                intermediate_values[j], quantity_of_food[j], should_use_food[j]
-            )
+    for j in range(len(foods)):
+        model.AddMultiplicationEquality(
+            intermediate_values[j], quantity_of_food[j], should_use_food[j]
+        )
 
-        for k in required_foods:
-            model.Add(should_use_food[k] == 1)
-
-        model.Add(sum(should_use_food) == num_foods)
-        solver_vars = intermediate_values
-    else:
-        solver_vars = quantity_of_food
+    model.Add(sum(should_use_food) == num_foods)
 
     for i in range(len(min_requirements)):
         nutrient_intake = sum(
-            food[i + FOOD_OFFSET][0] * solver_vars[j] for j, food in enumerate(foods)
+            food[i + FOOD_OFFSET] * intermediate_values[j]
+            for j, food in enumerate(foods)
         )
-        model.AddLinearConstraint(
+        model.AddLinearConstraint(  # min_requirements[i] <= nutrient_intake <= max_requirements[i]
             nutrient_intake, min_requirements[i], max_requirements[i]
         )
         # Here we apply the traditional metric for error using absolute value:
         model.AddAbsEquality(
             target=error_for_quantity[i], expr=nutrient_intake - min_requirements[i]
         )
-        # Supposedly you don't need abs. I guess because the two expressions are always positive
-        # model.Add(error_for_quantity[i] == nutrient_intake - min_requirements[i])
 
     model.Minimize(sum(error_for_quantity))
 
@@ -162,7 +150,7 @@ def solve_it(
     solver.parameters.enumerate_all_solutions = True
     # The solution printer displays the nutrient that is out of bounds.
     solution_printer = VarArraySolutionPrinter(
-        solver_vars,
+        intermediate_values,
         min_requirements,
         max_requirements,
         foods,
@@ -184,28 +172,48 @@ def solve_it(
 if __name__ == "__main__":
     args = get_arg_parser().parse_args()
 
-    nutrients, foods, food_labels, min_requirements, max_requirements = load_data(
-        should_use_test_data=args.test_data
+    # This is a list of food IDs to exclude. This is useful to temporarily exclude a food,
+    # for instance to tweak the solver so it won't return foods you don't like.
+    # For a more permanent exclusion, remove the food from data/selected_foods.txt.
+    # The foods below are examples that have already been excluded.
+    exclude_ids = [
+        # 35182,  # Acorn stew (Apache)
+        # 14091,  # Beverages, almond milk, unsweetened, shelf stable
+        # 14639,  # Beverages, rice milk, unsweetened
+        # 11656,  # Corn pudding, home prepared
+        # 11672,  # Potato pancakes
+    ]
+
+    foods, max_foods, min_requirements, max_requirements = load_data()
+
+    solutions = solve_it(
+        foods,
+        max_foods,
+        min_requirements,
+        max_requirements,
+        num_foods=7,
+        log_level=args.verbose,
     )
+    print(solutions)
 
-    num_foods = 1
-    solutions = []
-    while not solutions:
-        solutions = solve_it(
-            min_requirements,
-            max_requirements,
-            foods,
-            num_foods=num_foods,
-            log_level=args.verbose,
-        )
-
-        if solutions:
-            break
-        else:
-            print(f"No solutions with {num_foods} foods found.")
-            # If we specify the number of solutions as a command-line argument,
-            # then don't loop; stop after trying that number.
-            if args.n is not None:
-                break
-            else:
-                num_foods += 1
+    # num_foods = 1
+    # solutions = []
+    # while not solutions:
+    #     solutions = solve_it(
+    #         min_requirements,
+    #         max_requirements,
+    #         foods,
+    #         num_foods=num_foods,
+    #         log_level=args.verbose,
+    #     )
+    #
+    #     if solutions:
+    #         break
+    #     else:
+    #         print(f"No solutions with {num_foods} foods found.")
+    #         # If we specify the number of solutions as a command-line argument,
+    #         # then don't loop; stop after trying that number.
+    #         if args.n is not None:
+    #             break
+    #         else:
+    #             num_foods += 1
