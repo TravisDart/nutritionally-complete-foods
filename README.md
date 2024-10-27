@@ -1,4 +1,4 @@
-# Nutritionally Complete Foods v0.2
+# Nutritionally Complete Foods v0.3
 
 * [Overview](#Overview)
 * [Current State of Development](#Current-State-of-Development)
@@ -36,7 +36,7 @@ I originally chose this solver because the [Stigler Diet](https://en.wikipedia.o
 
 Given a mathematical function shaped like a mountain, an optimizing solver will try to find its peak. When presented with a plateau shape, the solver just skates around looking for a peak. Ideally, I would like to tell the solver to stop optimizing once it has found any solution and to not consider that combination again.
 
-
+Version 0.3 is just an optimization of version 0.2. All nutritional requirements now have an upper bound, and there is now a better upper bound for the food-quantity and error variables. The data format has been simplified, and unused features were removed.
 
 
 
