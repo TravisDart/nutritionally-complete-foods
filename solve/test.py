@@ -109,7 +109,7 @@ def time_it(func, *args, **kwargs):
 
 
 if __name__ == "__main__":
-    # trivial_tests(verbose=False)
+    trivial_tests(verbose=False)
     multiply_known_solutions(verbose=False, should_assert=True)
-    # time_it(solve_against_known_solutions, verbose=False)
+    time_it(solve_against_known_solutions, verbose=False)
     print("All assertions pass.")
