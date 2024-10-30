@@ -3,11 +3,11 @@ import time
 import numpy as np
 
 from constants import KNOWN_SOLUTIONS, FOOD_OFFSET
-from find_max import find_food_max_value
-from find_n_greatest import find_max_error
-from load_data import load_test_data, load_data
+from solver.find_max import find_food_max_value
+from solver.find_n_greatest import find_max_error
+from solver.load_data import load_test_data, load_data
 from solve import solve_it
-from utils import (
+from solver.utils import (
     ordered_dict_values,
     dict_to_ordered_tuples,
     verify_solution,

@@ -1,6 +1,6 @@
 import argparse
 import numpy as np
-from load_data import load_data
+from .load_data import load_data
 from constants import FOOD_OFFSET
 
 
@@ -102,5 +102,22 @@ def get_arg_parser():
         action="count",
         default=0,
         help="Verbosity logging. Use -vv for very verbose.",
+    )
+
+    # Data-related options:
+    parser.add_argument(
+        "--download",
+        action="store_true",
+        help="If the data file is missing, download the file without prompting.",
+    )
+    parser.add_argument(
+        "--only-download",
+        action="store_true",
+        help="Exit after downloading the data file. (Don't solve.) This option implies --download",
+    )
+    parser.add_argument(
+        "--delete-intermediate-files",
+        action="store_true",
+        help="Delete intermediate files without prompting.",
     )
     return parser

@@ -8,7 +8,7 @@ from itertools import combinations
 import functools
 from tqdm import tqdm
 
-from load_data import load_data
+from download_data import load_data
 from solve import solve_it
 from utils import get_arg_parser
 

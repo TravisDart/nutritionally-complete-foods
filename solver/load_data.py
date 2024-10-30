@@ -6,7 +6,7 @@ from constants import (
     NUTRIENT_UNITS,
     NUTRIENT_NAMES,
 )
-from find_max import find_food_max_value
+from .find_max import find_food_max_value
 
 
 def load_test_data(food_set: int = 0):
@@ -59,7 +59,7 @@ def load_test_data(food_set: int = 0):
 
 
 def load_requirements():
-    with open("../data/Daily Recommended Values.csv") as csvfile:
+    with open("./data/Daily Recommended Values.csv") as csvfile:
         csvwreader = csv.reader(csvfile)
         next(csvwreader)  # Skip the header
         rows = [row for row in csvwreader]
@@ -78,7 +78,7 @@ def load_requirements():
 
 def load_real_data(only_these_ids: list[int] = None, exclude_ids: list[int] = None):
     foods = []
-    with open("../data/food_data.csv") as csvfile:
+    with open("./data/food_data.csv") as csvfile:
         csvreader = csv.reader(csvfile)
         next(csvreader)  # Skip header
         next(csvreader)  # Skip nutrient units
@@ -108,6 +108,23 @@ def load_data(
     only_these_ids: list[int] = None,
     exclude_ids: list[int] = None,
 ):
+    """
+    Load the complete data set by default, or a selection defined by only_these_ids or exclude_ids.
+
+    # For example, this is a list of food IDs to exclude. This is useful to temporarily exclude a food,
+    # for instance to tweak the solver so it won't return foods you don't like.
+    # For a more permanent exclusion, remove the food from data/selected_foods.txt.
+    # The foods below are examples that have already been excluded.
+    exclude_ids = [
+        # 35182,  # Acorn stew (Apache)
+        # 14091,  # Beverages, almond milk, unsweetened, shelf stable
+        # 14639,  # Beverages, rice milk, unsweetened
+        # 11656,  # Corn pudding, home prepared
+        # 11672,  # Potato pancakes
+    ]
+
+    only_these_ids is formatted in a similar manner.
+    """
     foods = load_real_data(only_these_ids, exclude_ids)
     min_requirements, max_requirements = load_requirements()
     max_foods = find_food_max_value(foods, max_requirements)

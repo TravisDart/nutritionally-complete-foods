@@ -1,6 +1,6 @@
 import math
 
-from load_data import load_data
+from .load_data import load_data
 from constants import FOOD_OFFSET, NUMBER_SCALE
 
 
