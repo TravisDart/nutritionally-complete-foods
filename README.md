@@ -36,9 +36,7 @@ I originally chose this solver because the [Stigler Diet](https://en.wikipedia.o
 
 Given a mathematical function shaped like a mountain, an optimizing solver will try to find its peak. When presented with a plateau shape, the solver just skates around looking for a peak. Ideally, I would like to tell the solver to stop optimizing once it has found any solution and to not consider that combination again.
 
-Version 0.4 is mainly for restructuring. Previously, there were two commands: one to load data, and one to solve. These were in two different folders. But, because of the way Python structuring works, the files couldn't both access a constants.py file in the project root. So, I have combined both into one file that lives in the project root.
-
-Version 0.4 also makes it easy to change the precision of the solver by changing the `NUMBER_SCALE` variable.
+Version 0.4 is mainly for restructuring. Previously, there were three commands in two different subdirectories. But, because of the way Python structuring works, the files in the subdirectories couldn't access a constants.py file in the project root. So, I have moved all runnable commands to the project root. I also combined the data and solving command, so there are now just two commands: solve and test.
 
 
 

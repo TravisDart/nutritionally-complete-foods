@@ -164,9 +164,9 @@ def delete_intermediate_files(
 
 
 def create_filtered_csv(should_delete_intermediate_files: bool = False):
-    download_dir = os.path.join(
-        os.path.dirname(__file__), "data"
-    )  # Download to the ./data directory.
+    # Download to the directory of this file, i.e. ./data
+    download_dir = os.path.join(os.path.dirname(__file__))
+
     zip_url = "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_2018-04.zip"
     zip_path = os.path.join(download_dir, os.path.basename(zip_url))
     json_path = zip_path[: -len(".zip")] + ".json"

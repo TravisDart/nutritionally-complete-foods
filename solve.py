@@ -6,9 +6,9 @@ from ortools.sat.python import cp_model
 
 from constants import FOOD_OFFSET
 from data.download_data import download_data_if_needed
-from solve.find_n_greatest import find_max_error
-from solve.load_data import load_data
-from solve.utils import get_arg_parser
+from solver.find_n_greatest import find_max_error
+from solver.load_data import load_data
+from solver.utils import get_arg_parser
 
 
 class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
