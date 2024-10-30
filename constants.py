@@ -1,7 +1,8 @@
-# TODO: Restructure this project to remove the need to duplicate this file.
-
 # CP-SAT only does integers, and no nutrient or requirement is less than .001, so scale to make .001 * NUMBER_SCALE = 1.
+# This value affects both the number of decimal places to which the source data is rounded
+# and the scale of the integer variables in the CP-SAT model.
 NUMBER_SCALE = 1_000
+
 FOOD_OFFSET = 2  # The first few columns of the food data are labels.
 
 USDA_NUTRIENT_NAMES = [

@@ -1,4 +1,4 @@
-# Nutritionally Complete Foods v0.3
+# Nutritionally Complete Foods v0.4
 
 * [Overview](#Overview)
 * [Current State of Development](#Current-State-of-Development)
@@ -36,7 +36,9 @@ I originally chose this solver because the [Stigler Diet](https://en.wikipedia.o
 
 Given a mathematical function shaped like a mountain, an optimizing solver will try to find its peak. When presented with a plateau shape, the solver just skates around looking for a peak. Ideally, I would like to tell the solver to stop optimizing once it has found any solution and to not consider that combination again.
 
-Version 0.3 is just an optimization of version 0.2. All nutritional requirements now have an upper bound, and there is now a better upper bound for the food-quantity and error variables. The data format has been simplified, and unused features were removed.
+Version 0.4 is mainly for restructuring. Previously, there were two commands: one to load data, and one to solve. These were in two different folders. But, because of the way Python structuring works, the files couldn't both access a constants.py file in the project root. So, I have combined both into one file that lives in the project root.
+
+Version 0.4 also makes it easy to change the precision of the solver by changing the `NUMBER_SCALE` variable.
 
 
 
@@ -80,22 +82,6 @@ source deactive
 
 
 
-
-## Loading Source Data
-
-This project uses a subset of the [USDA's SR Legacy dataset](https://fdc.nal.usda.gov/) as input. Before running the solver, download and parse this dataset by running:
-
-```
-cd data
-python create_food_data.py
-```
-
-This will result in a file called `food_data.csv` which is one of the two input files for the solver. There are currently 1,241 foods in this list.
-
-The other input file is the CSV of daily recommended values, which comes from the [USDA's Dietary Reference Intake (DRI) Calculator](https://www.nal.usda.gov/human-nutrition-and-food-safety/dri-calculator). You can either use the example file in this repo ( `data/Daily Recommended Values.csv`), or you can modify the values based on your personalized requirements. Ideally, I would like this program to directly integrate the calculation of dietary requirements, but the spreadsheet gives us a good enough initial goal.
-
-
-
 ## Running The Solver
 
 After you have generated the source data file, run the solver like so:
@@ -107,19 +93,37 @@ python solve.py
 
 This will output a list of foods that combine to satisfy the given dietary constrains. 
 
+### Number of foods:
+
 As the goal is to find the fewest number of foods required, the solver is currently hardcoded to find 7 foods. (There are no solutions with 6 foods or fewer.) The number of foods in the solution can be set with the `-n` flag:
 
 ```
 python solve.py -n 9
 ```
 
-The program takes about 3hrs to run and all solutions can be found in `solve/constants.py`.
+### Known Solutions:
+
+The program takes about 3hrs to run and known solutions can be found in `solve/constants.py`.
+
+
+
+## Source Data
+
+This project uses a subset of the [USDA's SR Legacy dataset](https://fdc.nal.usda.gov/) as input. The first time the solver runs, it will prompt you to download the data file from the USDA. For our purposes, we remove all processed and non-plant-based foods, which currently leaves 1,241 foods in the list. After parsing, this results in a file called `food_data.csv` , which is one of the two input files for the solver. 
+
+The other input file is the CSV of daily recommended values, which comes from the [USDA's Dietary Reference Intake (DRI) Calculator](https://www.nal.usda.gov/human-nutrition-and-food-safety/dri-calculator). You can either use the example file in this repo ( `data/Daily Recommended Values.csv`), or you can modify the values based on your personalized requirements. Ideally, I would like this program to directly integrate the calculation of dietary requirements, but the spreadsheet gives us a good enough initial goal.
+
+The solver takes a couple of command-line options related to data:
+
+* `--download`  - If the data file is missing, download the file without prompting.
+* `--only-download`  - Exit after downloading the data file. (Don't solve.) This option implies --download 
+* `--delete-intermediate-files` - Delete intermediate files without prompting.
 
 
 
 ## The Combinatorial Solver
 
-In the `solve_all.py` file (see below), I have tried to use the optimizing solver to find all solutions: Once one solution of is found, the algorithm removes the foods that compose the solution from the list and solves again. When no more solutions are found, then the process is repeated using every combination of the foods found in the solutions. - Unfortunately, this basically reduces to a slow brute-force search. Yet, this method does find more solutions, which at least proves the standard solving method does not return a complete list.
+In the `solve_all.py` file, I have tried to use the optimizing solver to find all solutions: Once one solution of is found, the algorithm removes the foods that compose the solution from the list and solves again. When no more solutions are found, then the process is repeated using every combination of the foods found in the solutions. - Unfortunately, this basically reduces to a slow brute-force search. Yet, this method does find more solutions, which at least proves the standard solving method does not return a complete list.
 
 
 
@@ -127,7 +131,7 @@ In the `solve_all.py` file (see below), I have tried to use the optimizing solve
 
 To help me verify that the solutions were correct, I created a Jupyter notebook in the `visualize/` folder that displays a chart of the actual nutrient value vs the acceptable range. This was only used at the beginning of the project, and since then I removed several processed foods I found in the list. So, currently the example solution contains processed foods that I eventually removed from consideration (e.g. potato pancakes). Once the solver is perfected, we need to go back and create a tighter integration between the solver and the visualizer.
 
-The notebook is run in the standard way by running `jupyter notebook`, then opening `visualize/Visualize Nutrients.ipynb` in the Jupyter web application. Even though the solutions are a little out of date with the solver, I have included  a screenshot of the notebook below:
+The notebook is run in the standard way by running `jupyter notebook`, then opening `visualize/Visualize Nutrients.ipynb` in the Jupyter web application. Even though the solutions have become a little out of date with the solver, I have included  a screenshot of the notebook below:
 
-![Screenshot of the Jupyter Notebook](screenshot.png)
+![Screenshot of the Jupyter Notebook](./visualize/screenshot.png)
 

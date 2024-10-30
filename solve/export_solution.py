@@ -1,6 +1,6 @@
 from typing import Optional
 from utils import dict_to_ordered_tuples
-from load_data import load_real_data, load_subset_of_data, load_requirements
+from download_data import load_real_data, load_subset_of_data, load_requirements
 from solve import solve_it
 from constants import KNOWN_SOLUTIONS
 

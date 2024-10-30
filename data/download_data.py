@@ -106,7 +106,10 @@ def create_csv(filtered_json_path, csv_path):
                         nutrient_unit = "µg"
 
                     amount /= 100  # The standard serving size is 100g. Normalize to 1g.
-                    amount = round(amount, 3)  # Round everything to 3 decimal places.
+
+                    # Round everything to a specific number of decimal places,
+                    # later we will scale our integer variables by this amount.
+                    amount = round(amount, int(math.log10(NUMBER_SCALE)))
 
                     dest_col = USDA_NUTRIENT_NAMES.index(nutrient["nutrient"]["name"])
 
@@ -161,13 +164,15 @@ def delete_intermediate_files(
 
 
 def create_filtered_csv(should_delete_intermediate_files: bool = False):
-    download_dir = os.path.dirname(__file__)  # Download to the current directory
+    download_dir = os.path.join(
+        os.path.dirname(__file__), "data"
+    )  # Download to the ./data directory.
     zip_url = "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_2018-04.zip"
     zip_path = os.path.join(download_dir, os.path.basename(zip_url))
     json_path = zip_path[: -len(".zip")] + ".json"
     filtered_json_path = os.path.join(download_dir, "food_data.json")
     csv_path = os.path.join(download_dir, "food_data.csv")
-    selected_foods_path = "selected_foods.txt"
+    selected_foods_path = os.path.join(download_dir, "selected_foods.txt")
 
     if not os.path.exists(filtered_json_path):
         if not os.path.exists(json_path):
@@ -183,6 +188,23 @@ def create_filtered_csv(should_delete_intermediate_files: bool = False):
         [zip_path, json_path, filtered_json_path],
         should_delete_intermediate_files,
     )
+
+
+def download_data_if_needed(should_not_prompt, should_delete_intermediate_files):
+    data_file_present = os.path.isfile("./data/food_data.csv")
+
+    if not should_not_prompt and not data_file_present:
+        confirmation = input("Data file not present. Download data file? [y/N]: ")
+        if confirmation.lower() != "y":
+            print("Exiting.")
+            exit(1)
+
+    if not data_file_present:
+        create_filtered_csv(
+            should_delete_intermediate_files=should_delete_intermediate_files
+        )
+        print()
+        print("Starting solver...")
 
 
 if __name__ == "__main__":

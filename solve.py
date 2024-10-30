@@ -5,9 +5,10 @@ from typing import List
 from ortools.sat.python import cp_model
 
 from constants import FOOD_OFFSET
-from load_data import load_data
-from find_n_greatest import find_max_error
-from utils import get_arg_parser
+from data.download_data import download_data_if_needed
+from solve.find_n_greatest import find_max_error
+from solve.load_data import load_data
+from solve.utils import get_arg_parser
 
 
 class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
@@ -172,17 +173,12 @@ def solve_it(
 if __name__ == "__main__":
     args = get_arg_parser().parse_args()
 
-    # This is a list of food IDs to exclude. This is useful to temporarily exclude a food,
-    # for instance to tweak the solver so it won't return foods you don't like.
-    # For a more permanent exclusion, remove the food from data/selected_foods.txt.
-    # The foods below are examples that have already been excluded.
-    exclude_ids = [
-        # 35182,  # Acorn stew (Apache)
-        # 14091,  # Beverages, almond milk, unsweetened, shelf stable
-        # 14639,  # Beverages, rice milk, unsweetened
-        # 11656,  # Corn pudding, home prepared
-        # 11672,  # Potato pancakes
-    ]
+    download_data_if_needed(
+        args.download or args.only_download, args.delete_intermediate_files
+    )
+
+    if args.only_download:
+        exit(0)
 
     foods, max_foods, min_requirements, max_requirements = load_data()
 
