@@ -3,25 +3,25 @@ import datetime
 
 from itertools import combinations
 
+from solver.logger import Logger
+
 
 class SQLStore:
-    def __init__(self, db_file, num_foods, start_over=False, verbose=False):
-        """
-        SQL IDs are lists delimited by spaces so we can call .split() on them later.
-        """
+    def __init__(self, db_file, num_foods, logger: Logger, start_over: bool = False):
+        self.logger = logger
         self.num_foods = num_foods
-        self.verbose = verbose
 
         self.conn = sqlite3.connect(db_file)
+        if start_over:
+            self.initialize()
+
+    def initialize(self):
         cursor = self.conn.cursor()
 
-        if start_over:
-            if self.verbose:
-                print("Starting over")
-            cursor.execute(f"DROP TABLE IF EXISTS exclude")
-            cursor.execute(f"DROP TABLE IF EXISTS solutions")
-            cursor.execute(f"DROP TABLE IF EXISTS foods")
-            self.conn.commit()
+        cursor.execute(f"DROP TABLE IF EXISTS exclude")
+        cursor.execute(f"DROP TABLE IF EXISTS solutions")
+        cursor.execute(f"DROP TABLE IF EXISTS foods")
+        self.conn.commit()
 
         cursor.execute(
             """
@@ -62,6 +62,9 @@ class SQLStore:
 
     def exclusions(self):
         cursor = self.conn.cursor()
+        cursor.execute(f"SELECT count(*) FROM exclude")
+        self.logger.log("items to exclude", cursor.fetchone()[0])
+
         while True:
             cursor.execute(
                 """
@@ -76,9 +79,7 @@ class SQLStore:
             if row is None:
                 break
             else:
-                if self.verbose:
-                    print()
-                    print("Excluding", row[0])
+                self.logger.log("Excluding", row[0])
                 yield row[0].split()
 
     def add_try(self, exclusion):
@@ -99,10 +100,10 @@ class SQLStore:
     def add_solution(self, solution):
         """Insert the new solution"""
         # Convert tuple to string to store in SQL so we can call .split() on it later.
-        if self.verbose:
-            print("Adding solution", solution)
+        self.logger.log("Adding solution", solution)
 
         cursor = self.conn.cursor()
+        # SQL IDs are space-separated strings so we can call .split() on them later.
         sql_id = " ".join([str(e) for e in solution])
 
         # Check if the solution already exists
@@ -111,8 +112,7 @@ class SQLStore:
             (sql_id,),
         )
         if cursor.fetchone() is not None:
-            if self.verbose:
-                print("Solution already exists")
+            self.logger.log("Solution already exists")
             return
 
         # Continue if the solution does not exist...
@@ -130,8 +130,7 @@ class SQLStore:
         # Recalculate all combinations
         cursor.execute(f"SELECT id FROM foods")
         all_foods = [f[0] for f in cursor.fetchall()]
-        if self.verbose:
-            print("foods_in_solutions", all_foods)
+        self.logger.log("foods_in_solutions", all_foods)
 
         all_combinations = set(
             [
@@ -150,11 +149,8 @@ class SQLStore:
         sql = "INSERT OR IGNORE INTO exclude (id) VALUES (?)"
 
         cursor.executemany(sql, [(c,) for c in new_combinations_to_exclude])
+        self.conn.commit()
 
-        if self.verbose:
-            print("all_combinations", len(all_combinations))
-            print(
-                "new_combinations_to_exclude",
-                len(new_combinations_to_exclude),
-            )
-            print("already_exists", len(already_exists))
+        self.logger.log("all_combinations", len(all_combinations))
+        self.logger.log("new_combinations_to_exclude", len(new_combinations_to_exclude))
+        self.logger.log("already_exists", len(already_exists))
