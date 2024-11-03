@@ -12,6 +12,11 @@ class SQLStore:
         self.num_foods = num_foods
 
         self.conn = sqlite3.connect(db_file)
+        cursor = self.conn.cursor()
+        cursor.execute("PRAGMA journal_mode = WAL")
+        cursor.execute("PRAGMA synchronous = OFF")
+        self.conn.commit()
+
         if start_over:
             self.initialize()
 
@@ -62,10 +67,11 @@ class SQLStore:
 
     def exclusions(self):
         cursor = self.conn.cursor()
-        cursor.execute(f"SELECT count(*) FROM exclude")
+        cursor.execute(f"SELECT count(*) FROM exclude WHERE start_time IS NULL")
         self.logger.log("items to exclude", cursor.fetchone()[0])
 
         while True:
+            # This hangs and is the reason that I'm going to use something differnet than SQLite.
             cursor.execute(
                 """
                 UPDATE exclude
@@ -75,10 +81,20 @@ class SQLStore:
                 """
             )
 
+            cursor.execute(
+                f"SELECT id FROM exclude WHERE start_time IS NULL ORDER BY id LIMIT 1"
+            )
             row = cursor.fetchone()
+
             if row is None:
                 break
             else:
+                self.logger.log("Hold your breath", row[0])
+                cursor.execute(
+                    f"UPDATE exclude SET start_time = DATETIME('now') WHERE id = ?",
+                    (row[0],),
+                )
+
                 self.logger.log("Excluding", row[0])
                 yield row[0].split()
 

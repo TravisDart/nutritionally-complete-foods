@@ -12,7 +12,7 @@ import psutil
 from constants import DB_FILE_NAME
 from solve import solve_it
 from solver.initialize import initialize
-from solver.logger import Logger
+from solver.logger import Logger, FileLogger
 
 # from solver.local_store import LocalStore
 from solver.sql import SQLStore
@@ -67,12 +67,12 @@ def solve_job(process_id: int = 0, seed_run: bool = False):
 if __name__ == "__main__":
     # solve_job(seed_run=True)
 
-    logical_cores = psutil.cpu_count(logical=True)
+    logical_cores = 4  # psutil.cpu_count(logical=True)
     print(f"Logical cores: {logical_cores}")
     with multiprocessing.Pool(logical_cores) as p:
-        [
-            p.apply_async(solve_job, args=(process_id,))
-            for process_id in range(1, logical_cores + 1)
-        ]
+        p.map(solve_job, range(1, logical_cores + 1))
+        # [
+        #     p.apply_async(solve_job, args=(process_id,))
+        #     for process_id in range(1, logical_cores + 1)
+        # ]
         p.close()
-        p.join()
