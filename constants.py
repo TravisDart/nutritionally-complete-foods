@@ -5,7 +5,8 @@ NUMBER_SCALE = 1_000
 
 FOOD_OFFSET = 2  # The first few columns of the food data are labels.
 
-DB_FILE_NAME = "search_progress.db"
+SOLUTION_FILE_NAME = "solutions.txt"
+TRIED_FILE_NAME = "tried.txt"
 
 USDA_NUTRIENT_NAMES = [
     "Calcium, Ca",
