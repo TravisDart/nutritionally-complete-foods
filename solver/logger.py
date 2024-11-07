@@ -4,9 +4,9 @@ class Logger:
         self.verbose = verbose
         self.log("Logger initialized")
 
-    def log(self, *args):
+    def log(self, *args, **kwargs):
         if self.verbose:
-            print(f"[{self.process_id:02d}]", *args)
+            print(f"[{self.process_id:02d}]", *args, **kwargs)
 
 
 class FileLogger:

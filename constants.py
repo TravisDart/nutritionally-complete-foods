@@ -5,8 +5,7 @@ NUMBER_SCALE = 1_000
 
 FOOD_OFFSET = 2  # The first few columns of the food data are labels.
 
-SOLUTION_FILE_NAME = "solutions.txt"
-TRIED_FILE_NAME = "tried.txt"
+DB_URL = "postgresql://postgres:pg_password@localhost:5432/food"
 
 USDA_NUTRIENT_NAMES = [
     "Calcium, Ca",
