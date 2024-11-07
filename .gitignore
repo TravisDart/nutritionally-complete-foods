@@ -5,3 +5,4 @@
 **/*.sqlite
 /search_progress.db
 /search_progress.db-journal
+/pgdata/
