@@ -48,9 +48,8 @@ def solve_job(process_id: int = 0):
 
 if __name__ == "__main__":
     num_foods = 7
-    SQLStore.initialize(DB_URL)
-    # solve_job(1)  # For debugging
-    # exit()
+    # SQLStore.initialize(DB_URL)
+    SQLStore.resume(DB_URL)
 
     logical_cores = psutil.cpu_count(logical=True)
     print(f"Logical cores: {logical_cores}")

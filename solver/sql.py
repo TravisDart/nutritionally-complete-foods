@@ -20,6 +20,16 @@ class SQLStore:
         self.startup_wait = 10
 
     @classmethod
+    def resume(cls, db_url: str):
+        """
+        Reset the start time of any exclusions we started during the last run but didn't finish.
+        """
+        conn = psycopg.connect(db_url)
+        conn.autocommit = True
+        cursor = conn.cursor()
+        cursor.execute("UPDATE exclude set start_time = null where end_time is null;")
+
+    @classmethod
     def initialize(cls, db_url: str):
         conn = psycopg.connect(db_url)
         conn.autocommit = True
