@@ -3,73 +3,56 @@ This program tries to find all combinations of foods that will meet the nutritio
 See README.md for a full description. In short, the ultimate goal of this project is to find all solutions.
 However, it looks like we need a different solver to do this.
 """
-import sys
-from itertools import combinations
+import multiprocessing
+from multiprocessing import Lock
 import functools
-from tqdm import tqdm
+import psutil
 
-from download_data import load_data
+from constants import DB_URL
 from solve import solve_it
-from utils import get_arg_parser
+from solver.initialize import initialize
+from solver.logger import Logger, FileLogger
+
+# from solver.local_store import LocalStore
+from solver.sql import SQLStore
 
 
-def solve_it2(min_requirements, max_requirements, num_foods, foods):
-    solution_data = solve_it(min_requirements, max_requirements, foods, num_foods)
-    if not solution_data:
-        return None, None
+def solve_job(process_id: int = 0):
+    # Initialize the solver function
+    num_foods = 7
+    logger = Logger(verbose=True, process_id=process_id)
+    state_store = SQLStore(db_url=DB_URL, num_foods=num_foods, logger=logger)
+    foods, max_foods, min_requirements, max_requirements, verbose = initialize()
 
-    # A list of tuples of ordered food IDs.
-    solutions = solution_data.keys()
-
-    # Basically just a flattend list of solutions without duplicates.
-    foods_in_solutions = set(
-        [food for solution in solutions.keys() for food in solution]
-    )
-
-    return foods_in_solutions, solutions
+    # Loop until we've tried to solve without the combinations of elements of every solution.
+    for exclusion in state_store.exclusions():
+        foods_without = [food for food in foods if food[0] not in exclusion]
+        try:
+            solution = solve_it(
+                foods_without,
+                max_foods,
+                min_requirements,
+                max_requirements,
+                num_foods,
+                verbose,
+            )
+        except KeyboardInterrupt:
+            print("!!! Keyboard interrupt !!!")
+            exit()
+        state_store.add_try(exclusion)
+        if solution:
+            state_store.add_solution(solution)
+        else:
+            logger.log("No solution for exclusion", exclusion)
 
 
 if __name__ == "__main__":
-    # Keep track of these things:
-    foods_in_solutions = {}
-    all_solutions = {}
+    num_foods = 7
+    # SQLStore.initialize(DB_URL)
+    SQLStore.resume(DB_URL)
 
-    # Start with the empty tuple to seed the run and start by not removing any foods.
-    food_combinations_to_exclude = {()}
-
-    # Keep track of the combinations we've tried to remove so we can recalculate our work queue.
-    tried_to_solve_without = {}
-
-    # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # Initialize the solver function
-    args = get_arg_parser().parse_args()
-    nutrients, foods, food_labels, min_requirements, max_requirements = load_data(
-        should_use_test_data=args.test_data
-    )
-    solve = functools.partial(
-        solve_it2, min_requirements, max_requirements, num_foods=args.n
-    )
-
-    # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # Loop until we've tried to solve without the combinations of elements of every solution.
-    while tried_to_solve_without:
-        foods_without = [
-            [
-                food
-                for food in foods
-                if int(food[0]) not in food_combinations_to_exclude.pop()
-            ]
-        ]
-        foods_in_solutions, solution_combinations = solve(foods_without)
-        if solution_combinations:
-            # Update the global tally
-            foods_in_solutions.update(foods_in_solutions)
-            all_solutions.update(solution_combinations)
-
-            # Recalculate all of combinations
-            tried_to_solve_without = [
-                y
-                for x in range(len(foods_in_solutions) + 1)
-                for y in combinations(foods_in_solutions, x)
-                if y != tried_to_solve_without
-            ]
+    logical_cores = psutil.cpu_count(logical=True)
+    print(f"Logical cores: {logical_cores}")
+    with multiprocessing.Pool(logical_cores) as p:
+        p.map(solve_job, range(1, logical_cores + 1))
+        p.close()

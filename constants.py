@@ -5,6 +5,8 @@ NUMBER_SCALE = 1_000
 
 FOOD_OFFSET = 2  # The first few columns of the food data are labels.
 
+DB_URL = "postgresql://postgres:pg_password@localhost:5432/food"
+
 USDA_NUTRIENT_NAMES = [
     "Calcium, Ca",
     "Carbohydrate, by difference",
