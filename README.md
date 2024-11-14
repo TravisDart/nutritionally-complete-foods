@@ -1,4 +1,4 @@
-# Nutritionally Complete Foods v0.4
+# Nutritionally Complete Foods v0.5
 
 * [Overview](#Overview)
 * [Current State of Development](#Current-State-of-Development)
@@ -28,15 +28,15 @@ The solver is working and has found many solutions. Below is one example:
 6. Plums, wild (Northern Plains Indians) (1,108g) - ID #35206
 7. Beans, baked, canned, no salt added (956g) - ID #43449
 
-The goal is not to find "many" solutions but all of them. Currently, every solution contains Kiwifruit and either dry or rehydrated seaweed. This leads me to suspect we're missing a lot of solutions. Plus, using a semi-brute force approach, several more solutions can be found (see the section on the Combinatorial Solver below).
+The goal is not to find "many" solutions but all of them. Currently, every solution contains Kiwifruit and either dry or rehydrated seaweed. This leads me to suspect we're missing a lot of solutions. Plus, using a semi-brute force approach, several more solutions can be found.
 
-Currently, this program uses an optimizing solver, which means it finds the combinations of foods that most closely meet the minimum dietary requirements. But, the goal is to find all solutions that satisfy the allowable range of nutritional requirements, not just the solutions closest to the minimum requirements. So, I'm realizing that an optimizing solver is not the best tool for this problem.
+Currently, this program uses an optimizing solver, which means it finds the combinations of foods that most closely meet the minimum dietary requirements. I originally chose this solver because the [Stigler Diet](https://en.wikipedia.org/wiki/Stigler_diet) problem is similar to our problem and can be solved efficiently with an optimizing solver. But, instead of trying to minimize cost, our goal is to find the fewest distinct food types. It turns out, this is a pretty fundamental difference: We don't want to find the one solution closest to the minimum requirements. We want to find all solutions.
 
-I originally chose this solver because the [Stigler Diet](https://en.wikipedia.org/wiki/Stigler_diet) problem is similar to our problem and can be solved efficiently with an optimizing solver. But, instead of trying to minimize cost, our goal is to find the fewest distinct food types, and that is a pretty fundamental difference.
+The latest iteration of this program only gets one result back from the solver and exists as soon as a solution is found so that no time is spent optimizing. After a solution is found, we try to find solutions that don't contain that same combination of foods. Specifically, we try excluding every combination of foods in the original solution, running the solver with those foods excluded from the data set. To speed this up, this process is run across all cores and uses a PostgreSQL database to store data.
 
-Given a mathematical function shaped like a mountain, an optimizing solver will try to find its peak. When presented with a plateau shape, the solver just skates around looking for a peak. Ideally, I would like to tell the solver to stop optimizing once it has found any solution and to not consider that combination again.
+It was an idea worth trying, but there quickly become more than 10,000 combinations to try, and for sets of foods that contain no solution, the solver will run for ~3 hours before giving up. So this means the program would run for months before returning all solutions. This is only marginally better than brute force.
 
-Version 0.4 is mainly for restructuring. Previously, there were three commands in two different subdirectories. But, because of the way Python structuring works, the files in the subdirectories couldn't access a constants.py file in the project root. So, I have moved all runnable commands to the project root. I also combined the data and solving command, so there are now just two commands: solve and test.
+Back to the drawing board.
 
 
 
@@ -80,16 +80,15 @@ source deactive
 
 
 
-## Running The Solver
+## Running The Simple Solver
 
-After you have generated the source data file, run the solver like so:
+After you have generated the source data file, you can run the solver to get back one solution like so:
 
 ```
-cd solve
 python solve.py
 ```
 
-This will output a list of foods that combine to satisfy the given dietary constrains. 
+This will output the first solution it finds that combine to satisfy the given dietary constrains. 
 
 ### Number of foods:
 
@@ -105,6 +104,28 @@ The program takes about 3hrs to run and known solutions can be found in `solve/c
 
 
 
+## The Combinatorial Solver
+
+To find all solutions, first start a PostgreSQL instance with Docker and create the food database:
+
+```
+docker run -d --name food-postgres -p 5432:5432 \
+    -e POSTGRES_PASSWORD=pg_password \
+    -v ./pgdata:/var/lib/postgresql/data postgres:17.0
+
+docker exec -it food-postgres psql -U postgres -c "CREATE DATABASE food;"
+```
+
+Then run the combinatorial solver:
+
+````
+python solve_all.py
+````
+
+This will spawn a process for each logical core. But, as noted above, this is still an extremely slow way to solve the problem.
+
+
+
 ## Source Data
 
 This project uses a subset of the [USDA's SR Legacy dataset](https://fdc.nal.usda.gov/) as input. The first time the solver runs, it will prompt you to download the data file from the USDA. For our purposes, we remove all processed and non-plant-based foods, which currently leaves 1,241 foods in the list. After parsing, this results in a file called `food_data.csv` , which is one of the two input files for the solver. 
@@ -116,12 +137,6 @@ The solver takes a couple of command-line options related to data:
 * `--download`  - If the data file is missing, download the file without prompting.
 * `--only-download`  - Exit after downloading the data file. (Don't solve.) This option implies --download 
 * `--delete-intermediate-files` - Delete intermediate files without prompting.
-
-
-
-## The Combinatorial Solver
-
-In the `solve_all.py` file, I have tried to use the optimizing solver to find all solutions: Once one solution of is found, the algorithm removes the foods that compose the solution from the list and solves again. When no more solutions are found, then the process is repeated using every combination of the foods found in the solutions. - Unfortunately, this basically reduces to a slow brute-force search. Yet, this method does find more solutions, which at least proves the standard solving method does not return a complete list.
 
 
 

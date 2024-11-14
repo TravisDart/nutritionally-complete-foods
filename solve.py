@@ -135,25 +135,3 @@ if __name__ == "__main__":
         log_level=verbose,
     )
     print(solutions)
-
-    # num_foods = 1
-    # solutions = []
-    # while not solutions:
-    #     solutions = solve_it(
-    #         min_requirements,
-    #         max_requirements,
-    #         foods,
-    #         num_foods=num_foods,
-    #         log_level=args.verbose,
-    #     )
-    #
-    #     if solutions:
-    #         break
-    #     else:
-    #         print(f"No solutions with {num_foods} foods found.")
-    #         # If we specify the number of solutions as a command-line argument,
-    #         # then don't loop; stop after trying that number.
-    #         if args.n is not None:
-    #             break
-    #         else:
-    #             num_foods += 1
