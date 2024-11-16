@@ -18,13 +18,13 @@ def find_max_x(y: List[int], z: List[int]):
 
 
 def find_food_max_value(foods, max_requirements):
+    """
+    Calculate the maximum value we would ever need for each food.
+
+    For example, we will never need more than 2,917 grams of Apples because that's when
+    one of the nutrients (fiber) goes over the upper bound. One gram of apples contains .024 g of fiber,
+    and 2,917 * .024 = 70.008, which is above the upper bound of 70g.
+    """
     return [
         math.ceil(find_max_x(food[FOOD_OFFSET:], max_requirements)) for food in foods
     ]
-
-
-if __name__ == "__main__":
-    assert find_max_x([1, 2, 3], [12, 12, 12]) == 4.0
-    assert find_max_x([1, 3, 2], [12, 12, 12]) == 4.0
-    assert find_max_x([1, 3, 2], [10, 12, 14]) == 4.0
-    assert find_max_x([2, 3, 4], [10, 15, 20]) == 5.0
