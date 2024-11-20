@@ -1,4 +1,4 @@
-# Nutritionally Complete Foods v0.5
+# Nutritionally Complete Foods v0.6
 
 * [Overview](#Overview)
 * [Current State of Development](#Current-State-of-Development)
@@ -34,7 +34,9 @@ Currently, this program uses an optimizing solver, which means it finds the comb
 
 The latest iteration of this program only gets one result back from the solver and exists as soon as a solution is found so that no time is spent optimizing. After a solution is found, we try to find solutions that don't contain that same combination of foods. Specifically, we try excluding every combination of foods in the original solution, running the solver with those foods excluded from the data set. To speed this up, this process is run across all cores and uses a PostgreSQL database to store data.
 
-It was an idea worth trying, but there quickly become more than 10,000 combinations to try, and for sets of foods that contain no solution, the solver will run for ~3 hours before giving up. So this means the program would run for months before returning all solutions. This is only marginally better than brute force.
+Version 0.6 refactors the solver to add a timeout. Without a timeout, it can take a process up to 3 hours to finish. 
+
+After running for 3 hours, there were more than 500,000 combinations to try and 56 combinations had been processed. Of these, 29 took <120 seconds, 26 took >120 seconds, and 22 timed out. Even using a 120-second timeout 500,000 combinations would take 2 years to process. It was an idea worth trying, but this method is only marginally better than brute force.
 
 Back to the drawing board.
 
