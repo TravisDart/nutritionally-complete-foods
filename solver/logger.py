@@ -19,3 +19,8 @@ class FileLogger:
 
     def __del__(self):
         self.file.close()  # Close the file when the object is garbage collected
+
+
+class NullLogger:
+    def log(self, *args, **kwargs):
+        pass

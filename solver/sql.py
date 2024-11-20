@@ -1,43 +1,64 @@
-import time
+from typing import List, Optional
 
 import psycopg
 
-import datetime
 from itertools import combinations
-from solver.logger import Logger
+from solver.logger import Logger, NullLogger
 
 
 class SQLStore:
-    def __init__(self, db_url: str, num_foods: int, logger: Logger):
-        self.logger = logger
+    def __init__(
+        self, db_url: str, num_foods: int, timeout: int = 3600, logger: Logger = None
+    ):
+        self.logger = NullLogger if logger is None else logger
         self.num_foods = num_foods
         self.conn = psycopg.connect(db_url)
         self.conn.autocommit = True
         self.conn.isolation_level = psycopg.IsolationLevel.SERIALIZABLE
+        self.timeout = timeout
 
-        # If there are no jobs on startup, the workers will wait one time.
-        # If there are no jobs again, the workers will exit.
-        self.startup_wait = 10
-
-    @classmethod
-    def resume(cls, db_url: str):
+    def resume(self, clear_timeout: bool = False):
         """
         Reset the start time of any exclusions we started during the last run but didn't finish.
         """
-        conn = psycopg.connect(db_url)
-        conn.autocommit = True
-        cursor = conn.cursor()
-        cursor.execute("UPDATE exclude set start_time = null where end_time is null;")
+        cursor = self.conn.cursor()
+        cursor.execute(
+            """
+            UPDATE exclude set
+                start_time = null,
+                end_time = null,
+                timeout = null,
+                claimed_by = null,
+                duration = null,
+                solution = null
+                where start_time is not null
+                  and (timeout = %s or timeout = false) -- evaluates to the same thing if we aren't clearing timeouts
+            ;
+            """,
+            (clear_timeout,),
+        )
+        self._create_timed_out_view(cursor, self.timeout)
 
-    @classmethod
-    def initialize(cls, db_url: str):
-        conn = psycopg.connect(db_url)
-        conn.autocommit = True
-        cursor = conn.cursor()
+    def _create_timed_out_view(self, cursor, timeout):
+        cursor.execute(
+            f"""
+            CREATE OR REPLACE VIEW timed_out_processes AS
+            select claimed_by
+              from exclude
+             where start_time is not null
+               and end_time is null
+               and EXTRACT(EPOCH FROM (NOW() - start_time))::int > {timeout}
+             order by start_time desc
+            ;
+            """
+        )
 
-        cursor.execute("DROP TABLE IF EXISTS exclude;")
-        cursor.execute("DROP TABLE IF EXISTS solutions;")
-        cursor.execute("DROP TABLE IF EXISTS foods;")
+    def initialize(self):
+        cursor = self.conn.cursor()
+
+        cursor.execute("DROP TABLE IF EXISTS exclude CASCADE;")
+        cursor.execute("DROP TABLE IF EXISTS solutions CASCADE;")
+        cursor.execute("DROP TABLE IF EXISTS foods CASCADE;")
 
         cursor.execute(
             """
@@ -45,9 +66,28 @@ class SQLStore:
                 id smallint[] PRIMARY KEY,
                 start_time TIMESTAMP,
                 end_time TIMESTAMP,
-                duration INTEGER
+                timeout BOOLEAN,
+                claimed_by INTEGER UNIQUE,
+                duration INTEGER,
+                solution smallint[]
             );
         """
+        )
+
+        self._create_timed_out_view(cursor, self.timeout)
+
+        cursor.execute(
+            """
+            CREATE OR REPLACE VIEW process_status AS
+            select
+                id,
+                start_time,
+                coalesce(duration, EXTRACT(EPOCH FROM (NOW() - start_time))::int) as current_duration
+            from exclude
+            where start_time is not null and end_time is null
+            order by start_time desc
+            ;
+            """
         )
 
         cursor.execute(
@@ -74,55 +114,68 @@ class SQLStore:
     def __del__(self):
         self.conn.close()
 
-    def exclusions(self):
+    def get_exclusion(self, worker_id: int):
         cursor = self.conn.cursor()
         cursor.execute("SELECT count(*) FROM exclude WHERE start_time IS NULL;")
         self.logger.log("items to exclude", cursor.fetchone()[0])
 
-        while True:
-            cursor.execute("SELECT pg_advisory_lock(1);")
-            try:
-                cursor.execute(
-                    """
-                    UPDATE exclude
-                    SET start_time = NOW()
-                    WHERE id = (SELECT id FROM exclude WHERE start_time IS NULL LIMIT 1)
-                    RETURNING id;
-                    """
-                )
-                row = cursor.fetchall()
-            finally:
-                cursor.execute("SELECT pg_advisory_unlock(1);")
+        cursor.execute("SELECT pg_advisory_lock(1);")
+        try:
+            cursor.execute(
+                """
+                UPDATE exclude
+                SET start_time = NOW(),
+                claimed_by = %s
+                WHERE id = (SELECT id FROM exclude WHERE start_time IS NULL LIMIT 1)
+                RETURNING id;
+                """,
+                (worker_id,),
+            )
+            row = cursor.fetchall()
+        finally:
+            cursor.execute("SELECT pg_advisory_unlock(1);")
 
-            if row == []:
-                if self.startup_wait > 0:
-                    self.startup_wait -= 1
-                    self.logger.log("waiting", self.startup_wait)
-                    time.sleep(5)
-                else:
-                    return
-            else:
-                self.logger.log("Excluding", row[0][0])
-                yield row[0][0]
+        if row == []:
+            return
+        else:
+            return row[0][0]
 
-    def add_try(self, exclusion):
+    def get_timed_out_processes(self):
+        """Update the timestamp of the exclusion so we can see how long the solver took."""
+        cursor = self.conn.cursor()
+        results = cursor.execute("SELECT * FROM timed_out_processes;")
+        return [r[0] for r in results]
+
+    def add_result(
+        self, exclusion: List[int], timeout: bool, solution: Optional[List[int]] = None
+    ):
         """Update the timestamp of the exclusion so we can see how long the solver took."""
         cursor = self.conn.cursor()
         cursor.execute("SELECT pg_advisory_lock(1);")
         try:
             cursor.execute(
                 """
-            UPDATE exclude
-            SET end_time = NOW(),
-                duration = EXTRACT(EPOCH FROM (NOW() - start_time))
-            WHERE id = %s
-            """,
-                (exclusion,),
+                UPDATE exclude
+                SET end_time = NOW(),
+                    timeout = %s,
+                    claimed_by = NULL,
+                    duration = EXTRACT(EPOCH FROM (NOW() - start_time)),
+                    solution = %s
+                WHERE id = %s
+                """,
+                (
+                    timeout,
+                    list(solution),
+                    exclusion,
+                ),
             )
         finally:
             cursor.execute("SELECT pg_advisory_unlock(1);")
 
-    def add_solution(self, solution):
+        if solution:
+            self._add_solution(solution)
+
+    def _add_solution(self, solution):
         """Insert the new solution"""
         self.logger.log("Adding solution", solution, end=" ")
         cursor = self.conn.cursor()

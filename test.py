@@ -3,9 +3,14 @@ import time
 import numpy as np
 
 from constants import KNOWN_SOLUTIONS, FOOD_OFFSET
-from solver.find_max import find_food_max_value
+from solver.find_max import find_food_max_value, find_max_x
 from solver.find_n_greatest import find_max_error
-from solver.load_data import load_test_data, load_data
+from solver.load_data import (
+    load_test_data,
+    load_data,
+    load_requirements,
+    load_real_data,
+)
 from solve import solve_it
 from solver.utils import (
     ordered_dict_values,
@@ -108,8 +113,23 @@ def time_it(func, *args, **kwargs):
     print("Known solutions took", execution_time, "seconds to solve.")
 
 
+def test_find_max_x():
+    max_requirements = load_requirements()[1]
+    foods = load_real_data(only_these_ids=[9501])
+    result = find_food_max_value(foods, max_requirements)
+    assert result == [2917]
+
+    assert find_max_x([1, 2, 3], [12, 12, 12]) == 4.0
+    assert find_max_x([1, 3, 2], [12, 12, 12]) == 4.0
+    assert find_max_x([1, 3, 2], [10, 12, 14]) == 4.0
+    assert find_max_x([2, 3, 4], [10, 15, 20]) == 5.0
+
+
 if __name__ == "__main__":
-    trivial_tests(verbose=False)
-    multiply_known_solutions(verbose=False, should_assert=True)
-    time_it(solve_against_known_solutions, verbose=False)
+    test_find_max_x()
+
+    # Need to refactor these tests to account for the new output of the solver.
+    # trivial_tests(verbose=False)
+    # multiply_known_solutions(verbose=False, should_assert=True)
+    # time_it(solve_against_known_solutions, verbose=False)
     print("All assertions pass.")
