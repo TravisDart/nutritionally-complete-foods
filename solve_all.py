@@ -32,14 +32,15 @@ def solve_job(num_foods, exclusion: List[int], DB_URL):
 
 
 def solve(process_id: int = 0):
-    timeout = 120
+    timeout = 3600
     num_foods = 7
     logger = Logger(verbose=True, process_id=process_id)
-    state_store = SQLStore(db_url=DB_URL, num_foods=num_foods, logger=logger)
+    state_store = SQLStore(
+        db_url=DB_URL, num_foods=num_foods, logger=logger, timeout=timeout
+    )
 
-    # Refactor:
-    state_store.initialize(timeout)
-    # state_store.resume()
+    state_store.initialize()
+    # state_store.resume(clear_timeout=True)
 
     logical_cores = psutil.cpu_count(logical=True)
     processes = {id: None for id in range(logical_cores)}

@@ -7,22 +7,53 @@ from solver.logger import Logger, NullLogger
 
 
 class SQLStore:
-    def __init__(self, db_url: str, num_foods: int, logger: Logger = None):
+    def __init__(
+        self, db_url: str, num_foods: int, timeout: int = 3600, logger: Logger = None
+    ):
         self.logger = NullLogger if logger is None else logger
         self.num_foods = num_foods
         self.conn = psycopg.connect(db_url)
         self.conn.autocommit = True
         self.conn.isolation_level = psycopg.IsolationLevel.SERIALIZABLE
+        self.timeout = timeout
 
-    @classmethod
-    def resume(self):
+    def resume(self, clear_timeout: bool = False):
         """
         Reset the start time of any exclusions we started during the last run but didn't finish.
         """
         cursor = self.conn.cursor()
-        cursor.execute("UPDATE exclude set start_time = null where end_time is null;")
+        cursor.execute(
+            """
+            UPDATE exclude set
+                start_time = null,
+                end_time = null,
+                timeout = null,
+                claimed_by = null,
+                duration = null,
+                solution = null
+                where start_time is not null
+                  and (timeout = %s or timeout = false) -- evaluates to the same thing if we aren't clearing timeouts
+            ;
+            """,
+            (clear_timeout,),
+        )
+        self._create_timed_out_view(cursor, self.timeout)
 
-    def initialize(self, timeout: int):
+    def _create_timed_out_view(self, cursor, timeout):
+        cursor.execute(
+            f"""
+            CREATE OR REPLACE VIEW timed_out_processes AS
+            select claimed_by
+              from exclude
+             where start_time is not null
+               and end_time is null
+               and EXTRACT(EPOCH FROM (NOW() - start_time))::int > {timeout}
+             order by start_time desc
+            ;
+            """
+        )
+
+    def initialize(self):
         cursor = self.conn.cursor()
 
         cursor.execute("DROP TABLE IF EXISTS exclude CASCADE;")
@@ -37,10 +68,13 @@ class SQLStore:
                 end_time TIMESTAMP,
                 timeout BOOLEAN,
                 claimed_by INTEGER UNIQUE,
-                duration INTEGER
+                duration INTEGER,
+                solution smallint[]
             );
         """
         )
+
+        self._create_timed_out_view(cursor, self.timeout)
 
         cursor.execute(
             """
@@ -52,19 +86,6 @@ class SQLStore:
             from exclude
             where start_time is not null and end_time is null
             order by start_time desc
-            ;
-            """
-        )
-
-        cursor.execute(
-            f"""
-            CREATE OR REPLACE VIEW timed_out_processes AS
-            select claimed_by
-              from exclude
-             where start_time is not null
-               and end_time is null
-               and EXTRACT(EPOCH FROM (NOW() - start_time))::int > {timeout}
-             order by start_time desc
             ;
             """
         )
@@ -138,11 +159,13 @@ class SQLStore:
                 SET end_time = NOW(),
                     timeout = %s,
                     claimed_by = NULL,
-                    duration = EXTRACT(EPOCH FROM (NOW() - start_time))
+                    duration = EXTRACT(EPOCH FROM (NOW() - start_time)),
+                    solution = %s
                 WHERE id = %s
                 """,
                 (
                     timeout,
+                    list(solution),
                     exclusion,
                 ),
             )
