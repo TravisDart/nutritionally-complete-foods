@@ -7,7 +7,8 @@ import argparse
 
 import requests
 
-from constants import USDA_NUTRIENT_NAMES, NUMBER_SCALE, NUTRIENT_UNITS
+from constants import USDA_NUTRIENT_NAMES, NUMBER_SCALE, NUTRIENT_UNITS, DB_URL
+from data.sql import SQLData
 
 
 def download_zipfile(zip_url, zip_path):
@@ -163,7 +164,16 @@ def delete_intermediate_files(
                 print(f"Error deleting: {basename} ({error})")
 
 
-def create_filtered_csv(should_delete_intermediate_files: bool = False):
+def create_sql(csv_path):
+    sql = SQLData(DB_URL)
+    sql.initialize()
+    sql.import_csv(csv_path)
+    sql.import_csv_components(csv_path)
+
+
+def create_filtered_csv(
+    should_not_prompt: bool, should_delete_intermediate_files: bool
+):
     # Download to the directory of this file, i.e. ./data
     download_dir = os.path.join(os.path.dirname(__file__))
 
@@ -174,48 +184,25 @@ def create_filtered_csv(should_delete_intermediate_files: bool = False):
     csv_path = os.path.join(download_dir, "food_data.csv")
     selected_foods_path = os.path.join(download_dir, "selected_foods.txt")
 
-    if not os.path.exists(filtered_json_path):
-        if not os.path.exists(json_path):
-            if not os.path.exists(zip_path):
-                download_zipfile(zip_url, zip_path)
-            extract_json(zip_path, json_path)
-        create_filtered_json(json_path, filtered_json_path, selected_foods_path)
-    create_csv(filtered_json_path, csv_path)
+    if not os.path.exists(csv_path):
+        if not should_not_prompt:
+            confirmation = input("Data file not present. Download data file? [y/N]: ")
+            if confirmation.lower() != "y":
+                print("Exiting.")
+                exit(1)
 
-    print()
-    print("Data file successfully created.")
+        if not os.path.exists(filtered_json_path):
+            if not os.path.exists(json_path):
+                if not os.path.exists(zip_path):
+                    download_zipfile(zip_url, zip_path)
+                extract_json(zip_path, json_path)
+            create_filtered_json(json_path, filtered_json_path, selected_foods_path)
+        create_csv(filtered_json_path, csv_path)
+        print()
+        print("Data file successfully created.")
+    create_sql(csv_path)
+
     delete_intermediate_files(
         [zip_path, json_path, filtered_json_path],
         should_delete_intermediate_files,
     )
-
-
-def download_data_if_needed(should_not_prompt, should_delete_intermediate_files):
-    data_file_present = os.path.isfile("./data/food_data.csv")
-
-    if not should_not_prompt and not data_file_present:
-        confirmation = input("Data file not present. Download data file? [y/N]: ")
-        if confirmation.lower() != "y":
-            print("Exiting.")
-            exit(1)
-
-    if not data_file_present:
-        create_filtered_csv(
-            should_delete_intermediate_files=should_delete_intermediate_files
-        )
-        print()
-        print("Starting solver...")
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Create input data file for the solver."
-    )
-    parser.add_argument(
-        "-d",
-        action="store_true",
-        help="Delete intermediate files without prompting.",
-    )
-    args = parser.parse_args()
-
-    create_filtered_csv(should_delete_intermediate_files=args.d)
