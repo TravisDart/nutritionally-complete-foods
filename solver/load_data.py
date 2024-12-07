@@ -1,4 +1,5 @@
 import csv
+import os
 
 from constants import (
     NUMBER_SCALE,
@@ -59,7 +60,9 @@ def load_test_data(food_set: int = 0):
 
 
 def load_requirements():
-    with open("./data/Daily Recommended Values.csv") as csvfile:
+    this_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    file_path = os.path.join(this_dir, "./data/Daily Recommended Values.csv")
+    with open(file_path) as csvfile:
         csvwreader = csv.reader(csvfile)
         next(csvwreader)  # Skip the header
         rows = [row for row in csvwreader]
@@ -78,7 +81,9 @@ def load_requirements():
 
 def load_real_data(only_these_ids: list[int] = None, exclude_ids: list[int] = None):
     foods = []
-    with open("./data/food_data.csv") as csvfile:
+    this_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    file_path = os.path.join(this_dir, "data/food_data.csv")
+    with open(file_path) as csvfile:
         csvreader = csv.reader(csvfile)
         next(csvreader)  # Skip header
         next(csvreader)  # Skip nutrient units
