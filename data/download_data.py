@@ -3,11 +3,10 @@ import json
 import math
 import os
 import zipfile
-import argparse
 
 import requests
 
-from constants import USDA_NUTRIENT_NAMES, NUMBER_SCALE, NUTRIENT_UNITS, DB_URL
+from constants import USDA_NUTRIENT_NAMES, DATA_DECIMAL_PLACES, NUTRIENT_UNITS, DB_URL
 from data.sql import SQLData
 
 
@@ -109,8 +108,8 @@ def create_csv(filtered_json_path, csv_path):
                     amount /= 100  # The standard serving size is 100g. Normalize to 1g.
 
                     # Round everything to a specific number of decimal places,
-                    # later we will scale our integer variables by this amount.
-                    amount = round(amount, int(math.log10(NUMBER_SCALE)))
+                    # later we will scale our integer variables by NUMBER_SCALE.
+                    amount = round(amount, DATA_DECIMAL_PLACES)
 
                     dest_col = USDA_NUTRIENT_NAMES.index(nutrient["nutrient"]["name"])
 
@@ -129,10 +128,10 @@ def create_csv(filtered_json_path, csv_path):
 
             csvwriter.writerow(labels + nutrient_values)
 
-    scale = 10 ** max([math.ceil(-math.log10(m)) for m in min_nonzero_value])
+    scale = max([math.ceil(-math.log10(m)) for m in min_nonzero_value])
 
     # Ensure that the hardcoded values don't need to be updated.
-    assert scale == NUMBER_SCALE
+    assert scale == DATA_DECIMAL_PLACES
     assert column_unit == NUTRIENT_UNITS
 
     print(f"Created final CSV: {csv_path}")
@@ -169,6 +168,7 @@ def create_sql(csv_path):
     sql.initialize()
     sql.import_csv(csv_path)
     sql.import_csv_components(csv_path)
+    sql.do_calculations()
 
 
 def create_filtered_csv(

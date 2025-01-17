@@ -6,6 +6,7 @@ from constants import (
     FOOD_OFFSET,
     NUTRIENT_UNITS,
     NUTRIENT_NAMES,
+    UNIT_CONVERSION,
 )
 from .find_max import find_food_max_value
 
@@ -59,7 +60,7 @@ def load_test_data(food_set: int = 0):
     )
 
 
-def load_requirements():
+def load_requirements(scaled=True):
     this_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     file_path = os.path.join(this_dir, "./data/Daily Recommended Values.csv")
     with open(file_path) as csvfile:
@@ -68,8 +69,14 @@ def load_requirements():
         rows = [row for row in csvwreader]
 
         nutrient_names = [row[0] for row in rows]
-        min_requirements = [int(float(row[1]) * NUMBER_SCALE) for row in rows]
-        max_requirements = [int(float(row[2]) * NUMBER_SCALE) for row in rows]
+
+        if scaled:
+            min_requirements = [round(float(row[1]) * NUMBER_SCALE) for row in rows]
+            max_requirements = [round(float(row[2]) * NUMBER_SCALE) for row in rows]
+        else:
+            min_requirements = [float(row[1]) for row in rows]
+            max_requirements = [float(row[2]) for row in rows]
+
         nutrient_units = [row[3] for row in rows]
 
         assert nutrient_names == NUTRIENT_NAMES
@@ -91,7 +98,7 @@ def load_real_data(only_these_ids: list[int] = None, exclude_ids: list[int] = No
             parsed_row = [
                 int(row[0]),  # Food ID
                 row[1],  # Label
-                *[int(float(x) * NUMBER_SCALE) for x in row[FOOD_OFFSET:]],
+                *[round(float(x) * NUMBER_SCALE) for x in row[FOOD_OFFSET:]],
             ]
             foods += [parsed_row]
 

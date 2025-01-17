@@ -3,6 +3,11 @@
 # and the scale of the integer variables in the CP-SAT model.
 NUMBER_SCALE = 1_000
 
+# The solver users 3 decimal places, but the source data has 5 decimal places of precision.
+# Using more precision helps the SQL calculations a bit.
+# Note that NUMBER_SCALE and DATA_DECIMAL_PLACES are describing the same thing in different ways.
+DATA_DECIMAL_PLACES = 5
+
 FOOD_OFFSET = 2  # The first few columns of the food data are labels.
 
 DB_URL = "postgresql://postgres:pg_password@localhost:5432/food"
@@ -15,7 +20,6 @@ USDA_NUTRIENT_NAMES = [
     "Energy",
     "Total lipid (fat)",
     "Fiber, total dietary",
-    "Fluoride, F",
     "Folate, total",
     "Iron, Fe",
     "Magnesium, Mg",
@@ -30,45 +34,49 @@ USDA_NUTRIENT_NAMES = [
     "Thiamin",
     "Vitamin A, RAE",
     "Vitamin B-6",
-    "Vitamin B-12",
     "Vitamin C, total ascorbic acid",
     "Vitamin D (D2 + D3)",
     "Vitamin E (alpha-tocopherol)",
     "Vitamin K (phylloquinone)",
-    "Water",
     "Zinc, Zn",
 ]
 
+# This is actually unused at the moment, but might come in handy sometime.
+# quantity * UNIT_CONVERSION[unit] = quantity_in_grams
+UNIT_CONVERSION = {
+    "g": 1.0,
+    "µg": 1.0 / 1_000_000,
+    "mg": 1.0 / 1_000,
+    "kcal": 1.0,
+}
+
 NUTRIENT_UNITS = [
-    "mg",
-    "g",
-    "mg",
-    "mg",
-    "kcal",
-    "g",
-    "g",
-    "µg",
-    "µg",
-    "mg",
-    "mg",
-    "µg",
-    "mg",
-    "mg",
-    "mg",
-    "g",
-    "mg",
-    "µg",
-    "mg",
-    "mg",
-    "µg",
-    "mg",
-    "µg",
-    "mg",
-    "µg",
-    "mg",
-    "µg",
-    "g",
-    "mg",
+    "mg",  # calcium
+    "g",  # carbohydrate
+    "mg",  # choline
+    "mg",  # copper
+    "kcal",  # energy
+    "g",  # fat
+    "g",  # total_fiber
+    "µg",  # folate
+    "mg",  # iron
+    "mg",  # magnesium
+    "µg",  # manganese
+    "mg",  # niacin
+    "mg",  # phosphorus
+    "mg",  # potassium
+    "g",  # protein
+    "mg",  # riboflavin
+    "µg",  # selenium
+    "mg",  # sodium
+    "mg",  # thiamin
+    "µg",  # vitamin_a
+    "mg",  # vitamin_b6
+    "mg",  # vitamin_c
+    "µg",  # vitamin_d
+    "mg",  # vitamin_e
+    "µg",  # vitamin_k
+    "mg",  # zinc
 ]
 
 NUTRIENT_NAMES = [  # Columns of the CSV that are in SQL.
@@ -79,7 +87,6 @@ NUTRIENT_NAMES = [  # Columns of the CSV that are in SQL.
     "energy",
     "fat",
     "total_fiber",
-    "fluoride",
     "folate",
     "iron",
     "magnesium",
@@ -94,12 +101,10 @@ NUTRIENT_NAMES = [  # Columns of the CSV that are in SQL.
     "thiamin",
     "vitamin_a",
     "vitamin_b6",
-    "vitamin_b12",
     "vitamin_c",
     "vitamin_d",
     "vitamin_e",
     "vitamin_k",
-    "water",
     "zinc",
 ]
 
