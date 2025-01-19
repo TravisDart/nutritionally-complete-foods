@@ -119,14 +119,28 @@ def solve_it(
 
 
 if __name__ == "__main__":
-    foods, max_foods, min_requirements, max_requirements, verbose = initialize()
-
-    solutions = solve_it(
+    (
         foods,
         max_foods,
         min_requirements,
         max_requirements,
-        num_foods=7,
-        log_level=verbose,
-    )
-    print(solutions)
+        verbose,
+        num_foods,
+    ) = initialize()
+
+    if num_foods is None:
+        num_foods_range = range(1, 8)
+    else:
+        num_foods_range = [num_foods]
+
+    for num_foods in num_foods_range:
+        print(f"Looking for solutions with {num_foods} food(s)")
+        solutions = solve_it(
+            foods,
+            max_foods,
+            min_requirements,
+            max_requirements,
+            num_foods=num_foods,
+            log_level=verbose,
+        )
+        print(solutions)

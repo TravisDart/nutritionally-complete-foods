@@ -112,7 +112,8 @@ class SQLStore:
         )
 
     def __del__(self):
-        self.conn.close()
+        if hasattr(self, "conn"):
+            self.conn.close()
 
     def get_exclusion(self, worker_id: int):
         cursor = self.conn.cursor()

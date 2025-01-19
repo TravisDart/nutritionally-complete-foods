@@ -17,7 +17,14 @@ from solver.sql import SQLStore
 
 
 def solve_job(num_foods, exclusion: List[int], DB_URL):
-    foods, max_foods, min_requirements, max_requirements, verbose = initialize()
+    (
+        foods,
+        max_foods,
+        min_requirements,
+        max_requirements,
+        verbose,
+        _,  # num_foods (we hardcode this elsewhere)
+    ) = initialize(skip_download=True, verbose=False)
     foods_without = [food for food in foods if food[0] not in exclusion]
     solution = solve_it(
         foods_without,
@@ -32,7 +39,7 @@ def solve_job(num_foods, exclusion: List[int], DB_URL):
 
 
 def solve(process_id: int = 0):
-    timeout = 3600
+    timeout = 36000
     num_foods = 7
     logger = Logger(verbose=True, process_id=process_id)
     state_store = SQLStore(
