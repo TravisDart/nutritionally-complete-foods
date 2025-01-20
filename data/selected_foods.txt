@@ -2,17 +2,13 @@ American Indian/Alaska Native Foods > Agave, cooked (Southwest)
 American Indian/Alaska Native Foods > Agave, dried (Southwest)
 American Indian/Alaska Native Foods > Agave, raw (Southwest)
 American Indian/Alaska Native Foods > Blackberries, wild, raw (Alaska Native)
-American Indian/Alaska Native Foods > Blueberries, wild, frozen (Alaska Native)
 American Indian/Alaska Native Foods > Blueberries, wild, raw (Alaska Native)
 American Indian/Alaska Native Foods > Bread, blue corn, somiviki (Hopi)
 American Indian/Alaska Native Foods > Bread, kneel down (Navajo)
 American Indian/Alaska Native Foods > Cattail, Narrow Leaf Shoots (Northern Plains Indians)
-American Indian/Alaska Native Foods > Chilchen (Red Berry Beverage) (Navajo)
-American Indian/Alaska Native Foods > Chiton, leathery, gumboots (Alaska Native)
 American Indian/Alaska Native Foods > Chokecherries, raw, pitted (Northern Plains Indians)
 American Indian/Alaska Native Foods > Chokecherries, raw, pitted (Shoshone Bannock)
 American Indian/Alaska Native Foods > Cloudberries, raw (Alaska Native)
-American Indian/Alaska Native Foods > Cockles, raw (Alaska Native)
 American Indian/Alaska Native Foods > Corn, dried (Navajo)
 American Indian/Alaska Native Foods > Corn, dried, yellow (Northern Plains Indians)
 American Indian/Alaska Native Foods > Corn, white, steamed (Navajo)
@@ -40,7 +36,6 @@ American Indian/Alaska Native Foods > Raspberries, wild (Northern Plains Indians
 American Indian/Alaska Native Foods > Rhubarb, wild, leaves (Alaska Native)
 American Indian/Alaska Native Foods > Rose Hips, wild (Northern Plains Indians)
 American Indian/Alaska Native Foods > Salmonberries, raw (Alaska Native)
-American Indian/Alaska Native Foods > Sea cucumber, yane (Alaska Native)
 American Indian/Alaska Native Foods > Sourdock, young leaves (Alaska Native)
 American Indian/Alaska Native Foods > Squash, Indian, cooked, boiled (Navajo)
 American Indian/Alaska Native Foods > Squash, Indian, raw (Navajo)
@@ -64,8 +59,6 @@ Beverages > Beverages, tea, hibiscus, brewed
 Beverages > Beverages, tea, instant, decaffeinated, unsweetened
 Beverages > Beverages, tea, instant, lemon, unsweetened
 Beverages > Beverages, tea, Oolong, brewed
-Beverages > Beverages, water, tap, well
-Beverages > Water, bottled, generic
 Cereal Grains and Pasta > Amaranth grain, cooked
 Cereal Grains and Pasta > Amaranth grain, uncooked
 Cereal Grains and Pasta > Arrowroot flour
@@ -95,8 +88,6 @@ Cereal Grains and Pasta > Cornmeal, whole-grain, yellow
 Cereal Grains and Pasta > Cornstarch
 Cereal Grains and Pasta > Couscous, cooked
 Cereal Grains and Pasta > Couscous, dry
-Cereal Grains and Pasta > Hominy, canned, white
-Cereal Grains and Pasta > Hominy, canned, yellow
 Cereal Grains and Pasta > Millet flour
 Cereal Grains and Pasta > Millet, cooked
 Cereal Grains and Pasta > Millet, raw
@@ -199,13 +190,10 @@ Fats and Oils > Vegetable oil, palm kernel
 Fruits and Fruit Juices > Abiyuch, raw
 Fruits and Fruit Juices > Acerola juice, raw
 Fruits and Fruit Juices > Acerola, (west indian cherry), raw
-Fruits and Fruit Juices > Apple juice, canned or bottled, unsweetened, without added ascorbic acid
 Fruits and Fruit Juices > Apples, dehydrated (low moisture), sulfured, stewed
 Fruits and Fruit Juices > Apples, dehydrated (low moisture), sulfured, uncooked
 Fruits and Fruit Juices > Apples, dried, sulfured, stewed, without added sugar
 Fruits and Fruit Juices > Apples, dried, sulfured, uncooked
-Fruits and Fruit Juices > Apples, frozen, unsweetened, heated (Includes foods for USDA's Food Distribution Program)
-Fruits and Fruit Juices > Apples, frozen, unsweetened, unheated (Includes foods for USDA's Food Distribution Program)
 Fruits and Fruit Juices > Apples, raw, fuji, with skin (Includes foods for USDA's Food Distribution Program)
 Fruits and Fruit Juices > Apples, raw, gala, with skin (Includes foods for USDA's Food Distribution Program)
 Fruits and Fruit Juices > Apples, raw, golden delicious, with skin
@@ -215,60 +203,39 @@ Fruits and Fruit Juices > Apples, raw, with skin (Includes foods for USDA's Food
 Fruits and Fruit Juices > Apples, raw, without skin
 Fruits and Fruit Juices > Apples, raw, without skin, cooked, boiled
 Fruits and Fruit Juices > Apples, raw, without skin, cooked, microwave
-Fruits and Fruit Juices > Apricots, canned, juice pack, with skin, solids and liquids
-Fruits and Fruit Juices > Apricots, canned, water pack, with skin, solids and liquids
-Fruits and Fruit Juices > Apricots, canned, water pack, without skin, solids and liquids
 Fruits and Fruit Juices > Apricots, raw
 Fruits and Fruit Juices > Avocados, raw, all commercial varieties
 Fruits and Fruit Juices > Avocados, raw, California
 Fruits and Fruit Juices > Avocados, raw, Florida
 Fruits and Fruit Juices > Bananas, dehydrated, or banana powder
 Fruits and Fruit Juices > Bananas, raw
-Fruits and Fruit Juices > Baobab powder
-Fruits and Fruit Juices > Blackberries, frozen, unsweetened
 Fruits and Fruit Juices > Blackberries, raw
-Fruits and Fruit Juices > Blackberry juice, canned
-Fruits and Fruit Juices > Blueberries, frozen, unsweetened (Includes foods for USDA's Food Distribution Program)
 Fruits and Fruit Juices > Blueberries, raw
-Fruits and Fruit Juices > Blueberries, wild, frozen (Includes foods for USDA's Food Distribution Program)
-Fruits and Fruit Juices > Boysenberries, canned, heavy syrup
-Fruits and Fruit Juices > Boysenberries, frozen, unsweetened
 Fruits and Fruit Juices > Breadfruit, raw
 Fruits and Fruit Juices > Carambola, (starfruit), raw
 Fruits and Fruit Juices > Carissa, (natal-plum), raw
 Fruits and Fruit Juices > Cherimoya, raw
-Fruits and Fruit Juices > Cherries, sour, canned, water pack, drained
-Fruits and Fruit Juices > Cherries, sour, red, canned, water pack, solids and liquids
-Fruits and Fruit Juices > Cherries, sour, red, frozen, unsweetened (Includes foods for USDA's Food Distribution Program)
 Fruits and Fruit Juices > Cherries, sour, red, raw
-Fruits and Fruit Juices > Cherries, sweet, canned, juice pack, solids and liquids
-Fruits and Fruit Juices > Cherries, sweet, canned, water pack, solids and liquids
 Fruits and Fruit Juices > Cherries, sweet, raw
 Fruits and Fruit Juices > Cherry juice, tart
 Fruits and Fruit Juices > Clementines, raw
 Fruits and Fruit Juices > Crabapples, raw
 Fruits and Fruit Juices > Cranberries, raw
 Fruits and Fruit Juices > Cranberry juice, unsweetened
-Fruits and Fruit Juices > Cranberry-orange relish, canned
 Fruits and Fruit Juices > Currants, european black, raw
 Fruits and Fruit Juices > Currants, red and white, raw
 Fruits and Fruit Juices > Currants, zante, dried
 Fruits and Fruit Juices > Custard-apple, (bullock's-heart), raw
 Fruits and Fruit Juices > Dates, deglet noor
 Fruits and Fruit Juices > Dates, medjool
-Fruits and Fruit Juices > Durian, raw or frozen
 Fruits and Fruit Juices > Elderberries, raw
 Fruits and Fruit Juices > Feijoa, raw
-Fruits and Fruit Juices > Figs, canned, water pack, solids and liquids
 Fruits and Fruit Juices > Figs, dried, stewed
 Fruits and Fruit Juices > Figs, dried, uncooked
 Fruits and Fruit Juices > Figs, raw
 Fruits and Fruit Juices > Goji berries, dried
 Fruits and Fruit Juices > Gooseberries, raw
 Fruits and Fruit Juices > Grapefruit juice, pink, raw
-Fruits and Fruit Juices > Grapefruit juice, white, canned or bottled, unsweetened
-Fruits and Fruit Juices > Grapefruit juice, white, frozen concentrate, unsweetened, diluted with 3 volume water
-Fruits and Fruit Juices > Grapefruit juice, white, frozen concentrate, unsweetened, undiluted
 Fruits and Fruit Juices > Grapefruit juice, white, raw
 Fruits and Fruit Juices > Grapefruit, raw, pink and red and white, all areas
 Fruits and Fruit Juices > Grapefruit, raw, pink and red, all areas
@@ -277,15 +244,10 @@ Fruits and Fruit Juices > Grapefruit, raw, pink and red, Florida
 Fruits and Fruit Juices > Grapefruit, raw, white, all areas
 Fruits and Fruit Juices > Grapefruit, raw, white, California
 Fruits and Fruit Juices > Grapefruit, raw, white, Florida
-Fruits and Fruit Juices > Grapefruit, sections, canned, juice pack, solids and liquids
-Fruits and Fruit Juices > Grapefruit, sections, canned, water pack, solids and liquids
 Fruits and Fruit Juices > Grapes, american type (slip skin), raw
-Fruits and Fruit Juices > Grapes, canned, thompson seedless, water pack, solids and liquids
 Fruits and Fruit Juices > Grapes, muscadine, raw
 Fruits and Fruit Juices > Grapes, red or green (European type, such as Thompson seedless), raw
 Fruits and Fruit Juices > Groundcherries, (cape-gooseberries or poha), raw
-Fruits and Fruit Juices > Guanabana nectar, canned
-Fruits and Fruit Juices > Guava nectar, with sucralose, canned
 Fruits and Fruit Juices > Guava sauce, cooked
 Fruits and Fruit Juices > Guavas, common, raw
 Fruits and Fruit Juices > Guavas, strawberry, raw
@@ -297,42 +259,26 @@ Fruits and Fruit Juices > Jujube, raw
 Fruits and Fruit Juices > Kiwifruit, green, raw
 Fruits and Fruit Juices > Kiwifruit, ZESPRI SunGold, raw
 Fruits and Fruit Juices > Kumquats, raw
-Fruits and Fruit Juices > Lemon juice from concentrate, canned or bottled
 Fruits and Fruit Juices > Lemon juice, raw
 Fruits and Fruit Juices > Lemon peel, raw
 Fruits and Fruit Juices > Lemons, raw, without peel
-Fruits and Fruit Juices > Lime juice, canned or bottled, unsweetened
 Fruits and Fruit Juices > Lime juice, raw
 Fruits and Fruit Juices > Limes, raw
 Fruits and Fruit Juices > Litchis, dried
 Fruits and Fruit Juices > Litchis, raw
-Fruits and Fruit Juices > Loganberries, frozen
 Fruits and Fruit Juices > Longans, dried
 Fruits and Fruit Juices > Longans, raw
 Fruits and Fruit Juices > Loquats, raw
 Fruits and Fruit Juices > Mammy-apple, (mamey), raw
-Fruits and Fruit Juices > Mango nectar, canned
 Fruits and Fruit Juices > Mango, dried, sweetened
 Fruits and Fruit Juices > Mangos, raw
-Fruits and Fruit Juices > Mangosteen, canned, syrup pack
-Fruits and Fruit Juices > Maraschino cherries, canned, drained
-Fruits and Fruit Juices > Melon balls, frozen
 Fruits and Fruit Juices > Melons, cantaloupe, raw
 Fruits and Fruit Juices > Melons, casaba, raw
 Fruits and Fruit Juices > Melons, honeydew, raw
 Fruits and Fruit Juices > Mulberries, raw
-Fruits and Fruit Juices > Nance, canned, syrup, drained
-Fruits and Fruit Juices > Nance, frozen, unsweetened
-Fruits and Fruit Juices > Naranjilla (lulo) pulp, frozen, unsweetened
 Fruits and Fruit Juices > Nectarines, raw
 Fruits and Fruit Juices > Oheloberries, raw
-Fruits and Fruit Juices > Olives, pickled, canned or bottled, green
-Fruits and Fruit Juices > Olives, ripe, canned (jumbo-super colossal)
-Fruits and Fruit Juices > Olives, ripe, canned (small-extra large)
-Fruits and Fruit Juices > Orange juice, canned, unsweetened
 Fruits and Fruit Juices > Orange juice, chilled, includes from concentrate
-Fruits and Fruit Juices > Orange juice, frozen concentrate, unsweetened, diluted with 3 volume water
-Fruits and Fruit Juices > Orange juice, frozen concentrate, unsweetened, undiluted
 Fruits and Fruit Juices > Orange juice, raw (Includes foods for USDA's Food Distribution Program)
 Fruits and Fruit Juices > Orange peel, raw
 Fruits and Fruit Juices > Oranges, raw, all commercial varieties
@@ -340,21 +286,14 @@ Fruits and Fruit Juices > Oranges, raw, California, valencias
 Fruits and Fruit Juices > Oranges, raw, Florida
 Fruits and Fruit Juices > Oranges, raw, navels (Includes foods for USDA's Food Distribution Program)
 Fruits and Fruit Juices > Oranges, raw, with peel
-Fruits and Fruit Juices > Papaya nectar, canned
 Fruits and Fruit Juices > Papayas, raw
 Fruits and Fruit Juices > Passion-fruit juice, purple, raw
 Fruits and Fruit Juices > Passion-fruit juice, yellow, raw
 Fruits and Fruit Juices > Passion-fruit, (granadilla), purple, raw
-Fruits and Fruit Juices > Peaches, canned, juice pack, solids and liquids
-Fruits and Fruit Juices > Peaches, canned, water pack, solids and liquids
 Fruits and Fruit Juices > Peaches, dehydrated (low-moisture), sulfured, stewed
 Fruits and Fruit Juices > Peaches, dehydrated (low-moisture), sulfured, uncooked
-Fruits and Fruit Juices > Peaches, frozen, sliced, sweetened
 Fruits and Fruit Juices > Peaches, yellow, raw
-Fruits and Fruit Juices > Pear nectar, canned, without added ascorbic acid
 Fruits and Fruit Juices > Pears, asian, raw
-Fruits and Fruit Juices > Pears, canned, juice pack, solids and liquids
-Fruits and Fruit Juices > Pears, canned, water pack, solids and liquids
 Fruits and Fruit Juices > Pears, raw
 Fruits and Fruit Juices > Pears, raw, bartlett (Includes foods for USDA's Food Distribution Program)
 Fruits and Fruit Juices > Pears, raw, bosc (Includes foods for USDA's Food Distribution Program)
@@ -363,12 +302,6 @@ Fruits and Fruit Juices > Pears, raw, red anjou
 Fruits and Fruit Juices > Persimmons, japanese, dried
 Fruits and Fruit Juices > Persimmons, japanese, raw
 Fruits and Fruit Juices > Persimmons, native, raw
-Fruits and Fruit Juices > Pineapple juice, canned or bottled, unsweetened, without added ascorbic acid
-Fruits and Fruit Juices > Pineapple juice, frozen concentrate, unsweetened, diluted with 3 volume water
-Fruits and Fruit Juices > Pineapple juice, frozen concentrate, unsweetened, undiluted
-Fruits and Fruit Juices > Pineapple, canned, juice pack, drained
-Fruits and Fruit Juices > Pineapple, canned, juice pack, solids and liquids
-Fruits and Fruit Juices > Pineapple, canned, water pack, solids and liquids
 Fruits and Fruit Juices > Pineapple, raw, all varieties
 Fruits and Fruit Juices > Pineapple, raw, extra sweet variety
 Fruits and Fruit Juices > Pineapple, raw, traditional varieties
@@ -379,15 +312,12 @@ Fruits and Fruit Juices > Plantains, green, raw
 Fruits and Fruit Juices > Plantains, yellow, baked
 Fruits and Fruit Juices > Plantains, yellow, fried, Latino restaurant
 Fruits and Fruit Juices > Plantains, yellow, raw
-Fruits and Fruit Juices > Plums, canned, purple, juice pack, solids and liquids
-Fruits and Fruit Juices > Plums, canned, purple, water pack, solids and liquids
 Fruits and Fruit Juices > Plums, dried (prunes), stewed, without added sugar
 Fruits and Fruit Juices > Plums, dried (prunes), uncooked
 Fruits and Fruit Juices > Plums, raw
 Fruits and Fruit Juices > Pomegranate juice, bottled
 Fruits and Fruit Juices > Pomegranates, raw
 Fruits and Fruit Juices > Prickly pears, raw
-Fruits and Fruit Juices > Prune juice, canned
 Fruits and Fruit Juices > Prune puree
 Fruits and Fruit Juices > Prunes, dehydrated (low-moisture), stewed
 Fruits and Fruit Juices > Prunes, dehydrated (low-moisture), uncooked
@@ -396,13 +326,10 @@ Fruits and Fruit Juices > Quinces, raw
 Fruits and Fruit Juices > Raisins, dark, seedless (Includes foods for USDA's Food Distribution Program)
 Fruits and Fruit Juices > Raisins, golden, seedless
 Fruits and Fruit Juices > Raisins, seeded
-Fruits and Fruit Juices > Rambutan, canned, syrup pack
-Fruits and Fruit Juices > Raspberries, frozen, red, unsweetened
 Fruits and Fruit Juices > Raspberries, puree, seedless
 Fruits and Fruit Juices > Raspberries, puree, with seeds
 Fruits and Fruit Juices > Raspberries, raw
 Fruits and Fruit Juices > Raspberry juice concentrate
-Fruits and Fruit Juices > Rhubarb, frozen, uncooked
 Fruits and Fruit Juices > Rhubarb, raw
 Fruits and Fruit Juices > Rose-apples, raw
 Fruits and Fruit Juices > Roselle, raw
@@ -410,89 +337,62 @@ Fruits and Fruit Juices > Rowal, raw
 Fruits and Fruit Juices > Sapodilla, raw
 Fruits and Fruit Juices > Sapote, mamey, raw
 Fruits and Fruit Juices > Soursop, raw
-Fruits and Fruit Juices > Strawberries, frozen, unsweetened (Includes foods for USDA's Food Distribution Program)
 Fruits and Fruit Juices > Strawberries, raw
 Fruits and Fruit Juices > Sugar-apples, (sweetsop), raw
-Fruits and Fruit Juices > Tamarind nectar, canned
 Fruits and Fruit Juices > Tamarinds, raw
 Fruits and Fruit Juices > Tangerine juice, raw
-Fruits and Fruit Juices > Tangerines, (mandarin oranges), canned, juice pack
-Fruits and Fruit Juices > Tangerines, (mandarin oranges), canned, juice pack, drained
 Fruits and Fruit Juices > Tangerines, (mandarin oranges), raw
 Fruits and Fruit Juices > Watermelon, raw
 Legumes and Legume Products > Beans, adzuki, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, adzuki, mature seeds, raw
-Legumes and Legume Products > Beans, baked, canned, no salt added
-Legumes and Legume Products > Beans, baked, canned, plain or vegetarian
 Legumes and Legume Products > Beans, baked, home prepared
-Legumes and Legume Products > Beans, black turtle, mature seeds, canned
 Legumes and Legume Products > Beans, black turtle, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, black turtle, mature seeds, raw
 Legumes and Legume Products > Beans, black, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, black, mature seeds, raw
-Legumes and Legume Products > Beans, cranberry (roman), mature seeds, canned
 Legumes and Legume Products > Beans, cranberry (roman), mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, cranberry (roman), mature seeds, raw
 Legumes and Legume Products > Beans, french, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, french, mature seeds, raw
-Legumes and Legume Products > Beans, great northern, mature seeds, canned
 Legumes and Legume Products > Beans, great northern, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, great northern, mature seeds, raw (Includes foods for USDA's Food Distribution Program)
-Legumes and Legume Products > Beans, kidney, all types, mature seeds, canned
 Legumes and Legume Products > Beans, kidney, all types, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, kidney, all types, mature seeds, raw
 Legumes and Legume Products > Beans, kidney, california red, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, kidney, california red, mature seeds, raw
-Legumes and Legume Products > Beans, kidney, red, mature seeds, canned, drained solids
-Legumes and Legume Products > Beans, kidney, red, mature seeds, canned, drained solids, rinsed in tap water
-Legumes and Legume Products > Beans, kidney, red, mature seeds, canned, solids and liquids
 Legumes and Legume Products > Beans, kidney, red, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, kidney, red, mature seeds, raw
 Legumes and Legume Products > Beans, kidney, royal red, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, kidney, royal red, mature seeds, raw
 Legumes and Legume Products > Beans, liquid from stewed kidney beans
-Legumes and Legume Products > Beans, navy, mature seeds, canned
 Legumes and Legume Products > Beans, navy, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, navy, mature seeds, raw
 Legumes and Legume Products > Beans, pink, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, pink, mature seeds, raw
-Legumes and Legume Products > Beans, pinto, canned, drained solids
-Legumes and Legume Products > Beans, pinto, mature seeds, canned, drained solids, rinsed in tap water
-Legumes and Legume Products > Beans, pinto, mature seeds, canned, solids and liquids
 Legumes and Legume Products > Beans, pinto, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, pinto, mature seeds, raw (Includes foods for USDA's Food Distribution Program)
 Legumes and Legume Products > Beans, small white, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, small white, mature seeds, raw
-Legumes and Legume Products > Beans, white, mature seeds, canned
 Legumes and Legume Products > Beans, white, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, white, mature seeds, raw
 Legumes and Legume Products > Beans, yellow, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Beans, yellow, mature seeds, raw
-Legumes and Legume Products > Broadbeans (fava beans), mature seeds, canned
 Legumes and Legume Products > Broadbeans (fava beans), mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Broadbeans (fava beans), mature seeds, raw
 Legumes and Legume Products > Carob flour
 Legumes and Legume Products > Chickpea flour (besan)
-Legumes and Legume Products > Chickpeas (garbanzo beans, bengal gram), mature seeds, canned, drained solids
-Legumes and Legume Products > Chickpeas (garbanzo beans, bengal gram), mature seeds, canned, drained, rinsed in tap water
-Legumes and Legume Products > Chickpeas (garbanzo beans, bengal gram), mature seeds, canned, solids and liquids
 Legumes and Legume Products > Chickpeas (garbanzo beans, bengal gram), mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Chickpeas (garbanzo beans, bengal gram), mature seeds, raw
-Legumes and Legume Products > Chili with beans, canned
 Legumes and Legume Products > Cowpeas, catjang, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Cowpeas, catjang, mature seeds, raw
-Legumes and Legume Products > Cowpeas, common (blackeyes, crowder, southern), mature seeds, canned, plain
 Legumes and Legume Products > Cowpeas, common (blackeyes, crowder, southern), mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Cowpeas, common (blackeyes, crowder, southern), mature seeds, raw
 Legumes and Legume Products > Falafel, home-prepared
-Legumes and Legume Products > Frijoles rojos volteados (Refried beans, red, canned)
-Legumes and Legume Products > Hummus, home prepared
 Legumes and Legume Products > Hyacinth beans, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Hyacinth beans, mature seeds, raw
 Legumes and Legume Products > Lentils, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Lentils, pink or red, raw
 Legumes and Legume Products > Lentils, raw
-Legumes and Legume Products > Lima beans, large, mature seeds, canned
 Legumes and Legume Products > Lima beans, large, mature seeds, cooked, boiled, without salt
 Legumes and Legume Products > Lima beans, large, mature seeds, raw
 Legumes and Legume Products > Lima beans, thin seeded (baby), mature seeds, cooked, boiled, without salt
@@ -529,13 +429,9 @@ Legumes and Legume Products > Soybeans, mature cooked, boiled, without salt
 Legumes and Legume Products > Soybeans, mature seeds, dry roasted
 Legumes and Legume Products > Soybeans, mature seeds, raw
 Legumes and Legume Products > Soybeans, mature seeds, roasted, no salt added
-Legumes and Legume Products > Soymilk, original and vanilla, unfortified
 Legumes and Legume Products > Tempeh
 Legumes and Legume Products > Tempeh, cooked
-Legumes and Legume Products > Tofu yogurt
-Legumes and Legume Products > Tofu, dried-frozen (koyadofu)
 Legumes and Legume Products > Tofu, extra firm, prepared with nigari
-Legumes and Legume Products > Tofu, fried
 Legumes and Legume Products > Tofu, hard, prepared with nigari
 Legumes and Legume Products > Tofu, salted and fermented (fuyu)
 Legumes and Legume Products > Winged beans, mature seeds, cooked, boiled, without salt
@@ -578,11 +474,8 @@ Nut and Seed Products > Nuts, coconut meat, dried (desiccated), creamed
 Nut and Seed Products > Nuts, coconut meat, dried (desiccated), not sweetened
 Nut and Seed Products > Nuts, coconut meat, dried (desiccated), toasted
 Nut and Seed Products > Nuts, coconut meat, raw
-Nut and Seed Products > Nuts, coconut milk, canned (liquid expressed from grated meat and water)
-Nut and Seed Products > Nuts, coconut milk, frozen (liquid expressed from grated meat and water)
 Nut and Seed Products > Nuts, coconut milk, raw (liquid expressed from grated meat and water)
 Nut and Seed Products > Nuts, coconut water (liquid from coconuts)
-Nut and Seed Products > Nuts, ginkgo nuts, canned
 Nut and Seed Products > Nuts, ginkgo nuts, dried
 Nut and Seed Products > Nuts, ginkgo nuts, raw
 Nut and Seed Products > Nuts, hazelnuts or filberts
@@ -633,7 +526,6 @@ Nut and Seed Products > Seeds, sunflower seed kernels, oil roasted, without salt
 Nut and Seed Products > Seeds, sunflower seed kernels, toasted, without salt
 Nut and Seed Products > Seeds, watermelon seed kernels, dried
 Spices and Herbs > Basil, fresh
-Spices and Herbs > Capers, canned
 Spices and Herbs > Dill weed, fresh
 Spices and Herbs > Horseradish, prepared
 Spices and Herbs > Mustard, prepared, yellow
@@ -694,62 +586,31 @@ Vegetables and Vegetable Products > Arrowhead, cooked, boiled, drained, without 
 Vegetables and Vegetable Products > Arrowhead, raw
 Vegetables and Vegetable Products > Arrowroot, raw
 Vegetables and Vegetable Products > Artichokes, (globe or french), cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Artichokes, (globe or french), frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Artichokes, (globe or french), frozen, unprepared
 Vegetables and Vegetable Products > Artichokes, (globe or french), raw
 Vegetables and Vegetable Products > Arugula, raw
-Vegetables and Vegetable Products > Asparagus, canned, drained solids
-Vegetables and Vegetable Products > Asparagus, canned, no salt added, solids and liquids
-Vegetables and Vegetable Products > Asparagus, canned, regular pack, solids and liquids
 Vegetables and Vegetable Products > Asparagus, cooked, boiled, drained
-Vegetables and Vegetable Products > Asparagus, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Asparagus, frozen, unprepared
 Vegetables and Vegetable Products > Asparagus, raw
 Vegetables and Vegetable Products > Balsam-pear (bitter gourd), leafy tips, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Balsam-pear (bitter gourd), leafy tips, raw
 Vegetables and Vegetable Products > Balsam-pear (bitter gourd), pods, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Balsam-pear (bitter gourd), pods, raw
-Vegetables and Vegetable Products > Bamboo shoots, canned, drained solids
 Vegetables and Vegetable Products > Bamboo shoots, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Bamboo shoots, raw
 Vegetables and Vegetable Products > Beans, fava, in pod, raw
 Vegetables and Vegetable Products > Beans, kidney, mature seeds, sprouted, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Beans, kidney, mature seeds, sprouted, raw
-Vegetables and Vegetable Products > Beans, mung, mature seeds, sprouted, canned, drained solids
 Vegetables and Vegetable Products > Beans, navy, mature seeds, sprouted, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Beans, navy, mature seeds, sprouted, raw
-Vegetables and Vegetable Products > Beans, pinto, immature seeds, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Beans, pinto, immature seeds, frozen, unprepared
 Vegetables and Vegetable Products > Beans, pinto, mature seeds, sprouted, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Beans, pinto, mature seeds, sprouted, raw
-Vegetables and Vegetable Products > Beans, shellie, canned, solids and liquids
-Vegetables and Vegetable Products > Beans, snap, canned, all styles, seasoned, solids and liquids
-Vegetables and Vegetable Products > Beans, snap, green, canned, no salt added, drained solids
-Vegetables and Vegetable Products > Beans, snap, green, canned, no salt added, solids and liquids
-Vegetables and Vegetable Products > Beans, snap, green, canned, regular pack, drained solids
-Vegetables and Vegetable Products > Beans, snap, green, canned, regular pack, solids and liquids
 Vegetables and Vegetable Products > Beans, snap, green, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Beans, snap, green, frozen, all styles, microwaved
-Vegetables and Vegetable Products > Beans, snap, green, frozen, all styles, unprepared (Includes foods for USDA's Food Distribution Program)
-Vegetables and Vegetable Products > Beans, snap, green, frozen, cooked, boiled, drained without salt
 Vegetables and Vegetable Products > Beans, snap, green, microwaved
 Vegetables and Vegetable Products > Beans, snap, green, raw
-Vegetables and Vegetable Products > Beans, snap, yellow, canned, no salt added, drained solids
-Vegetables and Vegetable Products > Beans, snap, yellow, canned, no salt added, solids and liquids
-Vegetables and Vegetable Products > Beans, snap, yellow, canned, regular pack, drained solids
-Vegetables and Vegetable Products > Beans, snap, yellow, canned, regular pack, solids and liquids
 Vegetables and Vegetable Products > Beans, snap, yellow, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Beans, snap, yellow, frozen, all styles, unprepared
-Vegetables and Vegetable Products > Beans, snap, yellow, frozen, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Beans, snap, yellow, raw
 Vegetables and Vegetable Products > Beet greens, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Beet greens, raw
-Vegetables and Vegetable Products > Beets, canned, drained solids
-Vegetables and Vegetable Products > Beets, canned, no salt added, solids and liquids
-Vegetables and Vegetable Products > Beets, canned, regular pack, solids and liquids
 Vegetables and Vegetable Products > Beets, cooked, boiled, drained
-Vegetables and Vegetable Products > Beets, harvard, canned, solids and liquids
-Vegetables and Vegetable Products > Beets, pickled, canned, solids and liquids
 Vegetables and Vegetable Products > Beets, raw
 Vegetables and Vegetable Products > Borage, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Borage, raw
@@ -761,21 +622,14 @@ Vegetables and Vegetable Products > Broccoli, chinese, cooked
 Vegetables and Vegetable Products > Broccoli, chinese, raw
 Vegetables and Vegetable Products > Broccoli, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Broccoli, flower clusters, raw
-Vegetables and Vegetable Products > Broccoli, frozen, chopped, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Broccoli, frozen, chopped, unprepared
-Vegetables and Vegetable Products > Broccoli, frozen, spears, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Broccoli, frozen, spears, unprepared (Includes foods for USDA's Food Distribution Program)
 Vegetables and Vegetable Products > Broccoli, leaves, raw
 Vegetables and Vegetable Products > Broccoli, raw
 Vegetables and Vegetable Products > Broccoli, stalks, raw
 Vegetables and Vegetable Products > Brussels sprouts, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Brussels sprouts, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Brussels sprouts, frozen, unprepared
 Vegetables and Vegetable Products > Brussels sprouts, raw
 Vegetables and Vegetable Products > Burdock root, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Burdock root, raw
 Vegetables and Vegetable Products > Butterbur, (fuki), raw
-Vegetables and Vegetable Products > Butterbur, canned
 Vegetables and Vegetable Products > Butterbur, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Cabbage, chinese (pak-choi), cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Cabbage, chinese (pak-choi), raw
@@ -795,21 +649,12 @@ Vegetables and Vegetable Products > Cabbage, savoy, cooked, boiled, drained, wit
 Vegetables and Vegetable Products > Cabbage, savoy, raw
 Vegetables and Vegetable Products > Cardoon, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Cardoon, raw
-Vegetables and Vegetable Products > Carrot juice, canned
 Vegetables and Vegetable Products > Carrot, dehydrated
 Vegetables and Vegetable Products > Carrots, baby, raw
-Vegetables and Vegetable Products > Carrots, canned, no salt added, drained solids
-Vegetables and Vegetable Products > Carrots, canned, no salt added, solids and liquids
-Vegetables and Vegetable Products > Carrots, canned, regular pack, drained solids
-Vegetables and Vegetable Products > Carrots, canned, regular pack, solids and liquids
 Vegetables and Vegetable Products > Carrots, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Carrots, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Carrots, frozen, unprepared (Includes foods for USDA's Food Distribution Program)
 Vegetables and Vegetable Products > Carrots, raw
 Vegetables and Vegetable Products > Cassava, raw
 Vegetables and Vegetable Products > Cauliflower, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Cauliflower, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Cauliflower, frozen, unprepared
 Vegetables and Vegetable Products > Cauliflower, green, cooked, no salt added
 Vegetables and Vegetable Products > Cauliflower, green, raw
 Vegetables and Vegetable Products > Cauliflower, raw
@@ -831,43 +676,14 @@ Vegetables and Vegetable Products > Chrysanthemum leaves, raw
 Vegetables and Vegetable Products > Chrysanthemum, garland, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Chrysanthemum, garland, raw
 Vegetables and Vegetable Products > Collards, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Collards, frozen, chopped, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Collards, frozen, chopped, unprepared
 Vegetables and Vegetable Products > Collards, raw
 Vegetables and Vegetable Products > Coriander (cilantro) leaves, raw
-Vegetables and Vegetable Products > Corn with red and green peppers, canned, solids and liquids
-Vegetables and Vegetable Products > Corn, sweet, white, canned, cream style, no salt added
-Vegetables and Vegetable Products > Corn, sweet, white, canned, cream style, regular pack
-Vegetables and Vegetable Products > Corn, sweet, white, canned, vacuum pack, no salt added
-Vegetables and Vegetable Products > Corn, sweet, white, canned, vacuum pack, regular pack
-Vegetables and Vegetable Products > Corn, sweet, white, canned, whole kernel, drained solids
-Vegetables and Vegetable Products > Corn, sweet, white, canned, whole kernel, no salt added, solids and liquids
-Vegetables and Vegetable Products > Corn, sweet, white, canned, whole kernel, regular pack, solids and liquids
 Vegetables and Vegetable Products > Corn, sweet, white, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Corn, sweet, white, frozen, kernels cut off cob, boiled, drained, without salt
-Vegetables and Vegetable Products > Corn, sweet, white, frozen, kernels cut off cob, unprepared
-Vegetables and Vegetable Products > Corn, sweet, white, frozen, kernels on cob, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Corn, sweet, white, frozen, kernels on cob, unprepared
 Vegetables and Vegetable Products > Corn, sweet, white, raw
-Vegetables and Vegetable Products > Corn, sweet, yellow, canned, brine pack, regular pack, solids and liquids
-Vegetables and Vegetable Products > Corn, sweet, yellow, canned, cream style, no salt added
-Vegetables and Vegetable Products > Corn, sweet, yellow, canned, cream style, regular pack
-Vegetables and Vegetable Products > Corn, sweet, yellow, canned, drained solids, rinsed with tap water
-Vegetables and Vegetable Products > Corn, sweet, yellow, canned, no salt added, solids and liquids (Includes foods for USDA's Food Distribution Program)
-Vegetables and Vegetable Products > Corn, sweet, yellow, canned, vacuum pack, no salt added
-Vegetables and Vegetable Products > Corn, sweet, yellow, canned, vacuum pack, regular pack
-Vegetables and Vegetable Products > Corn, sweet, yellow, canned, whole kernel, drained solids
 Vegetables and Vegetable Products > Corn, sweet, yellow, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Corn, sweet, yellow, frozen, kernels cut off cob, boiled, drained, without salt
-Vegetables and Vegetable Products > Corn, sweet, yellow, frozen, kernels cut off cob, unprepared (Includes foods for USDA's Food Distribution Program)
-Vegetables and Vegetable Products > Corn, sweet, yellow, frozen, kernels on cob, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Corn, sweet, yellow, frozen, kernels on cob, unprepared
 Vegetables and Vegetable Products > Corn, sweet, yellow, raw
-Vegetables and Vegetable Products > Corn, yellow, whole kernel, frozen, microwaved
 Vegetables and Vegetable Products > Cornsalad, raw
 Vegetables and Vegetable Products > Cowpeas (blackeyes), immature seeds, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Cowpeas (blackeyes), immature seeds, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Cowpeas (blackeyes), immature seeds, frozen, unprepared
 Vegetables and Vegetable Products > Cowpeas (blackeyes), immature seeds, raw
 Vegetables and Vegetable Products > Cowpeas, leafy tips, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Cowpeas, leafy tips, raw
@@ -885,8 +701,6 @@ Vegetables and Vegetable Products > Drumstick leaves, cooked, boiled, drained, w
 Vegetables and Vegetable Products > Drumstick leaves, raw
 Vegetables and Vegetable Products > Drumstick pods, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Drumstick pods, raw
-Vegetables and Vegetable Products > Edamame, frozen, prepared
-Vegetables and Vegetable Products > Edamame, frozen, unprepared
 Vegetables and Vegetable Products > Eggplant, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Eggplant, pickled
 Vegetables and Vegetable Products > Eggplant, raw
@@ -895,7 +709,6 @@ Vegetables and Vegetable Products > Epazote, raw
 Vegetables and Vegetable Products > Eppaw, raw
 Vegetables and Vegetable Products > Escarole, cooked, boiled, drained, no salt added
 Vegetables and Vegetable Products > Fennel, bulb, raw
-Vegetables and Vegetable Products > Fiddlehead ferns, frozen, unprepared
 Vegetables and Vegetable Products > Fiddlehead ferns, raw
 Vegetables and Vegetable Products > Fireweed, leaves, raw
 Vegetables and Vegetable Products > Fungi, Cloud ears, dried
@@ -905,9 +718,7 @@ Vegetables and Vegetable Products > Gourd, dishcloth (towelgourd), cooked, boile
 Vegetables and Vegetable Products > Gourd, dishcloth (towelgourd), raw
 Vegetables and Vegetable Products > Gourd, white-flowered (calabash), cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Gourd, white-flowered (calabash), raw
-Vegetables and Vegetable Products > Grape leaves, canned
 Vegetables and Vegetable Products > Grape leaves, raw
-Vegetables and Vegetable Products > Hearts of palm, canned
 Vegetables and Vegetable Products > Hearts of palm, raw
 Vegetables and Vegetable Products > Hyacinth-beans, immature seeds, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Hyacinth-beans, immature seeds, raw
@@ -916,8 +727,6 @@ Vegetables and Vegetable Products > Jew's ear, (pepeao), raw
 Vegetables and Vegetable Products > Jute, potherb, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Jute, potherb, raw
 Vegetables and Vegetable Products > Kale, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Kale, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Kale, frozen, unprepared
 Vegetables and Vegetable Products > Kale, raw
 Vegetables and Vegetable Products > Kanpyo, (dried gourd strips)
 Vegetables and Vegetable Products > Kohlrabi, cooked, boiled, drained, without salt
@@ -935,13 +744,7 @@ Vegetables and Vegetable Products > Lettuce, cos or romaine, raw
 Vegetables and Vegetable Products > Lettuce, green leaf, raw
 Vegetables and Vegetable Products > Lettuce, iceberg (includes crisphead types), raw
 Vegetables and Vegetable Products > Lettuce, red leaf, raw
-Vegetables and Vegetable Products > Lima beans, immature seeds, canned, no salt added, solids and liquids
-Vegetables and Vegetable Products > Lima beans, immature seeds, canned, regular pack, solids and liquids
 Vegetables and Vegetable Products > Lima beans, immature seeds, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Lima beans, immature seeds, frozen, baby, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Lima beans, immature seeds, frozen, baby, unprepared
-Vegetables and Vegetable Products > Lima beans, immature seeds, frozen, fordhook, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Lima beans, immature seeds, frozen, fordhook, unprepared
 Vegetables and Vegetable Products > Lima beans, immature seeds, raw
 Vegetables and Vegetable Products > Lotus root, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Lotus root, raw
@@ -954,7 +757,6 @@ Vegetables and Vegetable Products > Mung beans, mature seeds, sprouted, raw
 Vegetables and Vegetable Products > Mushroom, white, exposed to ultraviolet light, raw
 Vegetables and Vegetable Products > Mushrooms, brown, italian, or crimini, exposed to ultraviolet light, raw
 Vegetables and Vegetable Products > Mushrooms, brown, italian, or crimini, raw
-Vegetables and Vegetable Products > Mushrooms, canned, drained solids
 Vegetables and Vegetable Products > Mushrooms, Chanterelle, raw
 Vegetables and Vegetable Products > Mushrooms, enoki, raw
 Vegetables and Vegetable Products > Mushrooms, maitake, raw
@@ -968,14 +770,11 @@ Vegetables and Vegetable Products > Mushrooms, shiitake, cooked, without salt
 Vegetables and Vegetable Products > Mushrooms, shiitake, dried
 Vegetables and Vegetable Products > Mushrooms, shiitake, raw
 Vegetables and Vegetable Products > Mushrooms, shiitake, stir-fried
-Vegetables and Vegetable Products > Mushrooms, straw, canned, drained solids
 Vegetables and Vegetable Products > Mushrooms, white, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Mushrooms, white, microwaved
 Vegetables and Vegetable Products > Mushrooms, white, raw
 Vegetables and Vegetable Products > Mushrooms, white, stir-fried
 Vegetables and Vegetable Products > Mustard greens, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Mustard greens, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Mustard greens, frozen, unprepared
 Vegetables and Vegetable Products > Mustard greens, raw
 Vegetables and Vegetable Products > Mustard spinach, (tendergreen), cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Mustard spinach, (tendergreen), raw
@@ -984,16 +783,9 @@ Vegetables and Vegetable Products > New Zealand spinach, raw
 Vegetables and Vegetable Products > Nopales, cooked, without salt
 Vegetables and Vegetable Products > Nopales, raw
 Vegetables and Vegetable Products > Okra, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Okra, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Okra, frozen, unprepared
 Vegetables and Vegetable Products > Okra, raw
-Vegetables and Vegetable Products > Onions, canned, solids and liquids
 Vegetables and Vegetable Products > Onions, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Onions, dehydrated flakes
-Vegetables and Vegetable Products > Onions, frozen, chopped, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Onions, frozen, chopped, unprepared
-Vegetables and Vegetable Products > Onions, frozen, whole, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Onions, frozen, whole, unprepared
 Vegetables and Vegetable Products > Onions, raw
 Vegetables and Vegetable Products > Onions, spring or scallions (includes tops and bulb), raw
 Vegetables and Vegetable Products > Onions, sweet, raw
@@ -1005,53 +797,29 @@ Vegetables and Vegetable Products > Parsley, fresh
 Vegetables and Vegetable Products > Parsnips, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Parsnips, raw
 Vegetables and Vegetable Products > Peas, edible-podded, boiled, drained, without salt
-Vegetables and Vegetable Products > Peas, edible-podded, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Peas, edible-podded, frozen, unprepared
 Vegetables and Vegetable Products > Peas, edible-podded, raw
-Vegetables and Vegetable Products > Peas, green (includes baby and lesuer types), canned, drained solids, unprepared
-Vegetables and Vegetable Products > Peas, green, canned, drained solids, rinsed in tap water
-Vegetables and Vegetable Products > Peas, green, canned, no salt added, drained solids
-Vegetables and Vegetable Products > Peas, green, canned, no salt added, solids and liquids
-Vegetables and Vegetable Products > Peas, green, canned, regular pack, solids and liquids
-Vegetables and Vegetable Products > Peas, green, canned, seasoned, solids and liquids
 Vegetables and Vegetable Products > Peas, green, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Peas, green, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Peas, green, frozen, unprepared (Includes foods for USDA's Food Distribution Program)
 Vegetables and Vegetable Products > Peas, green, raw
 Vegetables and Vegetable Products > Peas, mature seeds, sprouted, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Peas, mature seeds, sprouted, raw
 Vegetables and Vegetable Products > Pepeao, dried
 Vegetables and Vegetable Products > Pepper, banana, raw
 Vegetables and Vegetable Products > Peppers, ancho, dried
-Vegetables and Vegetable Products > Peppers, chili, green, canned
 Vegetables and Vegetable Products > Peppers, hot chile, sun-dried
-Vegetables and Vegetable Products > Peppers, hot chili, green, canned, pods, excluding seeds, solids and liquids
 Vegetables and Vegetable Products > Peppers, hot chili, green, raw
-Vegetables and Vegetable Products > Peppers, hot chili, red, canned, excluding seeds, solids and liquids
 Vegetables and Vegetable Products > Peppers, hot chili, red, raw
-Vegetables and Vegetable Products > Peppers, hot pickled, canned
 Vegetables and Vegetable Products > Peppers, hungarian, raw
-Vegetables and Vegetable Products > Peppers, jalapeno, canned, solids and liquids
 Vegetables and Vegetable Products > Peppers, jalapeno, raw
 Vegetables and Vegetable Products > Peppers, pasilla, dried
 Vegetables and Vegetable Products > Peppers, serrano, raw
-Vegetables and Vegetable Products > Peppers, sweet, green, canned, solids and liquids
 Vegetables and Vegetable Products > Peppers, sweet, green, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Peppers, sweet, green, frozen, chopped, boiled, drained, without salt
-Vegetables and Vegetable Products > Peppers, sweet, green, frozen, chopped, unprepared
 Vegetables and Vegetable Products > Peppers, sweet, green, raw
 Vegetables and Vegetable Products > Peppers, sweet, green, sauteed
-Vegetables and Vegetable Products > Peppers, sweet, red, canned, solids and liquids
 Vegetables and Vegetable Products > Peppers, sweet, red, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Peppers, sweet, red, freeze-dried
-Vegetables and Vegetable Products > Peppers, sweet, red, frozen, chopped, boiled, drained, without salt
-Vegetables and Vegetable Products > Peppers, sweet, red, frozen, chopped, unprepared
 Vegetables and Vegetable Products > Peppers, sweet, red, raw
 Vegetables and Vegetable Products > Peppers, sweet, red, sauteed
 Vegetables and Vegetable Products > Peppers, sweet, yellow, raw
-Vegetables and Vegetable Products > Pickle relish, hamburger
-Vegetables and Vegetable Products > Pickle relish, hot dog
-Vegetables and Vegetable Products > Pickle relish, sweet
 Vegetables and Vegetable Products > Pickles, chowchow, with cauliflower onion mustard, sweet
 Vegetables and Vegetable Products > Pickles, cucumber, dill or kosher dill
 Vegetables and Vegetable Products > Pickles, cucumber, dill, reduced sodium
@@ -1061,42 +829,31 @@ Vegetables and Vegetable Products > Pickles, cucumber, sweet (includes bread and
 Vegetables and Vegetable Products > Pickles, cucumber, sweet, low sodium (includes bread and butter pickles)
 Vegetables and Vegetable Products > Pigeonpeas, immature seeds, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Pigeonpeas, immature seeds, raw
-Vegetables and Vegetable Products > Pimento, canned
 Vegetables and Vegetable Products > Poi
 Vegetables and Vegetable Products > Pokeberry shoots, (poke), cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Pokeberry shoots, (poke), raw
 Vegetables and Vegetable Products > Potato flour
-Vegetables and Vegetable Products > Potato puffs, frozen, oven-heated
-Vegetables and Vegetable Products > Potato puffs, frozen, unprepared
-Vegetables and Vegetable Products > Potato wedges, frozen (Includes foods for USDA's Food Distribution Program)
 Vegetables and Vegetable Products > Potatoes, baked, flesh and skin, without salt
 Vegetables and Vegetable Products > Potatoes, baked, flesh, without salt
 Vegetables and Vegetable Products > Potatoes, baked, skin, without salt
 Vegetables and Vegetable Products > Potatoes, boiled, cooked in skin, flesh, without salt
 Vegetables and Vegetable Products > Potatoes, boiled, cooked in skin, skin, without salt
 Vegetables and Vegetable Products > Potatoes, boiled, cooked without skin, flesh, without salt
-Vegetables and Vegetable Products > Potatoes, canned, drained solids
-Vegetables and Vegetable Products > Potatoes, canned, drained solids, no salt added
-Vegetables and Vegetable Products > Potatoes, canned, solids and liquids
 Vegetables and Vegetable Products > Potatoes, flesh and skin, raw
-Vegetables and Vegetable Products > Potatoes, frozen, whole, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Potatoes, microwaved, cooked in skin, flesh and skin, without salt
 Vegetables and Vegetable Products > Potatoes, microwaved, cooked in skin, flesh, without salt
 Vegetables and Vegetable Products > Potatoes, microwaved, cooked in skin, skin, without salt
 Vegetables and Vegetable Products > Potatoes, raw, skin
 Vegetables and Vegetable Products > Potatoes, red, flesh and skin, baked
 Vegetables and Vegetable Products > Potatoes, red, flesh and skin, raw
-Vegetables and Vegetable Products > Potatoes, roasted, salt added in processing, frozen, unprepared
 Vegetables and Vegetable Products > Potatoes, Russet, flesh and skin, baked
 Vegetables and Vegetable Products > Potatoes, russet, flesh and skin, raw (Includes foods for USDA's Food Distribution Program)
 Vegetables and Vegetable Products > Potatoes, white, flesh and skin, baked
 Vegetables and Vegetable Products > Potatoes, white, flesh and skin, raw
-Vegetables and Vegetable Products > Potatoes, yellow fleshed, roasted, salt added in processing, frozen, unprepared
 Vegetables and Vegetable Products > Pumpkin flowers, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Pumpkin flowers, raw
 Vegetables and Vegetable Products > Pumpkin leaves, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Pumpkin leaves, raw
-Vegetables and Vegetable Products > Pumpkin, canned, without salt
 Vegetables and Vegetable Products > Pumpkin, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Pumpkin, raw
 Vegetables and Vegetable Products > Purslane, cooked, boiled, drained, without salt
@@ -1132,35 +889,22 @@ Vegetables and Vegetable Products > Soybeans, green, raw
 Vegetables and Vegetable Products > Soybeans, mature seeds, sprouted, cooked, steamed
 Vegetables and Vegetable Products > Soybeans, mature seeds, sprouted, cooked, stir-fried
 Vegetables and Vegetable Products > Soybeans, mature seeds, sprouted, raw
-Vegetables and Vegetable Products > Spinach, canned, no salt added, solids and liquids
-Vegetables and Vegetable Products > Spinach, canned, regular pack, drained solids
-Vegetables and Vegetable Products > Spinach, canned, regular pack, solids and liquids
 Vegetables and Vegetable Products > Spinach, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Spinach, frozen, chopped or leaf, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Spinach, frozen, chopped or leaf, unprepared (Includes foods for USDA's Food Distribution Program)
 Vegetables and Vegetable Products > Spinach, raw
 Vegetables and Vegetable Products > Squash, summer, all varieties, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Squash, summer, all varieties, raw
-Vegetables and Vegetable Products > Squash, summer, crookneck and straightneck, canned, drained, solid, without salt
 Vegetables and Vegetable Products > Squash, summer, crookneck and straightneck, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Squash, summer, crookneck and straightneck, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Squash, summer, crookneck and straightneck, frozen, unprepared
 Vegetables and Vegetable Products > Squash, summer, crookneck and straightneck, raw
 Vegetables and Vegetable Products > Squash, summer, scallop, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Squash, summer, scallop, raw
 Vegetables and Vegetable Products > Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Squash, summer, zucchini, includes skin, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Squash, summer, zucchini, includes skin, frozen, unprepared
 Vegetables and Vegetable Products > Squash, summer, zucchini, includes skin, raw
-Vegetables and Vegetable Products > Squash, summer, zucchini, italian style, canned
 Vegetables and Vegetable Products > Squash, winter, acorn, cooked, baked, without salt
 Vegetables and Vegetable Products > Squash, winter, acorn, cooked, boiled, mashed, without salt
 Vegetables and Vegetable Products > Squash, winter, acorn, raw
 Vegetables and Vegetable Products > Squash, winter, all varieties, cooked, baked, without salt
 Vegetables and Vegetable Products > Squash, winter, all varieties, raw
 Vegetables and Vegetable Products > Squash, winter, butternut, cooked, baked, without salt
-Vegetables and Vegetable Products > Squash, winter, butternut, frozen, cooked, boiled, without salt
-Vegetables and Vegetable Products > Squash, winter, butternut, frozen, unprepared
 Vegetables and Vegetable Products > Squash, winter, butternut, raw
 Vegetables and Vegetable Products > Squash, winter, hubbard, baked, without salt
 Vegetables and Vegetable Products > Squash, winter, hubbard, cooked, boiled, mashed, without salt
@@ -1170,13 +914,8 @@ Vegetables and Vegetable Products > Squash, winter, spaghetti, raw
 Vegetables and Vegetable Products > Squash, zucchini, baby, raw
 Vegetables and Vegetable Products > Sweet potato leaves, cooked, steamed, without salt
 Vegetables and Vegetable Products > Sweet potato leaves, raw
-Vegetables and Vegetable Products > Sweet Potato puffs, frozen, unprepared
-Vegetables and Vegetable Products > Sweet potato, canned, mashed
-Vegetables and Vegetable Products > Sweet potato, canned, vacuum pack
 Vegetables and Vegetable Products > Sweet potato, cooked, baked in skin, flesh, without salt
 Vegetables and Vegetable Products > Sweet potato, cooked, boiled, without skin
-Vegetables and Vegetable Products > Sweet potato, frozen, cooked, baked, without salt
-Vegetables and Vegetable Products > Sweet potato, frozen, unprepared (Includes foods for USDA's Food Distribution Program)
 Vegetables and Vegetable Products > Sweet potato, raw, unprepared (Includes foods for USDA's Food Distribution Program)
 Vegetables and Vegetable Products > Taro leaves, cooked, steamed, without salt
 Vegetables and Vegetable Products > Taro leaves, raw
@@ -1188,43 +927,24 @@ Vegetables and Vegetable Products > Taro, tahitian, cooked, without salt
 Vegetables and Vegetable Products > Taro, tahitian, raw
 Vegetables and Vegetable Products > Tomatillos, raw
 Vegetables and Vegetable Products > Tomato and vegetable juice, low sodium
-Vegetables and Vegetable Products > Tomato juice, canned, without salt added
 Vegetables and Vegetable Products > Tomato powder
-Vegetables and Vegetable Products > Tomato products, canned, paste, without salt added (Includes foods for USDA's Food Distribution Program)
-Vegetables and Vegetable Products > Tomato products, canned, puree, without salt added
-Vegetables and Vegetable Products > Tomato products, canned, sauce
-Vegetables and Vegetable Products > Tomato products, canned, sauce, spanish style
-Vegetables and Vegetable Products > Tomatoes, crushed, canned
 Vegetables and Vegetable Products > Tomatoes, green, raw
 Vegetables and Vegetable Products > Tomatoes, orange, raw
-Vegetables and Vegetable Products > Tomatoes, red, ripe, canned, packed in tomato juice
-Vegetables and Vegetable Products > Tomatoes, red, ripe, canned, packed in tomato juice, no salt added
-Vegetables and Vegetable Products > Tomatoes, red, ripe, canned, stewed
-Vegetables and Vegetable Products > Tomatoes, red, ripe, canned, with green chilies
 Vegetables and Vegetable Products > Tomatoes, red, ripe, cooked
 Vegetables and Vegetable Products > Tomatoes, red, ripe, cooked, stewed
 Vegetables and Vegetable Products > Tomatoes, red, ripe, raw, year round average
 Vegetables and Vegetable Products > Tomatoes, sun-dried
 Vegetables and Vegetable Products > Tomatoes, yellow, raw
 Vegetables and Vegetable Products > Tree fern, cooked, without salt
-Vegetables and Vegetable Products > Turnip greens and turnips, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Turnip greens and turnips, frozen, unprepared
-Vegetables and Vegetable Products > Turnip greens, canned, no salt added
-Vegetables and Vegetable Products > Turnip greens, canned, solids and liquids
 Vegetables and Vegetable Products > Turnip greens, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Turnip greens, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Turnip greens, frozen, unprepared
 Vegetables and Vegetable Products > Turnip greens, raw
 Vegetables and Vegetable Products > Turnips, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Turnips, frozen, cooked, boiled, drained, without salt
-Vegetables and Vegetable Products > Turnips, frozen, unprepared
 Vegetables and Vegetable Products > Turnips, raw
 Vegetables and Vegetable Products > Vinespinach, (basella), raw
 Vegetables and Vegetable Products > Wasabi, root, raw
 Vegetables and Vegetable Products > Water convolvulus, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Water convolvulus,raw
 Vegetables and Vegetable Products > Waterchestnuts, chinese, (matai), raw
-Vegetables and Vegetable Products > Waterchestnuts, chinese, canned, solids and liquids
 Vegetables and Vegetable Products > Watercress, raw
 Vegetables and Vegetable Products > Waxgourd, (chinese preserving melon), cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Waxgourd, (chinese preserving melon), raw
