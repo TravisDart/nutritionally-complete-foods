@@ -5,44 +5,7 @@ from ortools.sat.python import cp_model
 from constants import FOOD_OFFSET
 from solver.find_n_greatest import find_max_error
 from solver.initialize import initialize
-
-
-class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
-    def __init__(self, variables, error_for_quantity):
-        super().__init__()
-        self.__variables = variables
-        self.__error_for_quantity = error_for_quantity
-        self.__solution = None
-
-    def get_solution(self):
-        return self.__solution
-
-    def on_solution_callback(self):
-        # Just the ordered IDs of the foods in the solution.
-        self.__solution = tuple(
-            sorted([int(v.Name()) for v in self.__variables if self.Value(v) != 0])
-        )
-        self.StopSearch()
-
-
-def print_info(status, solver, solution_printer):
-    if status in [cp_model.OPTIMAL, cp_model.FEASIBLE]:
-        print("\nStatistics")
-        print(f"  status   : {solver.StatusName(status)}")
-        print(f"  conflicts: {solver.NumConflicts()}")
-        print(f"  branches : {solver.NumBranches()}")
-        print(f"  wall time: {solver.WallTime()} s")
-        print(f"  sol found: {solution_printer.get_solution()}")
-    else:
-        outcomes = [
-            "UNKNOWN",
-            "MODEL_INVALID",
-            "FEASIBLE",
-            "INFEASIBLE",
-            "OPTIMAL",
-        ]
-        outcome = outcomes[status]
-        print(outcome)
+from solver.solution_printer import SingleSolutionPrinter, print_info
 
 
 def solve_it(
@@ -105,14 +68,14 @@ def solve_it(
     solver = cp_model.CpSolver()
     solver.parameters.log_search_progress = bool(log_level >= 2)
     solver.parameters.enumerate_all_solutions = True
-    solution_printer = VarArraySolutionPrinter(intermediate_values, error_for_quantity)
+    solution_printer = SingleSolutionPrinter(intermediate_values)
 
     status = solver.Solve(model, solution_printer)
     if log_level >= 1:
         print_info(status, solver, solution_printer)
 
     if status in [cp_model.OPTIMAL, cp_model.FEASIBLE]:
-        solution = solution_printer.get_solution()
+        solution = solution_printer.get_solutions()
         if log_level:
             print(solution)
         return solution

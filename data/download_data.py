@@ -164,7 +164,7 @@ def delete_intermediate_files(
 
 
 def create_sql(csv_path):
-    sql = SQLData(DB_URL)
+    sql = SQLData(DB_URL, verbose=False)
     sql.initialize()
     sql.import_csv(csv_path)
     sql.import_csv_components(csv_path)
@@ -202,7 +202,8 @@ def create_filtered_csv(
         print("Data file successfully created.")
     create_sql(csv_path)
 
-    delete_intermediate_files(
-        [zip_path, json_path, filtered_json_path],
-        should_delete_intermediate_files,
-    )
+    # I got tired of this prompt nagging me. Let's just keep the intermediate files.
+    # delete_intermediate_files(
+    #     [zip_path, json_path, filtered_json_path],
+    #     should_delete_intermediate_files,
+    # )
