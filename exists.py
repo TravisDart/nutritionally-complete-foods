@@ -18,7 +18,6 @@ def solution_exists(A, B, C):
     :param C: Upper bound
     :return: Boolean indicating if a solution exists
     """
-    # Solve the linear programming problem using linprog with 'highs' method
     result = linprog(
         # The objective function (any objective function will do, we just care that the inequality holds)
         c=np.ones(B.shape[1]),
@@ -27,9 +26,6 @@ def solution_exists(A, B, C):
         b_ub=np.hstack((A, C)),
         method="highs",
     )
-    import pdb
-
-    pdb.set_trace()
 
     return result.success
 
@@ -144,7 +140,7 @@ def known_good_solution():
 def known_bad_solution():
     is_good = solution_exists(
         A=np.array([1, 1, 1]),
-        B=np.array([[1, 0, 0], [0, 1, 0], [1, 1, 0]]),
+        B=np.transpose(np.array([[0, 0, 0], [0, 0, 0], [0, 0, 0]])),
         C=np.array([10, 10, 10]),
     )
     print("good_solution?", is_good)
