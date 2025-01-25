@@ -23,7 +23,7 @@ def solution_exists(A, B, C):
         c=np.ones(B.shape[1]),
         # Define the equality constraints (Bx - s1 = A and Bx + s2 = C)
         A_ub=np.vstack((B, -B)),
-        b_ub=np.hstack((A, C)),
+        b_ub=np.hstack((C, -A)),
         method="highs",
     )
 
@@ -81,7 +81,7 @@ def find_all():
     loop_counter = 0
     for combination in iterate_over_combos(food_ids, num_foods):
         loop_counter += 1
-        if loop_counter % 1000 == 0:
+        if loop_counter % 10000 == 0:
             print(f"Loop counter: {loop_counter}")
 
         combo_list = [foods[i] for i in combination]
@@ -135,6 +135,7 @@ def known_good_solution():
         C=max_requirements,
     )
     print("good_solution?", good_solution)
+    return good_solution
 
 
 def known_bad_solution():
@@ -144,9 +145,21 @@ def known_bad_solution():
         C=np.array([10, 10, 10]),
     )
     print("good_solution?", is_good)
+    return is_good
+
+
+def trivial_good_solution():
+    is_good = solution_exists(
+        A=np.array([1, 1, 1]),
+        B=np.transpose(np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])),
+        C=np.array([10, 10, 10]),
+    )
+    print("good_solution?", is_good)
+    return is_good
 
 
 if __name__ == "__main__":
-    # known_solution()
-    # find_all()
-    known_bad_solution()
+    # known_good_solution()
+    # known_bad_solution()
+    # trivial_good_solution()
+    find_all()
