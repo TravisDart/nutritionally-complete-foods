@@ -1,8 +1,4 @@
-import math
-
 from constants import FOOD_OFFSET, NUMBER_SCALE
-
-from .load_data import load_data
 
 
 def find_top_values_in_each_column(foods, max_qty, num_values: int):
@@ -47,6 +43,10 @@ def find_top_values_in_each_column(foods, max_qty, num_values: int):
 
 
 def find_max_error(foods, max_qty, num_foods, min_requirements):
+    """
+    If we are looking for a solution with 7 foods (for example), then for each nutrient,
+    find the 7 foods with the highest quantity of that nutrient.
+    """
     top_n_values = find_top_values_in_each_column(foods, max_qty, num_foods)
     return [
         sum(top_n_values[i]) - min_requirements[i] for i in range(len(min_requirements))

@@ -113,7 +113,7 @@ To find all solutions, first start a PostgreSQL instance with Docker and create 
 ```
 docker run -d --name food-postgres -p 5432:5432 \
     -e POSTGRES_PASSWORD=pg_password \
-    -v ./pgdata:/var/lib/postgresql/data postgres:17.0
+    -v "$PWD"/pgdata:/var/lib/postgresql/data postgres:17.0
 
 docker exec -it food-postgres psql -U postgres -c "CREATE DATABASE food;"
 ```

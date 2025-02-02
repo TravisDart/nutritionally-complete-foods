@@ -5,7 +5,11 @@ from ortools.sat.python import cp_model
 from constants import FOOD_OFFSET
 from solver.find_n_greatest import find_max_error
 from solver.initialize import initialize
-from solver.solution_printer import SingleSolutionPrinter, print_info
+from solver.solution_printer import (
+    SingleSolutionPrinter,
+    print_info,
+    MultipleSolutionPrinter,
+)
 
 
 def solve_it(
@@ -15,6 +19,7 @@ def solve_it(
     max_requirements: List[int],
     num_foods: int,
     log_level: int = 0,
+    return_multiple_solutions: bool = True,
 ):
     """
     :param min_requirements a list containing the lower bound of nutritional requirements.
@@ -68,17 +73,20 @@ def solve_it(
     solver = cp_model.CpSolver()
     solver.parameters.log_search_progress = bool(log_level >= 2)
     solver.parameters.enumerate_all_solutions = True
-    solution_printer = SingleSolutionPrinter(intermediate_values)
+    if return_multiple_solutions:
+        solution_printer = MultipleSolutionPrinter(intermediate_values)
+    else:
+        solution_printer = SingleSolutionPrinter(intermediate_values)
 
     status = solver.Solve(model, solution_printer)
     if log_level >= 1:
         print_info(status, solver, solution_printer)
 
     if status in [cp_model.OPTIMAL, cp_model.FEASIBLE]:
-        solution = solution_printer.get_solutions()
+        result = solution_printer.get_solutions()
         if log_level:
-            print(solution)
-        return solution
+            print(result)
+        return result
 
 
 if __name__ == "__main__":
@@ -105,5 +113,6 @@ if __name__ == "__main__":
             max_requirements,
             num_foods=num_foods,
             log_level=verbose,
+            return_multiple_solutions=True,
         )
         print(solutions)

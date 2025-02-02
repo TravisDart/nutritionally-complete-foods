@@ -18,7 +18,7 @@ class SingleSolutionPrinter(cp_model.CpSolverSolutionCallback):
         self.StopSearch()
 
 
-class VarArraySolutionPrinter(cp_model.CpSolverSolutionCallback):
+class MultipleSolutionPrinter(cp_model.CpSolverSolutionCallback):
     def __init__(
         self,
         variables,

@@ -6,10 +6,18 @@ from constants import FOOD_OFFSET, KNOWN_SOLUTIONS
 from solve import solve_it
 from solver.find_max import find_food_max_value, find_max_x
 from solver.find_n_greatest import find_max_error
-from solver.load_data import (load_data, load_real_data, load_requirements,
-                              load_test_data)
-from solver.utils import (dict_to_ordered_tuples, evaluate_result,
-                          ordered_dict_values, verify_solution)
+from solver.load_data import (
+    load_data,
+    load_real_data,
+    load_requirements,
+    load_test_data,
+)
+from solver.utils import (
+    dict_to_ordered_tuples,
+    evaluate_result,
+    ordered_dict_values,
+    verify_solution,
+)
 
 
 def trivial_tests(verbose=False):
@@ -87,22 +95,13 @@ def solve_against_known_solutions(verbose=False):
                 max_requirements,
                 num_foods=len(known_solution),
                 log_level=int(verbose) * 2,
+                return_multiple_solutions=True,
             )
-            assert len(solver_result) == 1  # Only one solution
-
-            # Convert the dict-formatted solution to a tuple format. We need to make this more consistent.
-            food_quantity = list(solver_result.values())[0]["food_quantity"]
-            tuple_solution = dict_to_ordered_tuples(food_quantity)
-
-            verify_solution(tuple_solution, verbose=verbose)
-
-
-def time_it(func, *args, **kwargs):
-    start_time = time.time()
-    func(*args, **kwargs)
-    end_time = time.time()
-    execution_time = end_time - start_time
-    print("Known solutions took", execution_time, "seconds to solve.")
+            for result in solver_result.values():
+                # Convert the dict-formatted solution to a tuple format. We need to make this more consistent.
+                food_quantity = result["food_quantity"]
+                tuple_solution = dict_to_ordered_tuples(food_quantity)
+                verify_solution(tuple_solution, verbose=verbose)
 
 
 def test_find_max_x():
@@ -119,9 +118,7 @@ def test_find_max_x():
 
 if __name__ == "__main__":
     test_find_max_x()
-
-    # Need to refactor these tests to account for the new output of the solver.
-    # trivial_tests(verbose=False)
-    # multiply_known_solutions(verbose=False, should_assert=True)
-    # time_it(solve_against_known_solutions, verbose=False)
+    trivial_tests(verbose=False)
+    multiply_known_solutions(verbose=False, should_assert=True)
+    solve_against_known_solutions(verbose=False)
     print("All assertions pass.")

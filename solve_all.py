@@ -33,6 +33,7 @@ def solve_job(num_foods, exclusion: List[int], DB_URL):
         max_requirements,
         num_foods,
         verbose,
+        return_multiple_solutions=False,
     )
     state_store = SQLStore(db_url=DB_URL, num_foods=num_foods)
     state_store.add_result(exclusion, timeout=False, solution=solution)

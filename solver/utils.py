@@ -1,10 +1,22 @@
 import argparse
+import time
 
 import numpy as np
 
 from constants import FOOD_OFFSET
 
 from .load_data import load_data
+
+
+def time_it(func, *args, **kwargs):
+    """
+    Note that this is currently unused.
+    """
+    start_time = time.time()
+    func(*args, **kwargs)
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print("Known solutions took", execution_time, "seconds to solve.")
 
 
 def ordered_dict_values(food_quantity: dict[str, int]):

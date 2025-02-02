@@ -5,7 +5,7 @@ import numpy as np
 import psutil
 from scipy.optimize import linprog
 
-from constants import DB_URL, FOOD_OFFSET
+from constants import DB_URL, FOOD_OFFSET, TOP_FOODS
 from solver.initialize import initialize
 from solver.logger import Logger
 from solver.simple_sql import SimpleSQLStore
@@ -134,29 +134,6 @@ def trivial_good_solution():
 def find_all_solutions():
     num_foods = 4
 
-    # fmt: off
-    food_ids = [
-        35205, 11525, 11270, 9009, 4058, 11946, 11987, 11458, 16001, 11637, 11939, 20076, 2041, 2028, 35074,
-        16062, 16076, 42200, 16055, 12169, 11625, 4047, 11977, 11297, 20003, 11230, 4583, 43146, 16067,
-        2003, 4534, 11291, 11097, 12171, 16111, 11591, 11276, 11819, 11976, 20072, 4044, 16396, 4511, 4060,
-        11161, 2012, 16085, 12029, 4531, 12163, 35093, 11003, 16390, 11086, 4582, 4506, 11087, 11683, 11432,
-        4541, 11292, 11982, 2022, 11269, 2015, 2044, 11277, 9139, 2023, 11152, 11165, 4584, 16019, 4588,
-        12078, 2066, 4536, 14353, 2009, 35207, 11112, 11660, 11268, 11162, 20077, 11941, 12023, 16078,
-        12198, 11588, 16389, 9148, 20138, 35196, 35232, 12698, 11026, 20078, 11334, 12024, 11993, 11952,
-        11419, 11113, 11245, 4581, 2007, 4516, 11529, 2013, 11953, 11506, 2033, 11936, 4517, 9002, 11271,
-        11158, 4502, 11208, 9244, 11569, 11214, 4053, 11027, 4529, 16080, 35194, 9221, 11239, 16133, 12174,
-        11098, 11467, 11937, 9041, 4042, 12170, 11667, 16392, 11234, 20027, 4501, 11931, 11974, 4528, 9129,
-        2024, 11240, 9116, 11293, 2046, 2017, 9001, 11967, 12006, 42231, 11203, 12012, 11938, 2016, 11023,
-        11300, 12040, 20015, 9147, 20068, 16112, 4055, 4514, 9289, 2021, 20071, 43143, 11530, 11333, 11979,
-        4518, 2029, 4513, 16135, 2047, 11998, 16394, 4038, 12036, 12193, 4515, 2038, 4037, 11988, 16060,
-        9183, 9165, 2010, 43365, 11141, 11096, 4530, 12037, 16108, 2011, 2020, 4572, 11983, 12005, 11207,
-        2042, 11301, 2006, 11955, 11052, 2027, 12039, 16091, 12220, 11099, 11284, 2014, 2039, 16056, 11663,
-        2043, 16116, 48052, 4573, 11505, 12038, 11527, 16410, 11670, 11147, 11204, 31019, 4669, 2036, 14368,
-        11233, 11110, 35203, 2037, 11090, 16132, 4510, 11962, 11978, 12160, 4532, 2008, 11957, 11615, 20060,
-        11242, 2031, 11148, 16115
-    ]
-    # fmt: on
-
     (
         foods,
         max_foods,
@@ -164,7 +141,7 @@ def find_all_solutions():
         max_requirements,
         verbose,
         _,  # num_foods (not applicable for this solver)
-    ) = initialize(only_these_ids=food_ids, verbose=False)
+    ) = initialize(only_these_ids=TOP_FOODS, verbose=False)
 
     min_requirements = np.array(min_requirements)
     max_requirements = np.array(max_requirements)
@@ -174,14 +151,13 @@ def find_all_solutions():
     }
 
     logical_cores = psutil.cpu_count(logical=True)
-    # logical_cores = 2
 
     with Pool(processes=logical_cores) as pool:
         args = [
             (
                 worker_id,
                 logical_cores,
-                food_ids,
+                TOP_FOODS,
                 foods,
                 min_requirements,
                 max_requirements,
