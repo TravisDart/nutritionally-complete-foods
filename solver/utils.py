@@ -1,7 +1,10 @@
 import argparse
+
 import numpy as np
-from .load_data import load_data
+
 from constants import FOOD_OFFSET
+
+from .load_data import load_data
 
 
 def ordered_dict_values(food_quantity: dict[str, int]):

@@ -1,13 +1,9 @@
 import csv
 import os
 
-from constants import (
-    NUMBER_SCALE,
-    FOOD_OFFSET,
-    NUTRIENT_UNITS,
-    NUTRIENT_NAMES,
-    UNIT_CONVERSION,
-)
+from constants import (FOOD_OFFSET, NUMBER_SCALE, NUTRIENT_NAMES,
+                       NUTRIENT_UNITS, UNIT_CONVERSION)
+
 from .find_max import find_food_max_value
 
 

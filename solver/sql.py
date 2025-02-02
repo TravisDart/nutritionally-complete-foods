@@ -1,8 +1,8 @@
+from itertools import combinations
 from typing import List, Optional
 
 import psycopg
 
-from itertools import combinations
 from solver.logger import Logger, NullLogger
 
 

@@ -1,7 +1,8 @@
 import math
 
-from .load_data import load_data
 from constants import FOOD_OFFSET, NUMBER_SCALE
+
+from .load_data import load_data
 
 
 def find_top_values_in_each_column(foods, max_qty, num_values: int):

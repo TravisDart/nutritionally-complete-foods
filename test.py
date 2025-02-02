@@ -2,22 +2,14 @@ import time
 
 import numpy as np
 
-from constants import KNOWN_SOLUTIONS, FOOD_OFFSET
+from constants import FOOD_OFFSET, KNOWN_SOLUTIONS
+from solve import solve_it
 from solver.find_max import find_food_max_value, find_max_x
 from solver.find_n_greatest import find_max_error
-from solver.load_data import (
-    load_test_data,
-    load_data,
-    load_requirements,
-    load_real_data,
-)
-from solve import solve_it
-from solver.utils import (
-    ordered_dict_values,
-    dict_to_ordered_tuples,
-    verify_solution,
-    evaluate_result,
-)
+from solver.load_data import (load_data, load_real_data, load_requirements,
+                              load_test_data)
+from solver.utils import (dict_to_ordered_tuples, evaluate_result,
+                          ordered_dict_values, verify_solution)
 
 
 def trivial_tests(verbose=False):

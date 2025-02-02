@@ -1,8 +1,11 @@
 from typing import Optional
+
+from download_data import (load_real_data, load_requirements,
+                           load_subset_of_data)
 from utils import dict_to_ordered_tuples
-from download_data import load_real_data, load_subset_of_data, load_requirements
-from solve import solve_it
+
 from constants import KNOWN_SOLUTIONS
+from solve import solve_it
 
 
 def export_food_data(selected_food_ids: Optional[list[int]]):

@@ -6,7 +6,8 @@ import zipfile
 
 import requests
 
-from constants import USDA_NUTRIENT_NAMES, DATA_DECIMAL_PLACES, NUTRIENT_UNITS, DB_URL
+from constants import (DATA_DECIMAL_PLACES, DB_URL, NUTRIENT_UNITS,
+                       USDA_NUTRIENT_NAMES)
 from data.sql import SQLData
 
 
