@@ -102,7 +102,7 @@ def get_arg_parser():
         "-n",
         type=int,
         help=(
-            "Only look for solutions with this number of foods."
+            "Only look for solutions with this number of foods. "
             "The default is to sequentially look for solutions starting with 1 food."
         ),
     )

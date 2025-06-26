@@ -190,10 +190,6 @@ Fats and Oils > Vegetable oil, palm kernel
 Fruits and Fruit Juices > Abiyuch, raw
 Fruits and Fruit Juices > Acerola juice, raw
 Fruits and Fruit Juices > Acerola, (west indian cherry), raw
-Fruits and Fruit Juices > Apples, dehydrated (low moisture), sulfured, stewed
-Fruits and Fruit Juices > Apples, dehydrated (low moisture), sulfured, uncooked
-Fruits and Fruit Juices > Apples, dried, sulfured, stewed, without added sugar
-Fruits and Fruit Juices > Apples, dried, sulfured, uncooked
 Fruits and Fruit Juices > Apples, raw, fuji, with skin (Includes foods for USDA's Food Distribution Program)
 Fruits and Fruit Juices > Apples, raw, gala, with skin (Includes foods for USDA's Food Distribution Program)
 Fruits and Fruit Juices > Apples, raw, golden delicious, with skin
@@ -290,8 +286,6 @@ Fruits and Fruit Juices > Papayas, raw
 Fruits and Fruit Juices > Passion-fruit juice, purple, raw
 Fruits and Fruit Juices > Passion-fruit juice, yellow, raw
 Fruits and Fruit Juices > Passion-fruit, (granadilla), purple, raw
-Fruits and Fruit Juices > Peaches, dehydrated (low-moisture), sulfured, stewed
-Fruits and Fruit Juices > Peaches, dehydrated (low-moisture), sulfured, uncooked
 Fruits and Fruit Juices > Peaches, yellow, raw
 Fruits and Fruit Juices > Pears, asian, raw
 Fruits and Fruit Juices > Pears, raw
@@ -447,13 +441,11 @@ Nut and Seed Products > Nuts, almond paste
 Nut and Seed Products > Nuts, almonds
 Nut and Seed Products > Nuts, almonds, blanched
 Nut and Seed Products > Nuts, almonds, dry roasted, without salt added
-Nut and Seed Products > Nuts, almonds, oil roasted, without salt added
 Nut and Seed Products > Nuts, beechnuts, dried
 Nut and Seed Products > Nuts, brazilnuts, dried, unblanched
 Nut and Seed Products > Nuts, butternuts, dried
 Nut and Seed Products > Nuts, cashew butter, plain, without salt added
 Nut and Seed Products > Nuts, cashew nuts, dry roasted, without salt added
-Nut and Seed Products > Nuts, cashew nuts, oil roasted, without salt added
 Nut and Seed Products > Nuts, cashew nuts, raw
 Nut and Seed Products > Nuts, chestnuts, chinese, boiled and steamed
 Nut and Seed Products > Nuts, chestnuts, chinese, dried
@@ -486,7 +478,6 @@ Nut and Seed Products > Nuts, macadamia nuts, dry roasted, without salt added
 Nut and Seed Products > Nuts, macadamia nuts, raw
 Nut and Seed Products > Nuts, pecans
 Nut and Seed Products > Nuts, pecans, dry roasted, without salt added
-Nut and Seed Products > Nuts, pecans, oil roasted, without salt added
 Nut and Seed Products > Nuts, pilinuts, dried
 Nut and Seed Products > Nuts, pine nuts, dried
 Nut and Seed Products > Nuts, pine nuts, pinyon, dried
@@ -522,7 +513,6 @@ Nut and Seed Products > Seeds, sisymbrium sp. seeds, whole, dried
 Nut and Seed Products > Seeds, sunflower seed butter, without salt
 Nut and Seed Products > Seeds, sunflower seed kernels, dried
 Nut and Seed Products > Seeds, sunflower seed kernels, dry roasted, without salt
-Nut and Seed Products > Seeds, sunflower seed kernels, oil roasted, without salt
 Nut and Seed Products > Seeds, sunflower seed kernels, toasted, without salt
 Nut and Seed Products > Seeds, watermelon seed kernels, dried
 Spices and Herbs > Basil, fresh
