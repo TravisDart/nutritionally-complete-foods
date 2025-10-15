@@ -36,9 +36,7 @@ The latest iteration of this program only gets one result back from the solver a
 
 Version 0.6 refactors the solver to add a timeout. Without a timeout, it can take a process up to 3 hours to finish. 
 
-After running for 3 hours, there were more than 500,000 combinations to try and 56 combinations had been processed. Of these, 29 took <120 seconds, 26 took >120 seconds, and 22 timed out. Even using a 120-second timeout 500,000 combinations would take 2 years to process. It was an idea worth trying, but this method is only marginally better than brute force.
-
-Back to the drawing board.
+After running for 3 hours, there were more than 500,000 combinations to try and 56 combinations had been processed. Of these, 29 took <120 seconds, 26 took >120 seconds, and 22 timed out. Even using a 120-second timeout 500,000 combinations would take 2 years to process. It was an idea worth trying, but this method is only marginally better than brute force. Back to the drawing board.
 
 
 
