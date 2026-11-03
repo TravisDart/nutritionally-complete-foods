@@ -1239,3 +1239,19 @@ Vegetables and Vegetable Products > Yambean (jicama), raw
 Vegetables and Vegetable Products > Yardlong bean, cooked, boiled, drained, without salt
 Vegetables and Vegetable Products > Yardlong bean, raw
 Vegetables and Vegetable Products > Yautia (tannier), raw
+Dairy and Egg Products > Egg, duck, whole, fresh, raw
+Dairy and Egg Products > Egg, goose, whole, fresh, raw
+Dairy and Egg Products > Egg, quail, whole, fresh, raw
+Dairy and Egg Products > Egg, turkey, whole, fresh, raw
+Dairy and Egg Products > Egg, whole, cooked, fried
+Dairy and Egg Products > Egg, whole, cooked, hard-boiled
+Dairy and Egg Products > Egg, whole, cooked, omelet
+Dairy and Egg Products > Egg, whole, cooked, poached
+Dairy and Egg Products > Egg, whole, cooked, scrambled
+Dairy and Egg Products > Egg, whole, raw, fresh
+Dairy and Egg Products > Egg, yolk, raw, fresh
+Dairy and Egg Products > Egg, white, raw, fresh
+Dairy and Egg Products > Milk, goat, fluid, with added vitamin D
+Dairy and Egg Products > Milk, indian buffalo, fluid
+Dairy and Egg Products > Milk, sheep, fluid
+Dairy and Egg Products > Milk, whole, 3.25% milkfat, without added vitamin A and vitamin D
