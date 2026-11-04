@@ -1,4 +1,5 @@
 import csv
+import itertools
 import json
 import math
 import os
@@ -138,6 +139,16 @@ def create_csv(filtered_json_path, csv_path):
     print(f"Created final CSV: {csv_path}")
 
 
+def append_custom_foods(source_path: str, target_path: str) -> None:
+    """Reads from line 3 onward in source_path and appends to target_path."""
+    with open(source_path, "r", encoding="utf-8") as src:
+        remaining_lines = itertools.islice(src, 2, None)  # Skip the first 2 lines
+        with open(target_path, "a", encoding="utf-8") as tgt:
+            # Stream the rest in chunks without loading the entire file into memory
+            for line in remaining_lines:
+                tgt.write(line)
+
+
 def delete_intermediate_files(
     files_to_delete: list[str], should_delete_intermediate_files: bool = False
 ):
@@ -183,6 +194,7 @@ def create_filtered_csv(
     json_path = zip_path[: -len(".zip")] + ".json"
     filtered_json_path = os.path.join(download_dir, "food_data.json")
     csv_path = os.path.join(download_dir, "food_data.csv")
+    custom_foods_path = os.path.join(download_dir, "custom_foods.csv")
     selected_foods_path = os.path.join(download_dir, "selected_foods.txt")
 
     if not os.path.exists(csv_path):
@@ -199,6 +211,7 @@ def create_filtered_csv(
                 extract_json(zip_path, json_path)
             create_filtered_json(json_path, filtered_json_path, selected_foods_path)
         create_csv(filtered_json_path, csv_path)
+        append_custom_foods(custom_foods_path, csv_path)
         print()
         print("Data file successfully created.")
     create_sql(csv_path)
